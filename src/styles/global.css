@@ -135,6 +135,7 @@ h1, h2, h3, h4 {
 /* Prose for Markdown content */
 .prose { max-width: var(--measure); }
 .prose > * + * { margin-top: 1.1em; }
+.prose > :first-child { margin-top: 0; }
 :where(.prose) :where(p, ul, ol, blockquote, table, pre) { margin-block: 0; }
 .prose h2 { font-size: var(--step-2); margin-top: 2.2em; }
 .prose h3 { font-size: var(--step-1); margin-top: 1.8em; }
