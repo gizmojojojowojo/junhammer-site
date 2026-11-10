@@ -19,7 +19,7 @@ proof:
   - "Designed and built AI chat functions for hospital systems"
   - "Automates GA4 and Search Console reporting into ready-to-send deliverables"
   - "Built LandmAIn, an AI land intelligence platform with a sourced evidence layer"
-work: ["whole-whale-ai-tools", "merge-healthcare-ai-chat", "landmain"]
+work: ["agency-ai-tools", "hospital-ai-chat", "landmain"]
 faqs:
   - q: "What kinds of AI applications do you build?"
     a: "Mostly tools that sit on top of a team's own information: assistants that answer from your documents, agents that gather and summarize research, and data products that combine public sources into something decision-ready. I build with current models from Anthropic, OpenAI and Google and pick per task on cost, accuracy and data rules."
@@ -43,7 +43,7 @@ One example is [LandmAIn](/work/landmain/), an AI land intelligence platform I b
 
 ## Tools for agencies and in-house teams
 
-At Whole Whale I build [agentic tools, Claude skills, plugins and browser extensions](/work/whole-whale-ai-tools/) that turn an agency's repeatable SEO, AEO and reporting work into one-click workflows. At Merge I built [AI chat functions for hospital systems](/work/merge-healthcare-ai-chat/). The pattern is the same: find the process people repeat, write it down, and make it software.
+For a nonprofit digital agency I build [agentic tools, Claude skills, plugins and browser extensions](/work/agency-ai-tools/) that turn repeatable SEO, AEO and reporting work into one-click workflows. For enterprise health systems I built [AI chat functions that help patients find care](/work/hospital-ai-chat/). The pattern is the same: find the process people repeat, write it down, and make it software.
 
 ## Built for search, too
 

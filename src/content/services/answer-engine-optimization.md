@@ -14,11 +14,11 @@ offers:
   - "Healthcare AEO built on E-E-A-T and YMYL standards"
   - "AI visibility reporting alongside classic SEO metrics"
 proof:
-  - "Led AEO and technical SEO for Baptist Health Systems and Healthfirst NY at Merge"
-  - "Pioneered Merge's healthcare AEO/GEO practice, winning a significant retainer expansion"
-  - "Leads AEO for nonprofit and social-impact clients at Whole Whale"
+  - "Led AEO and technical SEO for enterprise hospital systems"
+  - "Built an agency's healthcare AEO/GEO practice, winning a significant retainer expansion"
+  - "Leads AEO for nonprofit and social-impact clients"
   - "Author of the AEO Playbook and 20+ articles on AI search"
-work: ["merge-healthcare-ai-chat", "citrus-spine-clinic-seo"]
+work: ["hospital-ai-chat", "spine-clinic-seo"]
 faqs:
   - q: "What is answer engine optimization?"
     a: "Answer engine optimization (AEO) is the practice of structuring content so AI systems such as ChatGPT, Perplexity, Gemini and Google's AI Overviews can find it, understand it and cite it in their answers. It builds on SEO but focuses on clear self-contained answers, entity signals, structured data and source credibility rather than rankings alone."
@@ -33,7 +33,7 @@ faqs:
 
 The results page still matters. But a growing share of questions get answered directly by AI assistants that summarize a few sources and skip the list of links. If your content is not structured for that layer, a chunk of your audience never sees you, even when you rank.
 
-I have worked on AEO since before most agencies had a name for it, and I [write about it regularly](/blog/topic/aeo/). I led AEO and technical SEO for enterprise health systems at Merge, where the bar for trust is higher than almost anywhere else, and I now lead AEO for nonprofit and social-impact clients at Whole Whale.
+I have worked on AEO since before most agencies had a name for it, and I [write about it regularly](/blog/topic/aeo/). I have led AEO and technical SEO for enterprise health systems, where the bar for trust is higher than almost anywhere else, and I now lead AEO for nonprofit and social-impact organizations.
 
 ## What an AEO program covers
 

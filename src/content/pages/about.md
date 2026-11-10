@@ -20,7 +20,7 @@ I was born in Flekkefjord, Norway, with dual Norwegian and US citizenship. After
 
 After the Army, I used the GI Bill to study marketing and aviation and aerospace management at MSU Denver, while working in the drone and GIS industry. That is where I found that I cared less about any one industry and more about how businesses get found and grow.
 
-From there, I spent a decade in search: Senior SEO Strategist at Spinutech, SEO Manager at Real FIG Advertising, and SEO/AEO/GEO Manager on enterprise healthcare, life sciences and retail accounts at Merge, alongside my own consulting clients. Currently, I work at Whole Whale where I'm honing my AI engineering skills while guiding SEO/AEO strategy for several non-profits.
+From there, I spent a decade in search: Senior SEO Strategist at Spinutech, SEO Manager at Real FIG Advertising, and SEO/AEO/GEO Manager on enterprise healthcare, life sciences and retail accounts at a Denver agency, alongside my own consulting clients. Currently, I work at Whole Whale where I'm honing my AI engineering skills while guiding SEO/AEO strategy for several non-profits.
 
 ## How I work
 

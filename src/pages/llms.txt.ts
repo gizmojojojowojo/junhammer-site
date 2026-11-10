@@ -10,7 +10,7 @@ export const GET: APIRoute = async () => {
     '',
     `> ${site.description}`,
     '',
-    `${site.name} (${site.legalName}) is an AI solutions builder and search strategist in ${site.location}. He works as AI Search Strategist at Whole Whale building agentic AI tools, chat functions and Claude skills, and previously led AEO and technical SEO for enterprise health systems at Merge. He is a US Army veteran and former geospatial intelligence analyst.`,
+    `${site.name} (${site.legalName}) is an AI solutions builder and search strategist in ${site.location}. He works as AI Search Strategist at Whole Whale building agentic AI tools, chat functions and Claude skills, and has led AEO and technical SEO for enterprise health systems. He is a US Army veteran and former geospatial intelligence analyst.`,
     '',
     '## Services',
     ...services.map((s) => `- [${s.data.title}](${u(`/services/${s.id}/`)}): ${s.data.summary}`),

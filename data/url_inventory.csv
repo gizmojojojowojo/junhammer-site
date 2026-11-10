@@ -51,9 +51,9 @@ old_url,type,title,published,words,clicks_16mo,impressions_16mo,avg_position,top
 /seo-services/,page,SEO Services,2024-12-13,595,0,51,10.0,joe the seo,REDIRECT,/services/,Services,Becomes services hub + 5 service pages
 /skills/,page,Skills,2024-12-13,125,0,45,7.6,conductor lumar,REDIRECT,/about/,About,Fold into About
 /blog/home-services-marketing-local-authority-through-strategic-seo-content/,post,Case Study: Home Services Markging - Local Authority Through Strategic SEO Content,2025-07-11,982,0,37,24.2,home services seo case studies,REDIRECT,/services/seo/,,37 impr; off-positioning
-/case-study-boosting-organic-traffic-for-citrus-spine-clinic-through-strategic-seo/,page,Case Study: Boosting Organic Traffic for a Florida Spine Clinic Through Strategic SEO,2025-08-13,365,0,29,45.8,spine seo,REDIRECT,/work/citrus-spine-clinic-seo/,Work,Case study
+/case-study-boosting-organic-traffic-for-citrus-spine-clinic-through-strategic-seo/,page,Case Study: Boosting Organic Traffic for a Florida Spine Clinic Through Strategic SEO,2025-08-13,365,0,29,45.8,spine seo,REDIRECT,/work/spine-clinic-seo/,Work,Case study
 /seo-case-studies/,page,SEO Case Studies,2024-12-13,218,0,27,58.1,medical seo case study,REDIRECT,/work/,Work,
-/driving-b2b-e-commerce-growth-through-seo-cro-kus-usa-case-study/,page,Driving B2B E-commerce Growth Through SEO & CRO: KUS-USA Case Study,2025-08-13,513,0,3,8.3,,REDIRECT,/work/kus-usa-b2b-ecommerce-seo/,Work,Case study
+/driving-b2b-e-commerce-growth-through-seo-cro-kus-usa-case-study/,page,Driving B2B E-commerce Growth Through SEO & CRO: KUS-USA Case Study,2025-08-13,513,0,3,8.3,,REDIRECT,/work/industrial-b2b-ecommerce-seo/,Work,Case study
 /portfolio/,page,Portfolio,2020-04-12,179,0,0,,,REDIRECT,/work/,Work,Becomes Work hub
 /seo-case-studies/consolidating-healthcare-websites-one-wordpress-case-study/,page,Case Study Consolidating Five Healthcare Device Websites Into One,2026-04-07,974,0,0,,,REDIRECT,/work/healthcare-website-consolidation/,Work,Case study; migration proof for Technical SEO service
 /blog/the-definitive-guide-to-answer-engine-optimization-aeo-strategies-for-2025-and-beyond/,legacy,,,,,,,,REDIRECT,/blog/the-definitive-guide-to-answer-engine-optimization-aeo-strategies-for-2026-and-beyond/,,Old slug; 4.7k impr
@@ -87,3 +87,7 @@ old_url,type,title,published,words,clicks_16mo,impressions_16mo,avg_position,top
 /blog/marketing-automation-for-small-business-growth-from-manual-to-automated-success/,legacy,,,,,,,,PRUNE-410,,,Draft; off-positioning
 /blog/10-seo-and-digital-marketing-blog-post-topics-for-2025/,legacy,,,,,,,,PRUNE-410,,,
 /naturalreach-org/,legacy,,,,,,,,PRUNE-410,,,Draft page
+/work/citrus-spine-clinic-seo/,legacy,,,,,,,,REDIRECT,/work/spine-clinic-seo/,,Renamed to remove client name
+/work/kus-usa-b2b-ecommerce-seo/,legacy,,,,,,,,REDIRECT,/work/industrial-b2b-ecommerce-seo/,,Renamed to remove client name
+/work/merge-healthcare-ai-chat/,legacy,,,,,,,,REDIRECT,/work/hospital-ai-chat/,,Renamed to remove client name
+/work/whole-whale-ai-tools/,legacy,,,,,,,,REDIRECT,/work/agency-ai-tools/,,Renamed to remove client name

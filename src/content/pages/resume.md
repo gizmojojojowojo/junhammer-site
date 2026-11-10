@@ -35,7 +35,7 @@ AI solutions builder and search strategist with more than ten years of experienc
 *Denver, February 2025 to March 2026*
 
 - Led AEO and technical SEO for enterprise healthcare accounts, including Baptist Health Systems and Healthfirst NY: technical audits, schema strategy and roadmaps built for AI answer engines as well as traditional search.
-- Designed and built [AI chat functions for hospital systems](/work/merge-healthcare-ai-chat/), helping patients navigate services and care information conversationally.
+- Designed and built [AI chat functions for hospital systems](/work/hospital-ai-chat/), helping patients navigate services and care information conversationally.
 - Developed agentic AI solutions for agency and healthcare clients that automate auditing, content QA and reporting.
 - Pioneered the agency's AEO/GEO practice for healthcare clients, securing a significant retainer expansion.
 - Grew client account scope 50% within six weeks.
@@ -50,7 +50,7 @@ AI solutions builder and search strategist with more than ten years of experienc
 - Led website migrations and launches for enterprise clients: pre-launch crawl audits, redirect mapping and canonical architecture through post-launch monitoring of index coverage, crawl behavior and traffic recovery.
 - Managed international SEO for Panavision across multiple country sites.
 - Launched and optimized more than 15 client websites, growing each site's traffic more than 900% within six months.
-- Grew healthcare client Citrus Spine from about 200 to more than 22,000 monthly clicks and lifted leads 300% in a year ([case study](/work/citrus-spine-clinic-seo/)).
+- Grew healthcare client Citrus Spine from about 200 to more than 22,000 monthly clicks and lifted leads 300% in a year ([case study](/work/spine-clinic-seo/)).
 - Identified market gaps through competitor analysis that captured 25% more market share for key accounts.
 - Mentored five junior SEO strategists, improving team productivity 25%.
 

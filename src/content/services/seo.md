@@ -14,11 +14,11 @@ offers:
   - "Conversion-focused landing pages"
   - "Monthly reporting tied to leads and revenue"
 proof:
-  - "Grew Citrus Spine Clinic from 2.7K to 39.4K quarterly clicks, outranking major health systems"
+  - "Grew a spine clinic from 2.7K to 39.4K quarterly clicks, outranking major health systems"
   - "Increased a B2B e-commerce client's organic traffic more than 200%"
   - "Grew a client's e-commerce sales 115% across B2B and B2C"
-  - "Led international SEO for Panavision and Champion Petfoods"
-work: ["citrus-spine-clinic-seo", "kus-usa-b2b-ecommerce-seo"]
+  - "Led multi-country SEO for global brands across North America, Asia Pacific and EMEA"
+work: ["spine-clinic-seo", "industrial-b2b-ecommerce-seo"]
 faqs:
   - q: "How long does SEO take to work?"
     a: "Most sites see early movement in three to six months and compounding results in six to twelve, depending on competition, site health and how much content needs to be built. New sites in competitive fields take longer. I set milestones for each quarter so progress is visible before rankings fully arrive."
@@ -31,7 +31,7 @@ faqs:
 
 Good SEO starts with what people are actually trying to do when they search. I build every program on [search intent research](/blog/user-intent-completet-guide-understanding-search-intent-seo-success/), then decide what to create, what to fix and what to cut.
 
-That approach grew a Florida [spine clinic's search clicks more than 14 times in a year](/work/citrus-spine-clinic-seo/), to the point it outranked national health systems for core terms. It worked because the content was specific, credible and written for patients, not because of tricks.
+That approach grew a Florida [spine clinic's search clicks more than 14 times in a year](/work/spine-clinic-seo/), to the point it outranked national health systems for core terms. It worked because the content was specific, credible and written for patients, not because of tricks.
 
 ## What I handle
 

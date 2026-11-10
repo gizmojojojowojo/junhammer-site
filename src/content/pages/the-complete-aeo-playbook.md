@@ -42,7 +42,7 @@ No prior AEO experience required. If you know basic SEO, you're ready for this.
 
 ## About the author
 
-Joe Unhammer is an AI engineer and SEO/AEO strategist who has led organic search programs for enterprise healthcare clients including Baptist Health Systems and Healthfirst NY. He has spent the last several years specifically focused on AEO and GEO — optimizing content for AI-powered search engines before most agencies had a name for it.
+Joe Unhammer is an AI engineer and SEO/AEO strategist who has led organic search programs for enterprise healthcare systems. He has spent the last several years specifically focused on AEO and GEO — optimizing content for AI-powered search engines before most agencies had a name for it.
 
 This playbook is a distillation of what actually works, written for people who need to act on it, not just understand it in theory.
 
