@@ -74,7 +74,7 @@ def check_link(src, href):
     if not href.startswith('/') or href.startswith('//'):
         return
     path = href.split('#')[0].split('?')[0]
-    if not path or path.startswith('/images/') or re.search(r'\.\w{2,4}$', path):
+    if not path or path.startswith('/images/') or re.search(r'\.\w{2,12}$', path):
         return
     if path in routes:
         return
