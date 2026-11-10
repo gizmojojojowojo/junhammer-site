@@ -98,7 +98,6 @@ h1, h2, h3, h4 {
 .mark {
   background: linear-gradient(transparent 12%, var(--highlight) 12%, var(--highlight) 88%, transparent 88%);
   color: var(--highlight-ink);
-  padding-inline: 0.12em;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -110,7 +109,7 @@ h1, h2, h3, h4 {
   line-height: 0;
   text-decoration: none;
   color: var(--fjord);
-  padding-inline: 0.15em;
+  padding-left: 0.1em;
 }
 .cite:hover { text-decoration: underline; }
 
@@ -136,7 +135,7 @@ h1, h2, h3, h4 {
 /* Prose for Markdown content */
 .prose { max-width: var(--measure); }
 .prose > * + * { margin-top: 1.1em; }
-.prose p, .prose ul, .prose ol { margin-block: 0; }
+:where(.prose) :where(p, ul, ol, blockquote, table, pre) { margin-block: 0; }
 .prose h2 { font-size: var(--step-2); margin-top: 2.2em; }
 .prose h3 { font-size: var(--step-1); margin-top: 1.8em; }
 .prose h4, .prose h5, .prose h6 { font-size: var(--step-0); margin-top: 1.6em; }

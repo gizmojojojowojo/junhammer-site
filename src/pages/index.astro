@@ -105,6 +105,7 @@ const latest = posts.slice(0, 5);
     font-family: var(--font-ui); font-size: 1rem; color: var(--ink-soft);
     background: var(--surface); border: 1px solid var(--rule); border-radius: 999px;
     padding: .55rem 1.1rem; margin: 0 0 2rem; max-width: 100%;
+    border-radius: 1.4rem;
   }
   .q-label { font-weight: 700; color: var(--fjord); }
   .answer {
@@ -145,7 +146,6 @@ const latest = posts.slice(0, 5);
 
   .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 3rem; align-items: start; }
   .two .section-head { margin-bottom: 0; }
-  .bio p { margin: 0; }
 
   @media (max-width: 860px) {
     .split, .cases, .two { grid-template-columns: 1fr; }
