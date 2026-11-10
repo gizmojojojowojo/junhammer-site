@@ -1,12 +1,12 @@
 ---
 title: "LandmAIn: AI land intelligence for data center and energy site selection"
-client: "LandmAIn (founder)"
+client: "LandmAIn"
 sector: "AI infrastructure"
 year: "2026"
 link: "https://landmain.io"
 summary: "An AI-powered land intelligence platform for data center, industrial, solar and storage site selection, with a dated, inspectable source behind every finding."
 description: "LandmAIn combines GIS layers, public records, infrastructure evidence and policy context into a repeatable screen for AI data-center sites in Colorado."
-order: 1
+order: 3
 services: ["ai-engineering", "ai-consulting"]
 results:
   - { value: "5", label: "representative sites screened on one evidence model" }

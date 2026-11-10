@@ -18,7 +18,7 @@ proof:
   - "Pioneered Merge's healthcare AEO/GEO practice, winning a significant retainer expansion"
   - "Leads AEO for nonprofit and social-impact clients at Whole Whale"
   - "Author of the AEO Playbook and 20+ articles on AI search"
-work: ["citrus-spine-clinic-seo"]
+work: ["merge-healthcare-ai-chat", "citrus-spine-clinic-seo"]
 faqs:
   - q: "What is answer engine optimization?"
     a: "Answer engine optimization (AEO) is the practice of structuring content so AI systems such as ChatGPT, Perplexity, Gemini and Google's AI Overviews can find it, understand it and cite it in their answers. It builds on SEO but focuses on clear self-contained answers, entity signals, structured data and source credibility rather than rankings alone."

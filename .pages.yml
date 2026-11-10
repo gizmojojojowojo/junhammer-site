@@ -116,6 +116,8 @@ content:
     fields:
       - { name: seoTitle, label: SEO title, type: string }
       - { name: metaDescription, label: Meta description, type: text }
+      - { name: heroImage, label: Hero image, type: image, description: "Wide landscape photo, at least 1920px wide. If you change it, also export 800px and 1200px versions with -800 and -1200 at the end of the file name, or just replace hero-mountains files." }
+      - { name: heroImageAlt, label: Hero image description, type: string }
       - { name: query, label: Question in the bubble, type: string }
       - { name: answer, label: Headline answer, type: text, description: "Wrap highlighted phrases in ==double equals== and add [1], [2], [3] right after a phrase to link it to that source below." }
       - name: sources
@@ -146,6 +148,7 @@ content:
       - { name: writingHeading, label: Writing heading, type: string }
       - { name: writingIntro, label: Writing intro, type: text, description: "Links: [text](/url/)" }
       - { name: aboutHeading, label: About heading, type: string }
+      - { name: portrait, label: Headshot, type: image }
       - { name: about, label: About paragraphs, type: text, list: true, description: "Links: [text](/url/)" }
 
   - name: navigation

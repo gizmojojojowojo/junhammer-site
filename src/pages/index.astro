@@ -12,7 +12,17 @@ const latest = posts.slice(0, 5);
 ---
 <Base title={home.seoTitle} seoTitle={home.seoTitle} description={home.metaDescription}>
   <section class="hero">
-    <div class="wrap">
+    <img
+      class="hero-img"
+      src={home.heroImage.replace('-1920', '-1200')}
+      srcset={`${home.heroImage.replace('-1920', '-800')} 800w, ${home.heroImage.replace('-1920', '-1200')} 1200w, ${home.heroImage} 1920w`}
+      sizes="100vw"
+      alt={home.heroImageAlt}
+      width="1920"
+      height="1440"
+      fetchpriority="high"
+    />
+    <div class="wrap hero-inner">
       <p class="query"><span class="q-label">Asked</span> {home.query}</p>
       <h1 class="answer" set:html={inline(home.answer)} />
       <div class="actions">
@@ -81,8 +91,11 @@ const latest = posts.slice(0, 5);
       <div class="section-head">
         <h2>{home.aboutHeading}</h2>
       </div>
-      <div class="prose bio">
-        {home.about.map((para) => <p set:html={inline(para)} />)}
+      <div class="bio-wrap">
+        {home.portrait && <img class="portrait" src={home.portrait} alt="Joe Unhammer" width="640" height="640" loading="lazy" />}
+        <div class="prose bio">
+          {home.about.map((para) => <p set:html={inline(para)} />)}
+        </div>
       </div>
     </div>
   </section>
@@ -91,32 +104,45 @@ const latest = posts.slice(0, 5);
 </Base>
 
 <style>
-  .hero { padding-block: clamp(3rem, 9vw, 7rem) clamp(2.5rem, 6vw, 4.5rem); }
+  .hero { position: relative; isolation: isolate; overflow: hidden; color: #f6eef0; min-height: min(78vh, 44rem); display: flex; align-items: flex-end; }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; z-index: -2; }
+  .hero::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(6 14 71 / .15) 0%, rgb(6 14 71 / .55) 45%, rgb(6 14 71 / .92) 100%),
+      linear-gradient(90deg, rgb(6 14 71 / .55) 0%, rgb(6 14 71 / 0) 70%);
+  }
+  .hero-inner { padding-block: clamp(6rem, 18vh, 10rem) clamp(2.5rem, 6vw, 4rem); }
   .query {
-    display: inline-flex; flex-wrap: wrap; gap: .4rem .75rem; align-items: baseline;
-    font-family: var(--font-ui); font-size: 1rem; color: var(--ink-soft);
-    background: var(--surface); border: 1px solid var(--rule); border-radius: 999px;
-    padding: .55rem 1.1rem; margin: 0 0 2rem; max-width: 100%;
-    border-radius: 1.4rem;
+    display: inline-flex; flex-wrap: wrap; gap: .3rem .6rem; align-items: baseline;
+    font-family: var(--font-ui); font-size: .95rem; color: #f6eef0;
+    background: rgb(255 255 255 / .12); border: 1px solid rgb(255 255 255 / .28);
+    backdrop-filter: blur(6px); border-radius: 1.4rem;
+    padding: .45rem 1rem; margin: 0 0 1.25rem; max-width: 100%;
   }
-  .q-label { font-weight: 700; color: var(--fjord); }
+  .q-label { font-weight: 700; color: #f2c6d1; }
   .answer {
-    font-family: var(--font-body); font-weight: 400; font-size: var(--step-4);
-    line-height: 1.28; letter-spacing: -0.015em; max-width: 30ch;
+    font-family: var(--font-body); font-weight: 400; font-size: clamp(1.45rem, 2.6vw, 2.15rem);
+    line-height: 1.4; letter-spacing: -0.01em; max-width: 38ch; color: #fbf6f7;
+    text-shadow: 0 1px 12px rgb(6 14 71 / .35);
   }
-  .answer :global(.mark) { animation: sweep .9s cubic-bezier(.2,.7,.2,1) both; background-size: 0% 100%; background-repeat: no-repeat; }
-  .answer :global(.mark:nth-of-type(2)) { animation-delay: .25s; }
-  .answer :global(.mark:nth-of-type(3)) { animation-delay: .5s; }
-  .answer :global(.mark:nth-of-type(4)) { animation-delay: .75s; }
-  @keyframes sweep { to { background-size: 100% 100%; } }
-  @media (prefers-reduced-motion: reduce) { .answer :global(.mark) { background-size: 100% 100%; } }
-  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.5rem; }
+  .answer :global(.mark) {
+    background: none; color: inherit; padding: 0;
+    text-decoration: underline; text-decoration-color: #e7a3b5; text-decoration-thickness: .12em; text-underline-offset: .22em;
+  }
+  .answer :global(.cite) { color: #f2c6d1; font-size: .6em; }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
+  .hero .btn { background: #f2c6d1; border-color: #f2c6d1; color: #060e47; }
+  .hero .btn:hover { background: #ffffff; border-color: #ffffff; }
+  .hero .btn.ghost { background: transparent; color: #fbf6f7; border-color: rgb(255 255 255 / .6); }
+  .hero .btn.ghost:hover { background: rgb(255 255 255 / .12); }
   .sources {
-    margin: 3rem 0 0; padding: 1rem 0 0 1.4rem; border-top: 1px solid var(--rule);
-    display: flex; flex-wrap: wrap; gap: .5rem 2.5rem; font-family: var(--font-ui); font-size: var(--step--1);
+    margin: 2.25rem 0 0; padding: .9rem 0 0 1.3rem; border-top: 1px solid rgb(255 255 255 / .25);
+    display: flex; flex-wrap: wrap; gap: .4rem 2.25rem; font-family: var(--font-ui); font-size: var(--step--1);
   }
-  .sources li::marker { color: var(--fjord); font-weight: 700; }
-  .sources li:target a { background: var(--highlight); color: var(--highlight-ink); }
+  .sources li::marker { color: #f2c6d1; font-weight: 700; }
+  .sources a { color: #f6eef0; text-decoration-color: rgb(255 255 255 / .4); }
+  .sources a:hover { text-decoration-color: currentColor; }
 
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
   .group { font-size: var(--step-1); padding-bottom: .75rem; border-bottom: 2px solid var(--ink); }
@@ -138,9 +164,13 @@ const latest = posts.slice(0, 5);
 
   .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 3rem; align-items: start; }
   .two .section-head { margin-bottom: 0; }
+  .bio-wrap { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 2rem; align-items: start; }
+  .portrait { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 4px solid var(--surface); box-shadow: 0 0 0 1px var(--rule); }
 
   @media (max-width: 860px) {
     .split, .cases, .two { grid-template-columns: 1fr; }
-    .answer { font-size: clamp(1.75rem, 7.2vw, 2.4rem); }
+    .hero { min-height: 36rem; }
+    .bio-wrap { grid-template-columns: 1fr; }
+    .portrait { width: 9rem; }
   }
 </style>

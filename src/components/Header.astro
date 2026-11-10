@@ -6,8 +6,11 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 <header class="site-header">
   <div class="wrap bar">
     <a class="wordmark" href="/" aria-label="Joe Unhammer, home">
-      <span class="wm-name">Joe Unhammer</span>
-      <span class="wm-role">AI engineering &amp; search</span>
+      <img class="wm-logo" src="/images/brand/ju-logo-480.webp" alt="" width="480" height="182" />
+      <span class="wm-text">
+        <span class="wm-name">Joe Unhammer</span>
+        <span class="wm-role">AI engineering &amp; search</span>
+      </span>
     </a>
 
     <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
@@ -45,7 +48,9 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 <style>
   .site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.25rem; }
-  .wordmark { display: grid; text-decoration: none; color: var(--ink); line-height: 1.1; }
+  .wordmark { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--ink); line-height: 1.1; }
+  .wm-logo { height: 2.6rem; width: auto; }
+  .wm-text { display: grid; }
   .wm-name { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em; }
   .wm-role { font-family: var(--font-ui); font-size: .78rem; color: var(--ink-soft); }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

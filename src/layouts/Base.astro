@@ -28,6 +28,7 @@ const person = {
   alternateName: site.legalName,
   jobTitle: site.jobTitle,
   url: 'https://junhammer.com/',
+  image: 'https://junhammer.com/images/brand/joe-unhammer.jpg',
   sameAs: [site.linkedin, site.github].filter(Boolean),
   address: { '@type': 'PostalAddress', addressLocality: 'Denver', addressRegion: 'CO', addressCountry: 'US' },
   worksFor: { '@type': 'Organization', name: 'Whole Whale', url: 'https://www.wholewhale.com/' },
@@ -38,7 +39,6 @@ const graph = {
   '@context': 'https://schema.org',
   '@graph': [
     person,
-    { '@type': 'Organization', '@id': 'https://landmain.io/#org', name: 'LandmAIn', url: 'https://landmain.io/', founder: { '@id': 'https://junhammer.com/#person' } },
     { '@type': 'WebSite', '@id': 'https://junhammer.com/#website', url: 'https://junhammer.com/', name: site.name, publisher: { '@id': 'https://junhammer.com/#person' } },
     ...schema,
   ],
@@ -60,7 +60,11 @@ const graph = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:site_name" content={site.name} />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#060e47" />
     <link rel="alternate" type="application/rss+xml" title="Joe Unhammer: Writing" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
