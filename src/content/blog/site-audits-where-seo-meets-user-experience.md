@@ -6,7 +6,7 @@ date: "2025-06-27"
 topic: "SEO"
 pillar: false
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2025/06/financial-inspection-and-strategy-analysis-in-business-using-graphs-and-market-reports-stockpack-adobe-stock.jpg"
+image: "/images/wp/2025/06/financial-inspection-and-strategy-analysis-in-business.webp"
 ---
 The traditional separation between SEO and UX is dead. Google's algorithm updates increasingly reward websites that provide excellent user experiences, while UX improvements often directly impact search rankings. A comprehensive site audit must evaluate both technical SEO factors and user experience elements as interconnected systems.
 

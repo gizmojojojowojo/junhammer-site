@@ -8,7 +8,7 @@ updated: "2026-09-03"
 topic: "Healthcare AEO"
 pillar: false
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2026/01/healthcare-and-medical-insurance-business-virtual-graph-data-and-growth-with-medical-financial-and-doctor-analyzing-generative-ai-stockpack-adobe-stock.jpg"
+image: "/images/wp/2026/01/healthcare-and-medical-insurance-business-virtual-graph.webp"
 ---
 Last updated: September 3, 2026 Regional health systems can compete in AI search by focusing on local authority, physician expertise, service-line depth, and community-specific patient questions. They do not need enterprise budgets if they publish clearer answers in areas where they already have real clinical credibility.
 

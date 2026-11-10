@@ -7,7 +7,7 @@ updated: "2026-09-14"
 topic: "AEO"
 pillar: false
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2024/08/openaigpt-scaled.jpg"
+image: "/images/wp/2024/08/openaigpt-scaled.webp"
 ---
 You have a website. You publish content regularly. You rank for some things in Google. But when you ask ChatGPT or Claude about a topic you've written about extensively, your site doesn't come up. Someone else does. This is one of the most common frustrations people bring to me, and the good news is that it's usually fixable. The causes tend to cluster around a handful of issues, and most of them don't require a technical background to address.
 

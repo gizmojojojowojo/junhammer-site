@@ -8,7 +8,7 @@ updated: "2026-07-22"
 topic: "AEO"
 pillar: false
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2026/03/aiooptimization-stockpack-adobe-stock.jpg"
+image: "/images/wp/2026/03/aiooptimization-stockpack-adobe-stock.webp"
 ---
 AI search tools like ChatGPT and Perplexity cite specific websites not because those sites rank highest, but because their content is structured as extractable answers. Answer Engine Optimization (AEO) is the practice of formatting your content so AI systems can retrieve, interpret, and cite it — turning your pages into sources that appear in AI-generated responses.
 

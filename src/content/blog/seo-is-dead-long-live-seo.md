@@ -7,7 +7,7 @@ updated: "2025-09-18"
 topic: "SEO"
 pillar: false
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2024/08/openaigpt-scaled.jpg"
+image: "/images/wp/2024/08/openaigpt-scaled.webp"
 ---
 SEO is dead, they proclaim, as they try to sell their services. GEO is replacing SEO the same way 8K is replacing 4K. The branding is changing; your eyes won't be able to tell the difference. Every few years, someone declares SEO dead. This time, the alleged culprit is AI and something called Generative Engine Optimization (GEO). With headlines proclaiming the death of SEO and the rise of GEO, people are panicking about their optimization strategy.
 
@@ -15,7 +15,7 @@ People
 
 need to chill. Here's the reality: as always, SEO isn't dead. It's evolving. If you've been following solid SEO practices, you're already most of the way toward effective AIO/GEO. The fundamentals that made your content visible to Google are the same principles that make it visible to AI engines like ChatGPT, Claude, and Google's AI Overviews. What they're selling is holistic SEO strategy, the way G(od)oogle intended it.
 
-![](https://junhammer.com/wp-content/uploads/2025/08/aiseo.png)
+![](/images/wp/2025/08/aiseo.webp)
 
 ## What's *Really* Happening in Search?
 

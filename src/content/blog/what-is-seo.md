@@ -7,7 +7,7 @@ updated: "2025-06-09"
 topic: "SEO"
 pillar: true
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2022/12/GettyImages-1360521208.jpg"
+image: "/images/wp/2022/12/GettyImages-1360521208.webp"
 ---
 ## What is SEO? Your Complete Guide to Search Engine Optimization in 2025
 

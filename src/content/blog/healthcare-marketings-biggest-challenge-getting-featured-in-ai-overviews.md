@@ -8,7 +8,7 @@ updated: "2026-01-18"
 topic: "Healthcare AEO"
 pillar: false
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2026/01/person-holding-a-digital-marketing-funnel-with-icons-of-digital-marketing-elements-for-the-concept-of-converting-sales-process-prospects-into-customers-stockpack-adobe-stock.jpg"
+image: "/images/wp/2026/01/person-holding-a-digital-marketing-funnel-with-icons-of.webp"
 ---
 Google's AI Overviews have fundamentally changed how patients find health information. That box at the top of search results synthesizes answers from multiple sources, often providing what users need without clicking through to any website. For healthcare marketers, this creates an urgent question: how do you get your organization's content featured in these AI-generated responses? The challenge is significant. Healthcare content falls under YMYL (Your Money or Your Life) guidelines, which means AI systems apply stricter criteria before featuring health information. Understanding these requirements and structuring your content accordingly separates healthcare organizations that thrive in AI search from those that disappear from patient journeys.
 
