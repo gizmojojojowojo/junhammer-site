@@ -14,9 +14,9 @@ offers:
   - "Healthcare AEO built on E-E-A-T and YMYL standards"
   - "AI visibility reporting alongside classic SEO metrics"
 proof:
-  - "Leads SEO and AEO strategy for enterprise health systems at the Merge agency"
-  - "Developed AEO and GEO programs that won a significant retainer expansion for healthcare clients"
-  - "Grew a healthcare account's scope 50% in six weeks"
+  - "Led AEO and technical SEO for Baptist Health Systems and Healthfirst NY at Merge"
+  - "Pioneered Merge's healthcare AEO/GEO practice, winning a significant retainer expansion"
+  - "Leads AEO for nonprofit and social-impact clients at Whole Whale"
   - "Author of the AEO Playbook and 20+ articles on AI search"
 work: ["citrus-spine-clinic-seo"]
 faqs:
@@ -33,7 +33,7 @@ faqs:
 
 The results page still matters. But a growing share of questions get answered directly by AI assistants that summarize a few sources and skip the list of links. If your content is not structured for that layer, a chunk of your audience never sees you, even when you rank.
 
-I have worked on AEO since before most agencies had a name for it, and I [write about it regularly](/blog/topic/aeo/). Today I lead SEO and AEO strategy for enterprise healthcare clients, where the bar for trust is higher than almost anywhere else.
+I have worked on AEO since before most agencies had a name for it, and I [write about it regularly](/blog/topic/aeo/). I led AEO and technical SEO for enterprise health systems at Merge, where the bar for trust is higher than almost anywhere else, and I now lead AEO for nonprofit and social-impact clients at Whole Whale.
 
 ## What an AEO program covers
 

@@ -14,9 +14,10 @@ offers:
   - "Build-or-buy plans and scoped specs for custom tools"
   - "Team training on prompting and AI-assisted research"
 proof:
-  - "Built LandmAIn, an AI infrastructure site-intelligence product, from idea to public demo"
-  - "Uses Claude, Claude Code and Python daily for research, audits and SEO automation"
-  - "Ten years leading search programs for healthcare, legal, finance and e-commerce clients"
+  - "Founded LandmAIn, an AI land intelligence platform, and built it from idea to public product"
+  - "Turns repeatable agency work into AI workflows as AI Search Strategist at Whole Whale"
+  - "Documents and standardizes AI processes so non-technical staff can run them"
+  - "Ten years leading search programs for healthcare, nonprofit, legal and e-commerce clients"
 work: ["landmain"]
 faqs:
   - q: "What does an AI consultant actually do?"

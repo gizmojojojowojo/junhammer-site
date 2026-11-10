@@ -3,20 +3,22 @@ title: "AI Engineering"
 navLabel: "AI engineering"
 seoTitle: "AI Engineering: LLM Apps, Agents and Data Tools"
 description: "Joe Unhammer builds LLM applications, AI agents, retrieval systems and data pipelines, shipped as fast static sites and lightweight services on Cloudflare."
-summary: "I design and build LLM apps, agents and data tools, from prototype to a deployed product your team can run."
+summary: "I design and build agentic AI tools, chat functions, Claude skills and data products, from prototype to something your team runs every day."
 order: 2
 topic: "AI"
 offers:
-  - "LLM-powered internal tools and customer-facing assistants"
-  - "AI agents that research, summarize and take actions in your systems"
+  - "AI chat functions for websites and internal teams"
+  - "Agentic workflows that research, QA and report without hand-holding"
+  - "Claude skills, MCP connectors, plugins and browser extensions"
   - "Retrieval (RAG) over your documents and data"
   - "Data pipelines that turn public records and APIs into usable datasets"
   - "Fast static sites and APIs on Cloudflare"
-  - "Python automation for SEO, reporting and content operations"
+  - "Automated GA4 and Search Console reporting"
 proof:
-  - "Built LandmAIn: GIS layers, public records and infrastructure evidence combined into a repeatable AI data-center site screen"
-  - "Shipped LandmAIn's public site, reports and interactive explorer on Cloudflare"
-  - "Builds Python automation for Search Console analysis, audits and site migrations"
+  - "Founded and built LandmAIn: regional search to parcel-level analysis to a sourced site brief"
+  - "Builds plugins, browser extensions and Claude skills that package SEO and AEO processes"
+  - "Designed and built AI chat functions for hospital systems"
+  - "Automates GA4 and Search Console reporting into ready-to-send deliverables"
 work: ["landmain"]
 faqs:
   - q: "What kinds of AI applications do you build?"
@@ -30,7 +32,7 @@ faqs:
 
 I build AI software for specific jobs, not general chatbots. The best AI tools I have seen do one thing well: answer from a defined body of knowledge, run a repeatable research process, or turn messy sources into structured data a person can trust.
 
-My own flagship project is [LandmAIn](/work/landmain/), an infrastructure site-intelligence product for AI data-center development. It combines GIS layers, public records, infrastructure evidence and policy context into one consistent screen, with source dates and confidence language on every finding. That last part matters: an AI tool is only useful if people can see where its answers come from.
+My flagship project is [LandmAIn](/work/landmain/), the AI land intelligence platform I founded for data center and energy site selection. It runs from regional search to parcel-level analysis to a reviewable site brief, and every finding ties to a dated, inspectable source. That last part matters: an AI tool is only useful if people can see where its answers come from.
 
 ## How I build
 
@@ -38,6 +40,10 @@ My own flagship project is [LandmAIn](/work/landmain/), an infrastructure site-i
 - **Keep humans in the loop** wherever a wrong answer is costly.
 - **Prefer simple infrastructure.** Static sites, serverless functions and plain files beat complex platforms for most internal tools, and they are cheaper to run.
 - **Ship in phases.** A working prototype in weeks, then hardening, then features.
+
+## Tools for agencies and in-house teams
+
+At Whole Whale I build [agentic tools, Claude skills, plugins and browser extensions](/work/whole-whale-ai-tools/) that turn an agency's repeatable SEO, AEO and reporting work into one-click workflows. At Merge I built [AI chat functions for hospital systems](/work/merge-healthcare-ai-chat/). The pattern is the same: find the process people repeat, write it down, and make it software.
 
 ## Built for search, too
 

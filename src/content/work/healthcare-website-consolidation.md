@@ -5,7 +5,7 @@ client: "Healthcare device manufacturer"
 sector: "Healthcare devices"
 summary: "Five separate websites merged into one WordPress site without losing organic visibility, with 60% more traffic and 130% more conversions."
 description: "How five healthcare device websites became one WordPress site with careful redirect mapping, lifting traffic 60% and conversions 130%."
-order: 4
+order: 6
 services: ["technical-seo", "seo"]
 results:
   - { value: "60%", label: "more traffic to the main site" }

@@ -108,6 +108,46 @@ content:
           - { name: a, label: Answer, type: text }
       - { name: body, label: Body, type: rich-text }
 
+  - name: home
+    label: Home page
+    type: file
+    path: src/data/home.json
+    format: json
+    fields:
+      - { name: seoTitle, label: SEO title, type: string }
+      - { name: metaDescription, label: Meta description, type: text }
+      - { name: query, label: Question in the bubble, type: string }
+      - { name: answer, label: Headline answer, type: text, description: "Wrap highlighted phrases in ==double equals== and add [1], [2], [3] right after a phrase to link it to that source below." }
+      - name: sources
+        label: Sources (numbered in order)
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: href, label: Link, type: string }
+      - name: primaryButton
+        label: Main button
+        type: object
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: href, label: Link, type: string }
+      - name: secondaryButton
+        label: Second button
+        type: object
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: href, label: Link, type: string }
+      - { name: servicesHeading, label: Services heading, type: string }
+      - { name: servicesIntro, label: Services intro, type: text }
+      - { name: buildLabel, label: AI services column title, type: string }
+      - { name: foundLabel, label: Search services column title, type: string }
+      - { name: workHeading, label: Work heading, type: string }
+      - { name: workIntro, label: Work intro, type: text }
+      - { name: writingHeading, label: Writing heading, type: string }
+      - { name: writingIntro, label: Writing intro, type: text, description: "Links: [text](/url/)" }
+      - { name: aboutHeading, label: About heading, type: string }
+      - { name: about, label: About paragraphs, type: text, list: true, description: "Links: [text](/url/)" }
+
   - name: navigation
     label: Menu
     type: file

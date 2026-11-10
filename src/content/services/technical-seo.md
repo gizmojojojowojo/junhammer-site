@@ -15,9 +15,9 @@ offers:
   - "Content pruning and consolidation"
 proof:
   - "Consolidated five healthcare device websites into one: 60% more traffic, 130% more conversions"
-  - "Led a law firm rebrand and national expansion with no lost organic clicks and 22% monthly traffic growth after launch"
-  - "Migrated an e-commerce client from Squarespace to WooCommerce"
-  - "Leads migration planning for enterprise healthcare replatforms"
+  - "Led enterprise migrations at Spinutech and Merge, from redirect maps to traffic recovery"
+  - "Built custom auditing frameworks on Screaming Frog and Search Console"
+  - "Led a law firm rebrand and national expansion with no lost organic clicks"
 work: ["healthcare-website-consolidation", "kus-usa-b2b-ecommerce-seo"]
 faqs:
   - q: "Will a website redesign hurt my SEO?"

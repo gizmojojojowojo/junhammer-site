@@ -5,7 +5,7 @@ client: "KUS-USA"
 sector: "Manufacturing"
 summary: "Technical product pages, content hubs and conversion fixes lifted organic traffic over 200% and direct-sales conversion from 2.8% to 4.5%."
 description: "How SEO and conversion rate optimization grew organic traffic 200%+ and lifted conversion rates for KUS-USA, a maker of liquid-level senders and marine gauges."
-order: 3
+order: 5
 services: ["seo", "technical-seo"]
 results:
   - { value: "200%+", label: "organic traffic, year over year" }

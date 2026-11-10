@@ -16,7 +16,7 @@ offers:
 proof:
   - "Grew Citrus Spine Clinic from 2.7K to 39.4K quarterly clicks, outranking major health systems"
   - "Increased a B2B e-commerce client's organic traffic more than 200%"
-  - "Managed 35 client accounts and a team of four strategists, with retention above 90%"
+  - "Grew a client's e-commerce sales 115% across B2B and B2C"
   - "Led international SEO for Panavision and Champion Petfoods"
 work: ["citrus-spine-clinic-seo", "kus-usa-b2b-ecommerce-seo"]
 faqs:

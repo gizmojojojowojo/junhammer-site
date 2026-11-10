@@ -7,7 +7,7 @@ year: "2022–2023"
 link: "https://www.citrusspine.com/"
 summary: "A new Florida spine clinic site grew from 2.7K to 39.4K quarterly search clicks and outranked Cleveland Clinic and Johns Hopkins for spine terms."
 description: "How E-E-A-T-focused content, technical fixes and local SEO grew a new spine clinic website from 2.74K to 39.4K quarterly clicks in one year."
-order: 2
+order: 4
 services: ["seo", "answer-engine-optimization"]
 results:
   - { value: "14x", label: "quarterly search clicks, 2.74K to 39.4K" }

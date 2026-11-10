@@ -29,13 +29,16 @@ const person = {
   jobTitle: site.jobTitle,
   url: 'https://junhammer.com/',
   sameAs: [site.linkedin, site.github].filter(Boolean),
-  address: { '@type': 'PostalAddress', addressLocality: 'Parker', addressRegion: 'CO', addressCountry: 'US' },
-  knowsAbout: ['Artificial intelligence', 'Large language models', 'AI agents', 'Answer engine optimization', 'Generative engine optimization', 'Search engine optimization', 'Technical SEO', 'Healthcare SEO'],
+  address: { '@type': 'PostalAddress', addressLocality: 'Denver', addressRegion: 'CO', addressCountry: 'US' },
+  worksFor: { '@type': 'Organization', name: 'Whole Whale', url: 'https://www.wholewhale.com/' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Metropolitan State University of Denver' },
+  knowsAbout: ['Artificial intelligence', 'Agentic AI', 'Large language models', 'Claude skills and MCP', 'Answer engine optimization', 'Generative engine optimization', 'Search engine optimization', 'Technical SEO', 'Healthcare SEO', 'Geospatial analysis', 'GIS'],
 };
 const graph = {
   '@context': 'https://schema.org',
   '@graph': [
     person,
+    { '@type': 'Organization', '@id': 'https://landmain.io/#org', name: 'LandmAIn', url: 'https://landmain.io/', founder: { '@id': 'https://junhammer.com/#person' } },
     { '@type': 'WebSite', '@id': 'https://junhammer.com/#website', url: 'https://junhammer.com/', name: site.name, publisher: { '@id': 'https://junhammer.com/#person' } },
     ...schema,
   ],
