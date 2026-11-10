@@ -3,30 +3,24 @@ import Base from '../layouts/Base.astro';
 import CTA from '../components/CTA.astro';
 import PostList from '../components/PostList.astro';
 import { getPosts, getServices, getWork } from '../lib';
-import site from '../data/site.json';
+import home from '../data/home.json';
+import { inline } from '../inline';
 const [services, work, posts] = await Promise.all([getServices(), getWork(), getPosts()]);
 const build = services.filter((s) => s.id.startsWith('ai-'));
 const found = services.filter((s) => !s.id.startsWith('ai-'));
 const latest = posts.slice(0, 5);
 ---
-<Base title="Joe Unhammer: AI Engineer and AEO/SEO Consultant" description={site.description}>
+<Base title={home.seoTitle} seoTitle={home.seoTitle} description={home.metaDescription}>
   <section class="hero">
     <div class="wrap">
-      <p class="query"><span class="q-label">Asked</span> Who can build an AI tool and also get a brand cited in AI search?</p>
-      <h1 class="answer">
-        Joe Unhammer is an <span class="mark">AI engineer and search consultant</span> in Colorado. He
-        <span class="mark">builds LLM-powered tools</span><a class="cite" href="#src-1" aria-label="Source 1">1</a>,
-        leads <span class="mark">answer engine optimization for enterprise health systems</span><a class="cite" href="#src-2" aria-label="Source 2">2</a>,
-        and once <span class="mark">grew a spine clinic's search clicks 14x in a year</span><a class="cite" href="#src-3" aria-label="Source 3">3</a>.
-      </h1>
+      <p class="query"><span class="q-label">Asked</span> {home.query}</p>
+      <h1 class="answer" set:html={inline(home.answer)} />
       <div class="actions">
-        <a class="btn" href="/contact/">Start a project</a>
-        <a class="btn ghost" href="/services/">See services</a>
+        <a class="btn" href={home.primaryButton.href}>{home.primaryButton.label}</a>
+        <a class="btn ghost" href={home.secondaryButton.href}>{home.secondaryButton.label}</a>
       </div>
       <ol class="sources" aria-label="Sources">
-        <li id="src-1"><a href="/work/landmain/">LandmAIn: AI infrastructure site intelligence</a></li>
-        <li id="src-2"><a href="/services/answer-engine-optimization/">Answer engine optimization</a></li>
-        <li id="src-3"><a href="/work/citrus-spine-clinic-seo/">Citrus Spine Clinic case study</a></li>
+        {home.sources.map((src, i) => <li id={`src-${i + 1}`}><a href={src.href}>{src.label}</a></li>)}
       </ol>
     </div>
   </section>
@@ -34,16 +28,16 @@ const latest = posts.slice(0, 5);
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <h2>Two practices, one person</h2>
-        <p>AI changed how software gets built and how people find things. I work on both sides of that, so the tool and the visibility plan come from the same person.</p>
+        <h2>{home.servicesHeading}</h2>
+        <p set:html={inline(home.servicesIntro)} />
       </div>
       <div class="split">
         <div>
-          <h3 class="group">Build with AI</h3>
+          <h3 class="group">{home.buildLabel}</h3>
           <ul class="svc">{build.map((s) => <li><a href={`/services/${s.id}/`}><strong>{s.data.title}</strong><span>{s.data.summary}</span></a></li>)}</ul>
         </div>
         <div>
-          <h3 class="group">Get found by people and AI</h3>
+          <h3 class="group">{home.foundLabel}</h3>
           <ul class="svc">{found.map((s) => <li><a href={`/services/${s.id}/`}><strong>{s.data.title}</strong><span>{s.data.summary}</span></a></li>)}</ul>
         </div>
       </div>
@@ -53,8 +47,8 @@ const latest = posts.slice(0, 5);
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <h2>Selected work</h2>
-        <p>Recent builds and the search programs behind the numbers.</p>
+        <h2>{home.workHeading}</h2>
+        <p set:html={inline(home.workIntro)} />
       </div>
       <ol class="cases">
         {work.slice(0, 4).map((w) => (
@@ -74,8 +68,8 @@ const latest = posts.slice(0, 5);
   <section class="section">
     <div class="wrap two">
       <div class="section-head">
-        <h2>Writing</h2>
-        <p>Field notes on AI search, AEO and technical SEO, written from client work. Start with <a href="/the-complete-aeo-playbook/">the AEO Playbook</a> or the guides.</p>
+        <h2>{home.writingHeading}</h2>
+        <p set:html={inline(home.writingIntro)} />
         <p><a href="/blog/">Browse all writing</a></p>
       </div>
       <PostList posts={latest} />
@@ -85,12 +79,10 @@ const latest = posts.slice(0, 5);
   <section class="section">
     <div class="wrap two">
       <div class="section-head">
-        <h2>About Joe</h2>
+        <h2>{home.aboutHeading}</h2>
       </div>
       <div class="prose bio">
-        <p>I was born in Flekkefjord, Norway, moved to Colorado after high school, and served in the US Army, including a deployment to Afghanistan. I studied marketing and aviation at MSU Denver, then spent ten years in agency and in-house search roles, most recently leading SEO and AEO for enterprise healthcare accounts.</p>
-        <p>These days I write as much code as strategy. I build AI tools for my own projects and for clients, and I use the same discipline on both: clear evidence, honest reporting, and no tactics I would not explain to the client.</p>
-        <p><a href="/about/">More about me</a> or <a href="/resume/">read the resume</a>.</p>
+        {home.about.map((para) => <p set:html={inline(para)} />)}
       </div>
     </div>
   </section>
@@ -112,12 +104,12 @@ const latest = posts.slice(0, 5);
     font-family: var(--font-body); font-weight: 400; font-size: var(--step-4);
     line-height: 1.28; letter-spacing: -0.015em; max-width: 30ch;
   }
-  .answer .mark { animation: sweep .9s cubic-bezier(.2,.7,.2,1) both; background-size: 0% 100%; background-repeat: no-repeat; }
-  .answer .mark:nth-of-type(2) { animation-delay: .25s; }
-  .answer .mark:nth-of-type(3) { animation-delay: .5s; }
-  .answer .mark:nth-of-type(4) { animation-delay: .75s; }
+  .answer :global(.mark) { animation: sweep .9s cubic-bezier(.2,.7,.2,1) both; background-size: 0% 100%; background-repeat: no-repeat; }
+  .answer :global(.mark:nth-of-type(2)) { animation-delay: .25s; }
+  .answer :global(.mark:nth-of-type(3)) { animation-delay: .5s; }
+  .answer :global(.mark:nth-of-type(4)) { animation-delay: .75s; }
   @keyframes sweep { to { background-size: 100% 100%; } }
-  @media (prefers-reduced-motion: reduce) { .answer .mark { background-size: 100% 100%; } }
+  @media (prefers-reduced-motion: reduce) { .answer :global(.mark) { background-size: 100% 100%; } }
   .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.5rem; }
   .sources {
     margin: 3rem 0 0; padding: 1rem 0 0 1.4rem; border-top: 1px solid var(--rule);

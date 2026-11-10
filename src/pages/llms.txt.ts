@@ -10,7 +10,7 @@ export const GET: APIRoute = async () => {
     '',
     `> ${site.description}`,
     '',
-    `${site.name} (${site.legalName}) is an AI engineer and AEO/SEO consultant in ${site.location}. He builds LLM tools and agents, and runs answer engine optimization and technical SEO programs, with a decade of agency work for enterprise healthcare, e-commerce and B2B clients.`,
+    `${site.name} (${site.legalName}) is an AI solutions builder and search strategist in ${site.location}. He founded LandmAIn, an AI land intelligence platform for data center and energy site selection, works as AI Search Strategist at Whole Whale building agentic AI tools, and led AEO and technical SEO for enterprise health systems at Merge. He is a US Army veteran and former geospatial intelligence analyst.`,
     '',
     '## Services',
     ...services.map((s) => `- [${s.data.title}](${u(`/services/${s.id}/`)}): ${s.data.summary}`),

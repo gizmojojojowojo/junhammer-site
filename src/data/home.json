@@ -1,0 +1,27 @@
+{
+  "seoTitle": "Joe Unhammer: AI Engineer and AEO/SEO Consultant",
+  "metaDescription": "Joe Unhammer builds agentic AI tools and leads answer engine optimization and technical SEO. Founder of LandmAIn. Based in Colorado.",
+  "query": "Who can build an AI tool and also get a brand cited in AI search?",
+  "answer": "Joe Unhammer is an ==AI engineer and search strategist== in Colorado. He ==founded LandmAIn, an AI land-intelligence platform==[1], ==builds AI chat tools and agents for agencies and hospital systems==[2], and once ==grew a spine clinic's search clicks 14x in a year==[3].",
+  "sources": [
+    { "label": "LandmAIn: AI land intelligence for site selection", "href": "/work/landmain/" },
+    { "label": "AI chat for hospital systems", "href": "/work/merge-healthcare-ai-chat/" },
+    { "label": "Citrus Spine Clinic case study", "href": "/work/citrus-spine-clinic-seo/" }
+  ],
+  "primaryButton": { "label": "Start a project", "href": "/contact/" },
+  "secondaryButton": { "label": "See services", "href": "/services/" },
+  "servicesHeading": "Two practices, one person",
+  "servicesIntro": "AI changed how software gets built and how people find things. I work on both sides of that, so the tool and the visibility plan come from the same person.",
+  "buildLabel": "Build with AI",
+  "foundLabel": "Get found by people and AI",
+  "workHeading": "Selected work",
+  "workIntro": "Recent builds and the search programs behind the numbers.",
+  "writingHeading": "Writing",
+  "writingIntro": "Field notes on AI search, AEO and technical SEO, written from client work. Start with [the AEO Playbook](/the-complete-aeo-playbook/) or the guides.",
+  "aboutHeading": "About Joe",
+  "about": [
+    "I was born in Flekkefjord, Norway, moved to Colorado after high school, and served eight years in the US Army as a forward observer, personal security specialist and geospatial intelligence analyst, including a deployment to Afghanistan.",
+    "After the Army I spent a decade in GIS marketing and agency search, leading AEO and technical SEO for enterprise health systems. Today I build agentic AI tools as an AI Search Strategist at Whole Whale and run [LandmAIn](/work/landmain/), the land-intelligence platform I founded.",
+    "[More about me](/about/) or [read the resume](/resume/)."
+  ]
+}

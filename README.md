@@ -9,6 +9,7 @@ Built with [Astro](https://astro.build), hosted on Cloudflare Pages, edited with
 2. Edit blog posts, services, case studies, pages, the **Menu** and **Site settings** in the sidebar.
 3. Click **Save**. That commits to GitHub, and Cloudflare rebuilds the site in about a minute.
 
+- **Home page:** *Home page* in the sidebar. In the headline, ==double equals== highlights a phrase and [1] links it to source 1. The case studies shown come from *Case studies* (lowest *Order* first).
 - **Menu and services dropdown:** *Menu* → *Services* → *Dropdown items*.
 - **New service page:** add it under *Services*, then add a dropdown item that links to `/services/<file-name>/`.
 - **Hide something without deleting it:** tick *Draft*.
@@ -24,6 +25,7 @@ All content is plain Markdown with YAML frontmatter:
 | Service pages | `src/content/services/*.md` |
 | Case studies | `src/content/work/*.md` |
 | About, resume, FAQ, AEO Playbook | `src/content/pages/*.md` |
+| Home page text | `src/data/home.json` |
 | Menu | `src/data/navigation.json` |
 | Name, email, contact form | `src/data/site.json` |
 | Colors and fonts | `src/styles/global.css` (top of file) |
@@ -63,4 +65,4 @@ The form appears when `formEndpoint` is set in *Site settings*. Free option: cre
 
 **Refresh (high impressions, poor position):** the user intent, AEO tools, semantic search and definitive AEO guides; AEO statistics (update to 2026); how AI search engines decide what to cite; human-AI content collaboration; keyword research; the AEO Playbook (expand past 520 words).
 
-**Write:** posts for the AI topic; the AI agents in marketing draft (`draft: true`); the Whole Whale and Merge healthcare chat case studies (`draft: true`).
+**Write:** posts for the AI topic, and the AI agents in marketing draft (`draft: true`).
