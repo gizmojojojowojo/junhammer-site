@@ -8,7 +8,7 @@ updated: "2026-01-18"
 topic: "Healthcare AEO"
 pillar: false
 draft: false
-image: "https://junhammer.com/wp-content/uploads/2026/01/hands-tablet-and-contact-us-with-healthcare-marketing-or-advertising-on-a-website-in-the-medical-industry-health-medicine-and-insurance-with-ux-design-on-a-wireless-technology-screen-in-a-hospital-stockpack-adobe-stock.jpg"
+image: "/images/wp/2026/01/hands-tablet-and-contact-us-with-healthcare-marketing-or.webp"
 ---
 Search engines no longer match keywords to pages. They match concepts to entities. For health systems, this shift changes everything about how patients find your services, physicians, and health information online. Entity-based search means Google and AI systems understand your health system as a distinct organization with specific locations, physicians, specialties, and services. When these systems correctly identify and connect these entities, your visibility expands dramatically. When entity relationships are unclear or inconsistent, you become invisible in exactly the searches where you should dominate. This guide explains how entity-based search works for health systems and provides the practical steps needed to optimize your entity presence across search and AI platforms.
 
