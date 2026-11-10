@@ -1,15 +1,30 @@
 {
   "seoTitle": "Joe Unhammer: AI Engineer and AEO/SEO Consultant",
-  "metaDescription": "Joe Unhammer builds agentic AI tools and leads answer engine optimization and technical SEO. Founder of LandmAIn. Based in Colorado.",
+  "metaDescription": "Joe Unhammer builds agentic AI tools and AI chat functions, and leads answer engine optimization and technical SEO. AI consulting, AI engineering, AEO and SEO in Colorado.",
   "query": "Who can build an AI tool and also get a brand cited in AI search?",
-  "answer": "Joe Unhammer is an ==AI engineer and search strategist== in Colorado. He ==founded LandmAIn, an AI land-intelligence platform==[1], ==builds AI chat tools and agents for agencies and hospital systems==[2], and once ==grew a spine clinic's search clicks 14x in a year==[3].",
+  "answer": "Joe Unhammer is an AI engineer and search strategist in Colorado. He ==builds agentic AI tools for agencies==[1], ==built AI chat for hospital systems==[2], and ==grew a spine clinic's search clicks 14x in a year==[3].",
   "sources": [
-    { "label": "LandmAIn: AI land intelligence for site selection", "href": "/work/landmain/" },
-    { "label": "AI chat for hospital systems", "href": "/work/merge-healthcare-ai-chat/" },
-    { "label": "Citrus Spine Clinic case study", "href": "/work/citrus-spine-clinic-seo/" }
+    {
+      "label": "Agentic AI tools at Whole Whale",
+      "href": "/work/whole-whale-ai-tools/"
+    },
+    {
+      "label": "AI chat for hospital systems",
+      "href": "/work/merge-healthcare-ai-chat/"
+    },
+    {
+      "label": "Citrus Spine Clinic case study",
+      "href": "/work/citrus-spine-clinic-seo/"
+    }
   ],
-  "primaryButton": { "label": "Start a project", "href": "/contact/" },
-  "secondaryButton": { "label": "See services", "href": "/services/" },
+  "primaryButton": {
+    "label": "Start a project",
+    "href": "/contact/"
+  },
+  "secondaryButton": {
+    "label": "See services",
+    "href": "/services/"
+  },
   "servicesHeading": "Two practices, one person",
   "servicesIntro": "AI changed how software gets built and how people find things. I work on both sides of that, so the tool and the visibility plan come from the same person.",
   "buildLabel": "Build with AI",
@@ -21,7 +36,10 @@
   "aboutHeading": "About Joe",
   "about": [
     "I was born in Flekkefjord, Norway, moved to Colorado after high school, and served eight years in the US Army as a forward observer, personal security specialist and geospatial intelligence analyst, including a deployment to Afghanistan.",
-    "After the Army I spent a decade in GIS marketing and agency search, leading AEO and technical SEO for enterprise health systems. Today I build agentic AI tools as an AI Search Strategist at Whole Whale and run [LandmAIn](/work/landmain/), the land-intelligence platform I founded.",
+    "After the Army I spent a decade in GIS marketing and agency search, leading AEO and technical SEO for enterprise health systems. Today I build agentic AI tools as an AI Search Strategist at Whole Whale and take on independent AI and search projects.",
     "[More about me](/about/) or [read the resume](/resume/)."
-  ]
+  ],
+  "heroImage": "/images/brand/hero-mountains-1920.webp",
+  "heroImageAlt": "Snow-covered pines and a mountain peak in the Colorado Rockies",
+  "portrait": "/images/brand/joe-unhammer.webp"
 }

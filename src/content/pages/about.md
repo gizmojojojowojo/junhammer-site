@@ -4,6 +4,8 @@ seoTitle: "About Joe Unhammer: AI Engineer and AEO/SEO Consultant"
 description: Joe Unhammer is an AI engineer and AEO/SEO consultant in Colorado,
   a US Army veteran with ten years of search work for enterprise brands.
 ---
+<img class="portrait-float" src="/images/brand/joe-unhammer.webp" alt="Joe Unhammer" width="640" height="640" />
+
 I'm Joe. My full name is Jostein Brubeck Unhammer, but nobody outside Norway gets it right on the first try.
 
 ## What I do now

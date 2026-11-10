@@ -6,7 +6,7 @@ sector: "Nonprofit digital agency"
 year: "2026–present"
 summary: "Plugins, browser extensions, Claude skills, chat functions and reporting automations that package an agency's SEO and AEO processes into one-click workflows."
 description: "Agentic AI tools built at Whole Whale: Claude skills, plugins, browser extensions, chat functions and automated GA4 and Search Console reporting."
-order: 2
+order: 1
 services: ["ai-engineering", "ai-consulting", "answer-engine-optimization"]
 results:
   - { value: "1-click", label: "SEO and AEO workflows packaged as reusable tools" }

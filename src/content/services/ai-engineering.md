@@ -15,11 +15,11 @@ offers:
   - "Fast static sites and APIs on Cloudflare"
   - "Automated GA4 and Search Console reporting"
 proof:
-  - "Founded and built LandmAIn: regional search to parcel-level analysis to a sourced site brief"
   - "Builds plugins, browser extensions and Claude skills that package SEO and AEO processes"
   - "Designed and built AI chat functions for hospital systems"
   - "Automates GA4 and Search Console reporting into ready-to-send deliverables"
-work: ["landmain"]
+  - "Built LandmAIn, an AI land intelligence platform with a sourced evidence layer"
+work: ["whole-whale-ai-tools", "merge-healthcare-ai-chat", "landmain"]
 faqs:
   - q: "What kinds of AI applications do you build?"
     a: "Mostly tools that sit on top of a team's own information: assistants that answer from your documents, agents that gather and summarize research, and data products that combine public sources into something decision-ready. I build with current models from Anthropic, OpenAI and Google and pick per task on cost, accuracy and data rules."
@@ -32,7 +32,7 @@ faqs:
 
 I build AI software for specific jobs, not general chatbots. The best AI tools I have seen do one thing well: answer from a defined body of knowledge, run a repeatable research process, or turn messy sources into structured data a person can trust.
 
-My flagship project is [LandmAIn](/work/landmain/), the AI land intelligence platform I founded for data center and energy site selection. It runs from regional search to parcel-level analysis to a reviewable site brief, and every finding ties to a dated, inspectable source. That last part matters: an AI tool is only useful if people can see where its answers come from.
+One example is [LandmAIn](/work/landmain/), an AI land intelligence platform I built for data center and energy site selection. It runs from regional search to parcel-level analysis to a reviewable site brief, and every finding ties to a dated, inspectable source. That last part matters: an AI tool is only useful if people can see where its answers come from.
 
 ## How I build
 

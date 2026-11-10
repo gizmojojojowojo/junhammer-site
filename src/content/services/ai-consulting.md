@@ -14,11 +14,11 @@ offers:
   - "Build-or-buy plans and scoped specs for custom tools"
   - "Team training on prompting and AI-assisted research"
 proof:
-  - "Founded LandmAIn, an AI land intelligence platform, and built it from idea to public product"
   - "Turns repeatable agency work into AI workflows as AI Search Strategist at Whole Whale"
   - "Documents and standardizes AI processes so non-technical staff can run them"
+  - "Built LandmAIn, an AI land intelligence platform, from idea to public product"
   - "Ten years leading search programs for healthcare, nonprofit, legal and e-commerce clients"
-work: ["landmain"]
+work: ["whole-whale-ai-tools", "landmain"]
 faqs:
   - q: "What does an AI consultant actually do?"
     a: "An AI consultant looks at how your team works today, finds the tasks where AI saves real time or improves quality, and turns that into a plan: which tools to use, what to build, what the rules are, and how you will measure whether it worked. The output is a decision you can act on, not a slide deck about AI trends."
