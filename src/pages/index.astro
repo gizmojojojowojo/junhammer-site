@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+import CTA from '../components/CTA.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts, getServices, getWork } from '../lib';
+import site from '../data/site.json';
+const [services, work, posts] = await Promise.all([getServices(), getWork(), getPosts()]);
+const build = services.filter((s) => s.id.startsWith('ai-'));
+const found = services.filter((s) => !s.id.startsWith('ai-'));
+const latest = posts.slice(0, 5);
+---
+<Base title="Joe Unhammer: AI Engineer and AEO/SEO Consultant" description={site.description}>
+  <section class="hero">
+    <div class="wrap">
+      <p class="query"><span class="q-label">Asked</span> Who can build an AI tool and also get a brand cited in AI search?</p>
+      <h1 class="answer">
+        Joe Unhammer is an <span class="mark">AI engineer and search consultant</span> in Colorado. He
+        <span class="mark">builds LLM-powered tools</span><a class="cite" href="#src-1" aria-label="Source 1">1</a>,
+        leads <span class="mark">answer engine optimization for enterprise health systems</span><a class="cite" href="#src-2" aria-label="Source 2">2</a>,
+        and once <span class="mark">grew a spine clinic's search clicks 14x in a year</span><a class="cite" href="#src-3" aria-label="Source 3">3</a>.
+      </h1>
+      <div class="actions">
+        <a class="btn" href="/contact/">Start a project</a>
+        <a class="btn ghost" href="/services/">See services</a>
+      </div>
+      <ol class="sources" aria-label="Sources">
+        <li id="src-1"><a href="/work/landmain/">LandmAIn: AI infrastructure site intelligence</a></li>
+        <li id="src-2"><a href="/services/answer-engine-optimization/">Answer engine optimization</a></li>
+        <li id="src-3"><a href="/work/citrus-spine-clinic-seo/">Citrus Spine Clinic case study</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Two practices, one person</h2>
+        <p>AI changed how software gets built and how people find things. I work on both sides of that, so the tool and the visibility plan come from the same person.</p>
+      </div>
+      <div class="split">
+        <div>
+          <h3 class="group">Build with AI</h3>
+          <ul class="svc">{build.map((s) => <li><a href={`/services/${s.id}/`}><strong>{s.data.title}</strong><span>{s.data.summary}</span></a></li>)}</ul>
+        </div>
+        <div>
+          <h3 class="group">Get found by people and AI</h3>
+          <ul class="svc">{found.map((s) => <li><a href={`/services/${s.id}/`}><strong>{s.data.title}</strong><span>{s.data.summary}</span></a></li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Selected work</h2>
+        <p>Recent builds and the search programs behind the numbers.</p>
+      </div>
+      <ol class="cases">
+        {work.slice(0, 4).map((w) => (
+          <li>
+            <a href={`/work/${w.id}/`}>
+              <span class="who meta">{w.data.client}</span>
+              <strong>{w.data.title}</strong>
+              {w.data.results[0] && <span class="stat"><b>{w.data.results[0].value}</b> {w.data.results[0].label}</span>}
+            </a>
+          </li>
+        ))}
+      </ol>
+      <p class="more"><a href="/work/">All case studies</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div class="section-head">
+        <h2>Writing</h2>
+        <p>Field notes on AI search, AEO and technical SEO, written from client work. Start with <a href="/the-complete-aeo-playbook/">the AEO Playbook</a> or the guides.</p>
+        <p><a href="/blog/">Browse all writing</a></p>
+      </div>
+      <PostList posts={latest} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div class="section-head">
+        <h2>About Joe</h2>
+      </div>
+      <div class="prose bio">
+        <p>I was born in Flekkefjord, Norway, moved to Colorado after high school, and served in the US Army, including a deployment to Afghanistan. I studied marketing and aviation at MSU Denver, then spent ten years in agency and in-house search roles, most recently leading SEO and AEO for enterprise healthcare accounts.</p>
+        <p>These days I write as much code as strategy. I build AI tools for my own projects and for clients, and I use the same discipline on both: clear evidence, honest reporting, and no tactics I would not explain to the client.</p>
+        <p><a href="/about/">More about me</a> or <a href="/resume/">read the resume</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</Base>
+
+<style>
+  .hero { padding-block: clamp(3rem, 9vw, 7rem) clamp(2.5rem, 6vw, 4.5rem); }
+  .query {
+    display: inline-flex; flex-wrap: wrap; gap: .4rem .75rem; align-items: baseline;
+    font-family: var(--font-ui); font-size: 1rem; color: var(--ink-soft);
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 999px;
+    padding: .55rem 1.1rem; margin: 0 0 2rem; max-width: 100%;
+  }
+  .q-label { font-weight: 700; color: var(--fjord); }
+  .answer {
+    font-family: var(--font-body); font-weight: 400; font-size: var(--step-4);
+    line-height: 1.28; letter-spacing: -0.015em; max-width: 30ch;
+  }
+  .answer .mark { animation: sweep .9s cubic-bezier(.2,.7,.2,1) both; background-size: 0% 100%; background-repeat: no-repeat; }
+  .answer .mark:nth-of-type(2) { animation-delay: .25s; }
+  .answer .mark:nth-of-type(3) { animation-delay: .5s; }
+  .answer .mark:nth-of-type(4) { animation-delay: .75s; }
+  @keyframes sweep { to { background-size: 100% 100%; } }
+  @media (prefers-reduced-motion: reduce) { .answer .mark { background-size: 100% 100%; } }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.5rem; }
+  .sources {
+    margin: 3rem 0 0; padding: 1rem 0 0 1.4rem; border-top: 1px solid var(--rule);
+    display: flex; flex-wrap: wrap; gap: .5rem 2.5rem; font-family: var(--font-ui); font-size: var(--step--1);
+  }
+  .sources li::marker { color: var(--fjord); font-weight: 700; }
+  .sources li:target a { background: var(--highlight); color: var(--highlight-ink); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .group { font-size: var(--step-1); padding-bottom: .75rem; border-bottom: 2px solid var(--ink); }
+  .svc { list-style: none; margin: 0; padding: 0; }
+  .svc a { display: grid; gap: .3rem; padding: 1.25rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); }
+  .svc strong { font-family: var(--font-display); font-size: 1.25rem; letter-spacing: -0.01em; }
+  .svc span { color: var(--ink-soft); font-size: 1rem; }
+  .svc a:hover strong { color: var(--fjord); text-decoration: underline; text-underline-offset: .2em; }
+
+  .cases { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 3rem; counter-reset: c; }
+  .cases li { border-top: 1px solid var(--rule); counter-increment: c; }
+  .cases a { display: grid; gap: .4rem; padding: 1.5rem 0 1.75rem; text-decoration: none; color: var(--ink); }
+  .cases a::before { content: '[' counter(c) ']'; font-family: var(--font-ui); font-weight: 700; color: var(--fjord); font-size: .95rem; }
+  .cases strong { font-family: var(--font-display); font-size: var(--step-1); line-height: 1.25; letter-spacing: -0.01em; }
+  .cases a:hover strong { color: var(--fjord); text-decoration: underline; text-underline-offset: .2em; }
+  .stat { font-family: var(--font-ui); font-size: .95rem; color: var(--ink-soft); }
+  .stat b { color: var(--ink); background: var(--highlight); color: var(--highlight-ink); padding: 0 .3rem; border-radius: 2px; }
+  .more { margin: 1.5rem 0 0; font-family: var(--font-ui); font-weight: 600; }
+
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 3rem; align-items: start; }
+  .two .section-head { margin-bottom: 0; }
+  .bio p { margin: 0; }
+
+  @media (max-width: 860px) {
+    .split, .cases, .two { grid-template-columns: 1fr; }
+    .answer { font-size: clamp(1.75rem, 7.2vw, 2.4rem); }
+  }
+</style>

@@ -1,0 +1,24 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import CTA from '../components/CTA.astro';
+import FAQ from '../components/FAQ.astro';
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}
+const { page } = Astro.props;
+const d = page.data;
+const { Content } = await render(page);
+const schema: Record<string, unknown>[] = [];
+if (d.faqs.length) schema.push({ '@type': 'FAQPage', mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+if (page.id === 'about') schema.push({ '@type': 'ProfilePage', mainEntity: { '@id': 'https://junhammer.com/#person' } });
+---
+<Base title={d.title} seoTitle={d.seoTitle} description={d.description} schema={schema}>
+  <article class="narrow">
+    <header class="page-head"><h1>{d.title}</h1></header>
+    <div class="prose"><Content /></div>
+    <FAQ faqs={d.faqs} heading="" />
+  </article>
+  <CTA />
+</Base>

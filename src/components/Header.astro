@@ -1,0 +1,124 @@
+---
+import nav from '../data/navigation.json';
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="wordmark" href="/" aria-label="Joe Unhammer, home">
+      <span class="wm-name">Joe Unhammer</span>
+      <span class="wm-role">AI engineering &amp; search</span>
+    </a>
+
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
+      <span class="sr">Menu</span>
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M2 6h18M2 11h18M2 16h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+
+    <nav id="site-nav" class="nav" aria-label="Main">
+      <ul class="nav-list">
+        {nav.items.map((item) =>
+          item.children && item.children.length ? (
+            <li class="has-menu">
+              <div class="menu-row">
+                <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+                <button class="sub-toggle" aria-expanded="false" aria-label={`Show ${item.label} menu`}>
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                </button>
+              </div>
+              <ul class="submenu">
+                {item.children.map((c) => (
+                  <li><a href={c.href} aria-current={path === c.href ? 'page' : undefined}>{c.label}</a></li>
+                ))}
+              </ul>
+            </li>
+          ) : (
+            <li><a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a></li>
+          )
+        )}
+        <li class="nav-cta"><a class="btn" href={nav.cta.href}>{nav.cta.label}</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.25rem; }
+  .wordmark { display: grid; text-decoration: none; color: var(--ink); line-height: 1.1; }
+  .wm-name { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em; }
+  .wm-role { font-family: var(--font-ui); font-size: .78rem; color: var(--ink-soft); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .nav-list { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: .25rem; font-family: var(--font-ui); font-size: .98rem; }
+  .nav-list a { color: var(--ink); text-decoration: none; padding: .5rem .7rem; border-radius: var(--radius-s); display: block; }
+  .nav-list a:hover, .nav-list a[aria-current] { color: var(--fjord); }
+  .nav-list a[aria-current]:not(.btn) { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .4em; }
+  .nav-cta { margin-left: .5rem; }
+  .nav-cta .btn { color: var(--paper); padding: .55rem 1rem; }
+  .nav-cta .btn:hover { color: var(--paper); }
+  .has-menu { position: relative; }
+  .menu-row { display: flex; align-items: center; }
+  .menu-row a { padding-right: .2rem; }
+  .sub-toggle { background: none; border: 0; color: var(--ink); padding: .5rem .45rem; cursor: pointer; border-radius: var(--radius-s); }
+  .sub-toggle svg { transition: transform .15s; }
+  .sub-toggle[aria-expanded='true'] svg { transform: rotate(180deg); }
+  .submenu {
+    list-style: none; margin: 0; padding: .5rem; position: absolute; top: calc(100% + .25rem); left: 0; min-width: 18rem;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-m);
+    box-shadow: 0 12px 32px -12px rgb(23 32 46 / .25); display: none;
+  }
+  .submenu a { padding: .6rem .75rem; }
+  .submenu a:hover { background: var(--paper); }
+  .has-menu.open .submenu { display: block; }
+  @media (hover: hover) and (min-width: 960px) {
+    .has-menu:hover .submenu, .has-menu:focus-within .submenu { display: block; }
+    .has-menu::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: .5rem; }
+  }
+  .menu-toggle { display: none; background: none; border: 1px solid var(--rule); color: var(--ink); border-radius: var(--radius-s); padding: .45rem .55rem; cursor: pointer; }
+
+  @media (max-width: 959px) {
+    .menu-toggle { display: inline-flex; }
+    .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--paper); border-bottom: 1px solid var(--rule); max-height: calc(100vh - 4.25rem); overflow-y: auto; }
+    .nav.open { display: block; }
+    .nav-list { flex-direction: column; align-items: stretch; padding: .75rem var(--gutter) 1.25rem; gap: 0; }
+    .nav-list > li { border-bottom: 1px solid var(--rule); }
+    .nav-list a { padding: .85rem 0; }
+    .menu-row { justify-content: space-between; }
+    .submenu { position: static; box-shadow: none; border: 0; padding: 0 0 .5rem 1rem; min-width: 0; background: transparent; }
+    .nav-cta { margin: 1rem 0 0; border: 0 !important; }
+    .nav-cta .btn { justify-content: center; padding: .8rem; }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', String(open));
+    nav?.classList.toggle('open', open);
+  });
+  document.querySelectorAll<HTMLButtonElement>('.sub-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const li = btn.closest('.has-menu');
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      li?.classList.toggle('open', open);
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.has-menu.open').forEach((li) => {
+      li.classList.remove('open');
+      li.querySelector('.sub-toggle')?.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.has-menu.open').forEach((li) => {
+      if (!li.contains(e.target as Node)) {
+        li.classList.remove('open');
+        li.querySelector('.sub-toggle')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+</script>

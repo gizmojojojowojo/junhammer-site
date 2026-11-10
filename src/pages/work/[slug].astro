@@ -1,0 +1,52 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import { getWork, getServices } from '../../lib';
+export async function getStaticPaths() {
+  const work = await getWork();
+  return work.map((w) => ({ params: { slug: w.id }, props: { item: w } }));
+}
+const { item } = Astro.props as { item: CollectionEntry<'work'> };
+const d = item.data;
+const { Content } = await render(item);
+const services = (await getServices()).filter((s) => d.services.includes(s.id));
+const url = `https://junhammer.com/work/${item.id}/`;
+const schema = [
+  { '@type': 'Article', headline: d.title, description: d.description ?? d.summary, author: { '@id': 'https://junhammer.com/#person' }, mainEntityOfPage: url, about: d.client },
+  { '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Work', item: 'https://junhammer.com/work/' },
+    { '@type': 'ListItem', position: 2, name: d.title, item: url },
+  ] },
+];
+---
+<Base title={d.title} seoTitle={d.seoTitle} description={d.description ?? d.summary} type="article" schema={schema}>
+  <article class="narrow">
+    <header class="page-head">
+      <p class="crumbs"><a href="/work/">Work</a> / {d.client}</p>
+      <h1>{d.title}</h1>
+      <p class="lede">{d.summary}</p>
+      <p class="meta facts">
+        <span>Client: {d.client}</span>
+        {d.sector && <span>Sector: {d.sector}</span>}
+        {d.year && <span>{d.year}</span>}
+        {d.link && <a href={d.link} rel="noopener">Visit project</a>}
+      </p>
+    </header>
+    {d.results.length > 0 && (
+      <dl class="res">{d.results.map((r) => <div><dt>{r.value}</dt><dd>{r.label}</dd></div>)}</dl>
+    )}
+    <div class="prose"><Content /></div>
+    {services.length > 0 && (
+      <p class="svc meta">Services used: {services.map((s, i) => <Fragment>{i > 0 && ', '}<a href={`/services/${s.id}/`}>{s.data.navLabel}</a></Fragment>)}</p>
+    )}
+  </article>
+  <CTA />
+</Base>
+<style>
+  .facts { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin-top: 1.25rem; }
+  .res { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1.5rem; margin: 0 0 3rem; padding: 1.5rem 0; border-block: 1px solid var(--rule); }
+  .res dt { font-family: var(--font-display); font-weight: 800; font-size: var(--step-3); line-height: 1; }
+  .res dd { margin: .4rem 0 0; font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); }
+  .svc { margin-top: 3rem; }
+</style>

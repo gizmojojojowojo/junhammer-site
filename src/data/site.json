@@ -1,0 +1,14 @@
+{
+  "name": "Joe Unhammer",
+  "legalName": "Jostein Brubeck Unhammer",
+  "jobTitle": "AI Engineer & AEO/SEO Consultant",
+  "tagline": "AI engineering and search strategy for teams that need both.",
+  "description": "Joe Unhammer builds AI tools and search programs: AI consulting, LLM and agent development, answer engine optimization, and technical SEO. Based in Colorado.",
+  "email": "brubeckunhammer@gmail.com",
+  "location": "Parker, Colorado",
+  "linkedin": "https://www.linkedin.com/in/junhammer/",
+  "github": "https://github.com/gizmojojojowojo",
+  "formEndpoint": "",
+  "formAccessKey": "",
+  "footerNote": "Built with Astro and hosted on Cloudflare Pages."
+}

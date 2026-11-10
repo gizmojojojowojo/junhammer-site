@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import { getWork } from '../../lib';
+const work = await getWork();
+---
+<Base title="Work: AI builds, AEO and SEO case studies" description="Case studies from Joe Unhammer: AI tools, healthcare SEO and AEO programs, B2B e-commerce growth and multi-site migrations.">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Work</h1>
+      <p class="lede">Projects I built or led, with the numbers where clients allow them.</p>
+    </header>
+    <ol class="cases">
+      {work.map((w, i) => (
+        <li id={`case-${i + 1}`}>
+          <a href={`/work/${w.id}/`}>
+            <span class="n" aria-hidden="true">[{i + 1}]</span>
+            <div>
+              <p class="who meta">{w.data.client}{w.data.sector && `, ${w.data.sector}`}</p>
+              <h2>{w.data.title}</h2>
+              <p class="sum">{w.data.summary}</p>
+              {w.data.results.length > 0 && (
+                <dl class="res">{w.data.results.slice(0, 3).map((r) => <div><dt>{r.value}</dt><dd>{r.label}</dd></div>)}</dl>
+              )}
+            </div>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <CTA />
+</Base>
+<style>
+  .cases { list-style: none; padding: 0; margin: 0; border-top: 2px solid var(--ink); }
+  .cases li { border-bottom: 1px solid var(--rule); }
+  .cases a { display: grid; grid-template-columns: 4rem 1fr; gap: 1rem; padding: 2.25rem 0; text-decoration: none; color: var(--ink); }
+  .n { font-family: var(--font-ui); font-weight: 700; color: var(--fjord); font-size: 1.1rem; padding-top: .2rem; }
+  .who { margin: 0 0 .4rem; }
+  h2 { font-size: var(--step-2); max-width: 30ch; }
+  .sum { color: var(--ink-soft); max-width: 60ch; margin: .75rem 0 0; }
+  .cases a:hover h2 { color: var(--fjord); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .15em; }
+  .res { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin: 1.25rem 0 0; }
+  .res dt { font-family: var(--font-display); font-weight: 800; font-size: var(--step-2); line-height: 1; }
+  .res dd { margin: .3rem 0 0; font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); max-width: 18ch; }
+  @media (max-width: 600px) { .cases a { grid-template-columns: 1fr; gap: .25rem; } }
+</style>

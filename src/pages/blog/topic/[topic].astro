@@ -1,0 +1,21 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostList from '../../../components/PostList.astro';
+import { getPosts, TOPICS, type Topic } from '../../../lib';
+export async function getStaticPaths() {
+  return Object.entries(TOPICS).map(([key, t]) => ({ params: { topic: t.slug }, props: { key } }));
+}
+const { key } = Astro.props as { key: Topic };
+const t = TOPICS[key];
+const posts = (await getPosts()).filter((p) => p.data.topic === key);
+---
+<Base title={`${t.label}: articles and guides`} description={t.blurb}>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="crumbs"><a href="/blog/">Writing</a> / {t.label}</p>
+      <h1>{t.label}</h1>
+      <p class="lede">{t.blurb}</p>
+    </header>
+    {posts.length ? <PostList posts={posts} showTopic={false} /> : <p>New posts on this topic are on the way. Meanwhile, <a href="/blog/">browse all writing</a>.</p>}
+  </div>
+</Base>

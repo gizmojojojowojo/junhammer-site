@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import site from '../data/site.json';
+
+interface Props {
+  title: string;
+  seoTitle?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+const { title, seoTitle, description = site.description, image, type = 'website', schema = [], noindex = false } = Astro.props;
+
+const base = seoTitle || title;
+const suffix = ' | Joe Unhammer';
+const fullTitle = base.includes('Unhammer') || base.length + suffix.length > 62 ? base : base + suffix;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = image ? new URL(image, Astro.site).href : new URL('/og-default.png', Astro.site).href;
+
+const person = {
+  '@type': 'Person',
+  '@id': 'https://junhammer.com/#person',
+  name: site.name,
+  alternateName: site.legalName,
+  jobTitle: site.jobTitle,
+  url: 'https://junhammer.com/',
+  sameAs: [site.linkedin, site.github].filter(Boolean),
+  address: { '@type': 'PostalAddress', addressLocality: 'Parker', addressRegion: 'CO', addressCountry: 'US' },
+  knowsAbout: ['Artificial intelligence', 'Large language models', 'AI agents', 'Answer engine optimization', 'Generative engine optimization', 'Search engine optimization', 'Technical SEO', 'Healthcare SEO'],
+};
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    person,
+    { '@type': 'WebSite', '@id': 'https://junhammer.com/#website', url: 'https://junhammer.com/', name: site.name, publisher: { '@id': 'https://junhammer.com/#person' } },
+    ...schema,
+  ],
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={base} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={site.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Joe Unhammer: Writing" href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+    />
+    <script is:inline>
+      try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

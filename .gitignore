@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env
+scripts/gsc/token.json
+scripts/gsc/client_secret.json
+scripts/gsc/*.csv

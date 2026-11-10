@@ -1,0 +1,19 @@
+{
+  "items": [
+    {
+      "label": "Services",
+      "href": "/services/",
+      "children": [
+        { "label": "AI Consulting & Strategy", "href": "/services/ai-consulting/" },
+        { "label": "AI Engineering", "href": "/services/ai-engineering/" },
+        { "label": "Answer Engine Optimization", "href": "/services/answer-engine-optimization/" },
+        { "label": "SEO", "href": "/services/seo/" },
+        { "label": "Technical SEO & Migrations", "href": "/services/technical-seo/" }
+      ]
+    },
+    { "label": "Work", "href": "/work/", "children": [] },
+    { "label": "Writing", "href": "/blog/", "children": [] },
+    { "label": "About", "href": "/about/", "children": [] }
+  ],
+  "cta": { "label": "Start a project", "href": "/contact/" }
+}

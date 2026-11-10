@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import { getServices } from '../lib';
+const services = await getServices();
+const hasForm = Boolean(site.formEndpoint);
+---
+<Base title="Contact Joe Unhammer" description="Start an AI, AEO or SEO project with Joe Unhammer. Email, LinkedIn or the project form; replies within two business days.">
+  <div class="wrap grid">
+    <header class="page-head">
+      <h1>Start a project</h1>
+      <p class="lede">Tell me what you are trying to fix or build, roughly when you need it, and how you will judge the result. I reply within two business days.</p>
+      <ul class="direct">
+        <li><span>Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><span>LinkedIn</span><a href={site.linkedin}>linkedin.com/in/junhammer</a></li>
+        <li><span>Based in</span>{site.location}, working with teams anywhere in the US</li>
+      </ul>
+    </header>
+    {hasForm ? (
+      <form class="form" method="POST" action={site.formEndpoint}>
+        {site.formAccessKey && <input type="hidden" name="access_key" value={site.formAccessKey} />}
+        <input type="hidden" name="subject" value="New project inquiry from junhammer.com" />
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <label>Name<input name="name" required autocomplete="name" /></label>
+        <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+        <label>Company or organization<input name="company" autocomplete="organization" /></label>
+        <label>What do you need help with?
+          <select name="service" id="service">
+            <option value="">Not sure yet</option>
+            {services.map((s) => <option value={s.id}>{s.data.title}</option>)}
+            <option value="aeo-playbook">Send me the AEO Playbook</option>
+          </select>
+        </label>
+        <label>Project details<textarea name="message" rows="6" required></textarea></label>
+        <button class="btn" type="submit">Send message</button>
+      </form>
+    ) : (
+      <div class="form fallback">
+        <h2>Email is fastest</h2>
+        <p>Send a few lines to <a href={`mailto:${site.email}?subject=Project inquiry`}>{site.email}</a>: what you need, your timeline, and your site or product URL.</p>
+        <a class="btn" href={`mailto:${site.email}?subject=Project inquiry`}>Write an email</a>
+      </div>
+    )}
+  </div>
+  <script>
+    const s = new URLSearchParams(location.search).get('service');
+    const sel = document.getElementById('service') as HTMLSelectElement | null;
+    if (s && sel && [...sel.options].some((o) => o.value === s)) sel.value = s;
+  </script>
+</Base>
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .direct { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: .9rem; font-family: var(--font-ui); }
+  .direct span { display: block; font-size: var(--step--1); color: var(--ink-soft); }
+  .form { margin-top: clamp(3rem, 8vw, 5.5rem); display: grid; gap: 1.1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-m); padding: clamp(1.25rem, 3vw, 2rem); font-family: var(--font-ui); }
+  label { display: grid; gap: .35rem; font-weight: 600; font-size: .95rem; }
+  input, select, textarea { font: inherit; font-weight: 400; padding: .7rem .8rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--paper); color: var(--ink); }
+  .hp { display: none; }
+  .fallback h2 { font-size: var(--step-2); }
+  .fallback p { margin: 0; }
+  .form .btn { justify-self: start; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; gap: 0; } .form { margin-top: 1rem; } }
+</style>
