@@ -1,10 +1,10 @@
 ---
 title: "B2B e-commerce: SEO and CRO for an industrial manufacturer"
-seoTitle: "B2B E-commerce SEO & CRO Case Study: KUS-USA"
-client: "KUS-USA"
+seoTitle: "B2B E-commerce SEO & CRO Case Study: Industrial Manufacturer"
+client: "Industrial manufacturer"
 sector: "Manufacturing"
 summary: "Technical product pages, content hubs and conversion fixes lifted organic traffic over 200% and direct-sales conversion from 2.8% to 4.5%."
-description: "How SEO and conversion rate optimization grew organic traffic 200%+ and lifted conversion rates for KUS-USA, a maker of liquid-level senders and marine gauges."
+description: "How SEO and conversion rate optimization grew organic traffic 200%+ and lifted conversion rates for a maker of liquid-level senders and marine gauges."
 order: 5
 services: ["seo", "technical-seo"]
 results:
@@ -14,7 +14,7 @@ results:
 ---
 ## The challenge
 
-KUS-USA makes liquid-level senders, DEF fluid equipment and marine gauges. Its buyers are mostly technical B2B customers, with a B2C component, and the site had to support two conversion paths: direct purchase and "request more information."
+The client makes liquid-level senders, DEF fluid equipment and marine gauges. Its buyers are mostly technical B2B customers, with a B2C component, and the site had to support two conversion paths: direct purchase and "request more information."
 
 Product pages struggled to rank on their own, technical queries had little supporting content, and the purchase path had too much friction.
 

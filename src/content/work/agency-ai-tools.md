@@ -1,11 +1,11 @@
 ---
 title: "Agentic AI tools that turn agency work into software"
-seoTitle: "Agentic AI Tools for a Digital Agency: Whole Whale"
-client: "Whole Whale"
+seoTitle: "Agentic AI Tools for a Digital Agency: Case Study"
+client: "Digital agency for nonprofits"
 sector: "Nonprofit digital agency"
 year: "2026–present"
 summary: "Plugins, browser extensions, Claude skills, chat functions and reporting automations that package an agency's SEO and AEO processes into one-click workflows."
-description: "Agentic AI tools built at Whole Whale: Claude skills, plugins, browser extensions, chat functions and automated GA4 and Search Console reporting."
+description: "Agentic AI tools for a nonprofit digital agency: Claude skills, plugins, browser extensions, chat functions and automated GA4 and Search Console reporting."
 order: 1
 services: ["ai-engineering", "ai-consulting", "answer-engine-optimization"]
 results:
@@ -18,7 +18,7 @@ Agencies repeat the same skilled work for every client: research, content QA, au
 
 ## What I build
 
-As AI Search Strategist at Whole Whale, a digital agency for nonprofit and social-impact organizations, I turn those repeatable processes into software.
+As AI Search Strategist at a digital agency for nonprofit and social-impact organizations, I turn those repeatable processes into software.
 
 - **Agentic tools and automations** that handle research, content QA and reporting steps the team used to do by hand.
 - **Custom plugins, browser extensions and Claude skills** that package the agency's SEO and AEO methods into reusable, one-click workflows.

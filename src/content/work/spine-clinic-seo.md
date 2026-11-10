@@ -1,10 +1,9 @@
 ---
 title: "Healthcare SEO: a new spine clinic site that outranked national health systems"
 seoTitle: "Spine Clinic SEO Case Study: 14x Search Clicks"
-client: "Citrus Spine Clinic"
+client: "Spine clinic, Florida"
 sector: "Healthcare"
 year: "2022–2023"
-link: "https://www.citrusspine.com/"
 summary: "A new Florida spine clinic site grew from 2.7K to 39.4K quarterly search clicks and outranked Cleveland Clinic and Johns Hopkins for spine terms."
 description: "How E-E-A-T-focused content, technical fixes and local SEO grew a new spine clinic website from 2.74K to 39.4K quarterly clicks in one year."
 order: 4
@@ -16,7 +15,7 @@ results:
 ---
 ## The challenge
 
-Citrus Spine Clinic launched a new website with almost no search traffic, competing for spine-health questions against Cleveland Clinic, Johns Hopkins and other national health systems with decades of authority.
+A Florida spine clinic launched a new website with almost no search traffic, competing for spine-health questions against Cleveland Clinic, Johns Hopkins and other national health systems with decades of authority.
 
 ## The approach
 

@@ -15,10 +15,10 @@ offers:
   - "Content pruning and consolidation"
 proof:
   - "Consolidated five healthcare device websites into one: 60% more traffic, 130% more conversions"
-  - "Led enterprise migrations at Spinutech and Merge, from redirect maps to traffic recovery"
+  - "Led enterprise website migrations and replatforms, from redirect maps to traffic recovery"
   - "Built custom auditing frameworks on Screaming Frog and Search Console"
   - "Led a law firm rebrand and national expansion with no lost organic clicks"
-work: ["healthcare-website-consolidation", "kus-usa-b2b-ecommerce-seo"]
+work: ["healthcare-website-consolidation", "industrial-b2b-ecommerce-seo"]
 faqs:
   - q: "Will a website redesign hurt my SEO?"
     a: "It can, but it does not have to. Rankings drop when URLs change without redirects, content gets cut without a plan, or the new templates hide content from crawlers. A migration plan with a full URL inventory, a redirect map, pre-launch testing and Search Console monitoring after launch prevents most of that."

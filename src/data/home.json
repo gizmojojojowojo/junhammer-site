@@ -5,16 +5,16 @@
   "answer": "Joe Unhammer is an AI engineer and search strategist in Colorado. He ==builds agentic AI tools for agencies==[1], ==built AI chat for hospital systems==[2], and ==grew a spine clinic's search clicks 14x in a year==[3].",
   "sources": [
     {
-      "label": "Agentic AI tools at Whole Whale",
-      "href": "/work/whole-whale-ai-tools/"
+      "label": "Agentic AI tools for a digital agency",
+      "href": "/work/agency-ai-tools/"
     },
     {
       "label": "AI chat for hospital systems",
-      "href": "/work/merge-healthcare-ai-chat/"
+      "href": "/work/hospital-ai-chat/"
     },
     {
-      "label": "Citrus Spine Clinic case study",
-      "href": "/work/citrus-spine-clinic-seo/"
+      "label": "Spine clinic SEO case study",
+      "href": "/work/spine-clinic-seo/"
     }
   ],
   "primaryButton": {
