@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import { getServices } from '../../lib';
+const services = await getServices();
+const schema = [{
+  '@type': 'ItemList',
+  itemListElement: services.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: `https://junhammer.com/services/${s.id}/`, name: s.data.title })),
+}];
+---
+<Base title="Services: AI consulting, AI engineering, AEO and SEO" description="Five ways to work with Joe Unhammer: AI consulting and strategy, AI engineering, answer engine optimization, SEO, and technical SEO and site migrations." schema={schema}>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Services</h1>
+      <p class="lede">Two practices that now overlap: building AI tools, and making sure people and AI systems can find you. Most engagements start with one and pull in the other.</p>
+    </header>
+    <ul class="svc">
+      {services.map((s) => (
+        <li>
+          <a href={`/services/${s.id}/`}>
+            <h2>{s.data.title}</h2>
+            <p>{s.data.summary}</p>
+            <span class="more">Read about {s.data.navLabel}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <CTA />
+</Base>
+<style>
+  .svc { list-style: none; margin: 1rem 0 0; padding: 0; border-top: 2px solid var(--ink); }
+  .svc li { border-bottom: 1px solid var(--rule); }
+  .svc a { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto; gap: 1rem 2.5rem; align-items: baseline; padding: 2rem 0; color: var(--ink); text-decoration: none; }
+  .svc h2 { font-size: var(--step-2); }
+  .svc p { margin: 0; color: var(--ink-soft); }
+  .more { font-family: var(--font-ui); font-weight: 600; color: var(--fjord); white-space: nowrap; }
+  .svc a:hover h2 { color: var(--fjord); }
+  .svc a:hover .more { text-decoration: underline; }
+  @media (max-width: 820px) { .svc a { grid-template-columns: 1fr; } }
+</style>

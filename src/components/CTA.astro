@@ -1,0 +1,23 @@
+---
+interface Props { heading?: string; text?: string }
+const { heading = 'Have a project in mind?', text = 'Tell me what you are trying to fix or build. I reply within two business days.' } = Astro.props;
+---
+<section class="cta">
+  <div class="wrap inner">
+    <div>
+      <h2>{heading}</h2>
+      <p>{text}</p>
+    </div>
+    <a class="btn" href="/contact/">Start a project</a>
+  </div>
+</section>
+<style>
+  .cta { background: var(--fjord-deep); color: var(--paper); padding-block: clamp(2.5rem, 6vw, 4rem); margin-top: 4rem; }
+  :root[data-theme='dark'] .cta { background: var(--surface); color: var(--ink); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .cta { background: var(--surface); color: var(--ink); } }
+  .inner { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; align-items: center; justify-content: space-between; }
+  h2 { font-size: var(--step-3); }
+  p { margin: .5rem 0 0; opacity: .85; max-width: 44ch; }
+  .btn { background: var(--highlight); color: var(--highlight-ink); border-color: var(--highlight); }
+  .btn:hover { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+</style>

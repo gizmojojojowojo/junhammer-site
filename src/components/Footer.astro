@@ -1,0 +1,68 @@
+---
+import site from '../data/site.json';
+import nav from '../data/navigation.json';
+const services = nav.items.find((i) => i.href === '/services/')?.children ?? [];
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div class="about">
+      <p class="name">{site.name}</p>
+      <p>{site.tagline}</p>
+      <p class="meta">{site.location}</p>
+    </div>
+    <nav aria-label="Services">
+      <p class="col-title">Services</p>
+      <ul>{services.map((s) => <li><a href={s.href}>{s.label}</a></li>)}</ul>
+    </nav>
+    <nav aria-label="Site">
+      <p class="col-title">Site</p>
+      <ul>
+        <li><a href="/work/">Work</a></li>
+        <li><a href="/blog/">Writing</a></li>
+        <li><a href="/the-complete-aeo-playbook/">The AEO Playbook</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/resume/">Resume</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="col-title">Contact</p>
+      <ul>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><a href={site.linkedin} rel="me">LinkedIn</a></li>
+        <li><a href="/contact/">Start a project</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap base meta">
+    <span>© {year} {site.name}</span>
+    <span><a href="/rss.xml">RSS</a> · <a href="/llms.txt">llms.txt</a></span>
+    <button class="theme" type="button" aria-label="Switch color theme">Theme</button>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--rule); margin-top: 4rem; padding-top: 3rem; font-family: var(--font-ui); font-size: .95rem; }
+  .grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2rem; }
+  .name { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; margin: 0 0 .5rem; }
+  .about p { margin: 0 0 .4rem; max-width: 28ch; }
+  .col-title { font-weight: 700; margin: 0 0 .6rem; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+  a { color: var(--ink-soft); text-decoration: none; }
+  a:hover { color: var(--fjord); text-decoration: underline; }
+  .base { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; padding-block: 2.5rem 2rem; margin-top: 2rem; border-top: 1px solid var(--rule); }
+  .theme { font: inherit; background: none; border: 1px solid var(--rule); color: var(--ink-soft); border-radius: var(--radius-s); padding: .3rem .7rem; cursor: pointer; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  document.querySelector('.theme')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    const next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>

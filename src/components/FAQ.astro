@@ -1,0 +1,27 @@
+---
+interface Props { faqs: { q: string; a: string }[]; heading?: string }
+const { faqs, heading = 'Questions' } = Astro.props;
+---
+{faqs.length > 0 && (
+  <section class="faq">
+    {heading && <h2>{heading}</h2>}
+    {faqs.map((f) => (
+      <details>
+        <summary><h3>{f.q}</h3></summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+)}
+<style>
+  .faq { max-width: var(--measure); margin-top: 3.5rem; }
+  .faq > h2 { font-size: var(--step-2); margin-bottom: 1rem; }
+  details { border-top: 1px solid var(--rule); }
+  details:last-child { border-bottom: 1px solid var(--rule); }
+  summary { cursor: pointer; padding: 1rem 2rem 1rem 0; list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; position: absolute; right: .25rem; top: .9rem; font-family: var(--font-ui); font-size: 1.4rem; color: var(--fjord); }
+  details[open] summary::after { content: '–'; }
+  summary h3 { font-size: 1.1rem; display: inline; }
+  details p { margin: 0 0 1.25rem; color: var(--ink-soft); }
+</style>

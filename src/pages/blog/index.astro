@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts, TOPICS } from '../../lib';
+const posts = await getPosts();
+const guides = posts.filter((p) => p.data.pillar);
+---
+<Base title="Writing on AI, AEO and SEO" description="Guides and field notes on AI engineering, answer engine optimization, AI search and technical SEO from Joe Unhammer.">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Writing</h1>
+      <p class="lede">Notes from client work on AI, answer engines and search. The guides are the long references; everything else is shorter and more specific.</p>
+      <nav class="topics" aria-label="Topics">
+        {Object.entries(TOPICS).map(([, t]) => <a href={`/blog/topic/${t.slug}/`}>{t.label}</a>)}
+      </nav>
+    </header>
+    <section class="block">
+      <h2>Guides</h2>
+      <PostList posts={guides} />
+    </section>
+    <section class="block">
+      <h2>All posts</h2>
+      <PostList posts={posts.filter((p) => !p.data.pillar)} />
+    </section>
+  </div>
+</Base>
+<style>
+  .topics { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.75rem; font-family: var(--font-ui); }
+  .topics a { border: 1px solid var(--rule); border-radius: 999px; padding: .35rem .9rem; text-decoration: none; color: var(--ink); background: var(--surface); }
+  .topics a:hover { border-color: var(--fjord); color: var(--fjord); }
+  .block { margin-top: 3rem; }
+  .block h2 { font-size: var(--step-2); margin-bottom: 1rem; }
+</style>

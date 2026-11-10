@@ -1,0 +1,75 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import { getPosts, fmtDate, readMins, TOPICS } from '../../lib';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, all: posts } }));
+}
+const { post, all } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const topic = TOPICS[d.topic];
+const related = all.filter((p) => p.id !== post.id && p.data.topic === d.topic).slice(0, 3);
+const url = new URL(`/blog/${post.id}/`, Astro.site).href;
+const schema = [
+  {
+    '@type': 'BlogPosting',
+    headline: d.title,
+    description: d.description,
+    datePublished: d.date.toISOString(),
+    dateModified: (d.updated ?? d.date).toISOString(),
+    author: { '@id': 'https://junhammer.com/#person' },
+    publisher: { '@id': 'https://junhammer.com/#person' },
+    mainEntityOfPage: url,
+    ...(d.image ? { image: new URL(d.image, Astro.site).href } : {}),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Writing', item: 'https://junhammer.com/blog/' },
+      { '@type': 'ListItem', position: 2, name: topic.label, item: `https://junhammer.com/blog/topic/${topic.slug}/` },
+      { '@type': 'ListItem', position: 3, name: d.title, item: url },
+    ],
+  },
+];
+---
+<Base title={d.title} seoTitle={d.seoTitle} description={d.description} image={d.image} type="article" schema={schema}>
+  <article class="narrow">
+    <header class="page-head">
+      <p class="crumbs"><a href="/blog/">Writing</a> / <a href={`/blog/topic/${topic.slug}/`}>{topic.label}</a></p>
+      <h1>{d.title}</h1>
+      <p class="byline meta">
+        By <a href="/about/" rel="author">Joe Unhammer</a>
+        <span>Published <time datetime={d.date.toISOString()}>{fmtDate(d.date)}</time></span>
+        {d.updated && <span>Updated <time datetime={d.updated.toISOString()}>{fmtDate(d.updated)}</time></span>}
+        <span>{readMins(post.body)} min read</span>
+      </p>
+    </header>
+    {d.image && <img class="hero-img" src={d.image} alt="" width="1200" height="630" fetchpriority="high" />}
+    <div class="prose">
+      <Content />
+    </div>
+    <aside class="author">
+      <p><strong>Joe Unhammer</strong> builds AI tools and runs AEO and SEO programs, most recently for enterprise healthcare clients. <a href="/about/">More about Joe</a> or <a href="/services/">see services</a>.</p>
+    </aside>
+    {related.length > 0 && (
+      <nav class="related" aria-label="Related posts">
+        <h2>More on {topic.label}</h2>
+        <ul>{related.map((p) => <li><a href={`/blog/${p.id}/`}>{p.data.title}</a></li>)}</ul>
+      </nav>
+    )}
+  </article>
+  <CTA />
+</Base>
+<style>
+  .page-head h1 { font-size: var(--step-4); max-width: 24ch; }
+  .byline { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; margin-top: 1.25rem; }
+  .hero-img { width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: var(--radius-m); margin-bottom: 2.5rem; }
+  .author { margin-top: 3.5rem; padding: 1.25rem 1.5rem; background: var(--surface); border-left: 4px solid var(--highlight); border-radius: var(--radius-s); font-size: 1rem; }
+  .author p { margin: 0; }
+  .related { margin-top: 3rem; }
+  .related h2 { font-size: var(--step-1); margin-bottom: .75rem; }
+  .related ul { padding-left: 1.2rem; margin: 0; display: grid; gap: .5rem; }
+</style>

@@ -1,0 +1,109 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CTA from '../../components/CTA.astro';
+import FAQ from '../../components/FAQ.astro';
+import PostList from '../../components/PostList.astro';
+import { getServices, getWork, getPosts } from '../../lib';
+import site from '../../data/site.json';
+export async function getStaticPaths() {
+  const services = await getServices();
+  return services.map((s) => ({ params: { slug: s.id }, props: { service: s, all: services } }));
+}
+const { service, all } = Astro.props as { service: CollectionEntry<'services'>; all: CollectionEntry<'services'>[] };
+const d = service.data;
+const { Content } = await render(service);
+const work = (await getWork()).filter((w) => d.work.includes(w.id) || w.data.services.includes(service.id));
+const posts = d.topic ? (await getPosts()).filter((p) => p.data.topic === d.topic).slice(0, 4) : [];
+const url = `https://junhammer.com/services/${service.id}/`;
+const schema: Record<string, unknown>[] = [
+  {
+    '@type': 'Service',
+    name: d.title,
+    description: d.description ?? d.summary,
+    url,
+    provider: { '@id': 'https://junhammer.com/#person' },
+    areaServed: 'US',
+    serviceType: d.navLabel,
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Services', item: 'https://junhammer.com/services/' },
+      { '@type': 'ListItem', position: 2, name: d.title, item: url },
+    ],
+  },
+];
+if (d.faqs.length) schema.push({ '@type': 'FAQPage', mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const others = all.filter((s) => s.id !== service.id);
+---
+<Base title={d.title} seoTitle={d.seoTitle} description={d.description ?? d.summary} schema={schema}>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="crumbs"><a href="/services/">Services</a> / {d.navLabel}</p>
+      <h1>{d.title}</h1>
+      <p class="lede">{d.summary}</p>
+    </header>
+    <div class="layout">
+      <div class="prose main"><Content /></div>
+      <aside class="side">
+        {d.offers.length > 0 && (
+          <section>
+            <h2>What you can hire me for</h2>
+            <ul>{d.offers.map((o) => <li>{o}</li>)}</ul>
+          </section>
+        )}
+        {d.proof.length > 0 && (
+          <section>
+            <h2>What I have done</h2>
+            <ul class="proof">{d.proof.map((p) => <li>{p}</li>)}</ul>
+          </section>
+        )}
+        <a class="btn" href={`/contact/?service=${service.id}`}>Talk about {d.navLabel}</a>
+      </aside>
+    </div>
+
+    {work.length > 0 && (
+      <section class="work">
+        <h2>Related work</h2>
+        <ul>
+          {work.map((w) => (
+            <li><a href={`/work/${w.id}/`}><strong>{w.data.client}</strong><span>{w.data.summary}</span></a></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <FAQ faqs={d.faqs} />
+
+    {posts.length > 0 && (
+      <section class="reading">
+        <h2>Further reading</h2>
+        <PostList posts={posts} showTopic={false} />
+      </section>
+    )}
+
+    <nav class="others" aria-label="Other services">
+      <h2>Other services</h2>
+      <ul>{others.map((s) => <li><a href={`/services/${s.id}/`}>{s.data.title}</a></li>)}</ul>
+    </nav>
+  </div>
+  <CTA heading={`Need help with ${d.navLabel}?`} text={`Email ${site.email} or use the project form. Tell me where things stand and what a good result looks like.`} />
+</Base>
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 21rem; gap: 3.5rem; align-items: start; }
+  .side { position: sticky; top: 6rem; display: grid; gap: 1.75rem; padding: 1.5rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-m); font-family: var(--font-ui); font-size: .98rem; }
+  .side h2 { font-size: 1.05rem; margin-bottom: .6rem; }
+  .side ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; }
+  .proof li::marker { color: var(--fjord); }
+  .side .btn { justify-content: center; }
+  .work, .reading, .others { margin-top: 3.5rem; max-width: var(--measure); }
+  .work h2, .reading h2, .others h2 { font-size: var(--step-2); margin-bottom: 1rem; }
+  .work ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
+  .work li a { display: grid; gap: .25rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); }
+  .work li a span { color: var(--ink-soft); }
+  .work li a:hover strong { color: var(--fjord); text-decoration: underline; }
+  .others ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .5rem; font-family: var(--font-ui); }
+  .others a { display: block; border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .95rem; text-decoration: none; background: var(--surface); }
+  @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } .side { position: static; } }
+</style>
