@@ -1,7 +1,9 @@
 ---
 title: "Resume: Joe Unhammer"
 seoTitle: "Joe Unhammer Resume: AI Solutions Builder and Search Strategist"
-description: "Resume of Jostein (Joe) Unhammer: founder of LandmAIn, AI Search Strategist at Whole Whale, agentic AI tools, AEO and technical SEO for enterprise healthcare."
+description: "Resume of Jostein (Joe) Unhammer: founder of LandmAIn, AI Search
+  Strategist at Whole Whale, agentic AI tools, AEO and technical SEO for
+  enterprise healthcare."
 ---
 **Jostein (Joe) Unhammer**, Denver, Colorado. [LinkedIn](https://www.linkedin.com/in/junhammer/) · [landmain.io](https://landmain.io) · [Email](mailto:brubeckunhammer@gmail.com)
 
@@ -14,6 +16,7 @@ AI solutions builder and search strategist with more than ten years of experienc
 ## Experience
 
 ### LandmAIn: Founder
+
 *Denver, September 2026 to present*
 
 - Started and built [LandmAIn](/work/landmain/), an AI-powered land intelligence platform for data center, industrial, solar and storage site selection.
@@ -21,17 +24,19 @@ AI solutions builder and search strategist with more than ten years of experienc
 - Designed an evidence layer that ties every finding to a dated, inspectable source and flags items that still need utility or jurisdiction confirmation.
 - Publish market research on Colorado power and land-use policy, including Xcel Energy's large-load tariff proceeding and Front Range data center permitting.
 
-### Whole Whale: AI Search Strategist
-*Remote, March 2026 to present*
+### WHOLE WHALE | Remote	Mar 2026 – Present  
+AI Search Strategist
 
-- Build agentic AI tools and automations that take repeatable agency work off the team, from research and content QA to client reporting.
-- Develop custom plugins, browser extensions and Claude skills that package the agency's SEO and AEO processes into reusable, one-click workflows.
-- Design and build conversational chat functions for client websites and internal teams.
-- Automate recurring analytics and client reporting, turning GA4 and Search Console data into ready-to-send deliverables.
 - Lead AEO strategy for nonprofit and social-impact clients, structuring content and schema so AI answer engines cite client organizations.
-- Document and standardize AI processes so non-technical staff can run them reliably.
+- Run technical SEO audits for client sites covering crawlability, indexation, site architecture, internal linking, and structured data, and turn findings into prioritized, developer-ready fixes.
+- Build AEO and SEO content strategies from keyword and question research, competitor gap analysis, and topic clustering, producing content briefs designed to rank in traditional search and earn citations in ChatGPT, Perplexity, and Google AI Overviews.
+- Develop custom plugins, browser extensions, and Claude skills that package the agency's SEO and AEO processes into reusable, one-click workflows.
+- Automate recurring analytics and client reporting, turning GA4 and Search Console data into ready-to-send deliverables.
+- Build agentic AI tools and automations that take repeatable agency work off the team, from research and content QA to client reporting.
+- Design and build conversational chat functions for client websites and internal teams
 
 ### Merge: SEO/AEO/GEO Manager (contract)
+
 *Denver, February 2025 to March 2026*
 
 - Led AEO and technical SEO for enterprise healthcare accounts, including Baptist Health Systems and Healthfirst NY: technical audits, schema strategy and roadmaps built for AI answer engines as well as traditional search.
@@ -44,6 +49,7 @@ AI solutions builder and search strategist with more than ten years of experienc
 - Led multi-country technical SEO for Champion Petfoods across Asia Pacific and EMEA, including hreflang and localized content frameworks.
 
 ### Spinutech: Senior SEO Strategist
+
 *Remote, January 2020 to November 2024*
 
 - Increased a client's e-commerce sales 115% across B2B and B2C channels.
@@ -55,6 +61,7 @@ AI solutions builder and search strategist with more than ten years of experienc
 - Mentored five junior SEO strategists, improving team productivity 25%.
 
 ### CompassData, CompassDrone and CompassCom: Marketing Manager
+
 *Centennial, Colorado, May 2015 to January 2020*
 
 - Built an SEO-focused strategy for the GIS and surveying division, growing paid ad traffic 900% and improving return on ad spend 35%.
@@ -64,6 +71,7 @@ AI solutions builder and search strategist with more than ten years of experienc
 - Managed B2B sales of DJI Enterprise products, growing annual sales 20%.
 
 ### US Army: Fire Support, Personal Security and Geospatial Intelligence Analyst
+
 *Various locations, April 2010 to November 2018*
 
 - Directed more than 250 fire support missions as a forward observer, with a 95% mission success rate.
@@ -83,3 +91,4 @@ AI solutions builder and search strategist with more than ten years of experienc
 - **Geospatial and mapping:** ArcGIS, Esri, parcel and terrain analysis, infrastructure proximity screening, DJI Enterprise
 - **Search and AEO:** Google Search Console, GA4 and GTM, Screaming Frog, Ahrefs, Semrush, Lumar, Conductor, schema, hreflang, site architecture
 - **Strategy and analysis:** E-E-A-T and YMYL content strategy, competitor analysis, persona development, Google Ads ROI optimization
+
