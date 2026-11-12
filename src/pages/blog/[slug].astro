@@ -33,6 +33,16 @@ const schema = [
       { '@type': 'ListItem', position: 3, name: d.title, item: url },
     ],
   },
+  ...(d.faqs.length
+    ? [{
+        '@type': 'FAQPage',
+        mainEntity: d.faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      }]
+    : []),
 ];
 ---
 <Base title={d.title} seoTitle={d.seoTitle} description={d.description} image={d.image} type="article" schema={schema}>
