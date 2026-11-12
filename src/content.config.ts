@@ -23,6 +23,7 @@ const blog = defineCollection({
     pillar: z.boolean().default(false),
     draft: z.boolean().default(false),
     image: optStr,
+    faqs: z.preprocess((v) => (v == null ? [] : v), z.array(z.object({ q: z.string(), a: z.string() }))),
   }),
 });
 
