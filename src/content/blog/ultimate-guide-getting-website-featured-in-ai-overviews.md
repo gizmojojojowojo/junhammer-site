@@ -8,6 +8,7 @@ updated: "2025-06-27"
 topic: "AEO"
 pillar: false
 draft: false
+image: "/images/wp/2026/03/aiooptimization-stockpack-adobe-stock.webp"
 ---
 ## What Are AI Overviews and Why Do They Matter?
 

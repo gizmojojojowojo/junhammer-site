@@ -8,6 +8,7 @@ updated: "2025-08-08"
 topic: "AI"
 pillar: false
 draft: false
+image: "/images/wp/2025/03/anthropomorphic-robot-that-performs-regular-human-job.webp"
 ---
 *Last Updated: March 15, 2025*
 

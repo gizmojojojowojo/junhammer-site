@@ -8,6 +8,7 @@ updated: "2026-07-27"
 topic: "AEO"
 pillar: false
 draft: false
+image: "/images/wp/2025/06/financial-inspection-and-strategy-analysis-in-business.webp"
 ---
 *Last Updated: July 27th, 2026*
 

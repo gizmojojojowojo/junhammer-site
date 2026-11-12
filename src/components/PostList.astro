@@ -6,7 +6,8 @@ const { posts, showTopic = true } = Astro.props;
 <ol class="posts">
   {posts.map((p) => (
     <li>
-      <a href={`/blog/${p.id}/`}>
+      <a href={`/blog/${p.id}/`} class:list={[{ 'has-img': p.data.image }]}>
+        {p.data.image && <img class="thumb" src={p.data.image} alt="" width="160" height="104" loading="lazy" decoding="async" />}
         <span class="t">{p.data.title}</span>
         <span class="m meta">
           {showTopic && <span>{TOPICS[p.data.topic].label}</span>}
@@ -21,9 +22,11 @@ const { posts, showTopic = true } = Astro.props;
   .posts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
   .posts li { border-bottom: 1px solid var(--rule); }
   .posts a { display: grid; grid-template-columns: 1fr auto; gap: .35rem 2rem; padding: 1.1rem 0; text-decoration: none; color: var(--ink); }
+  .posts a.has-img { grid-template-columns: 6.5rem 1fr auto; column-gap: 1.25rem; }
+  .thumb { width: 6.5rem; height: 4.25rem; object-fit: cover; border-radius: 6px; align-self: center; background: var(--rule); }
   .t { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; line-height: 1.3; letter-spacing: -0.01em; }
   .posts a:hover .t { color: var(--fjord); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
   .m { display: flex; gap: 1rem; white-space: nowrap; align-self: center; }
   .pill { background: var(--highlight); color: var(--highlight-ink); padding: 0 .45rem; border-radius: 3px; font-weight: 600; }
-  @media (max-width: 700px) { .posts a { grid-template-columns: 1fr; } .m { white-space: normal; flex-wrap: wrap; } }
+  @media (max-width: 700px) { .posts a { grid-template-columns: 1fr; } .posts a.has-img { grid-template-columns: 5rem 1fr; } .thumb { width: 5rem; height: 3.5rem; grid-row: span 2; } .m { white-space: normal; flex-wrap: wrap; } }
 </style>

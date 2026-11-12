@@ -8,7 +8,7 @@ updated: "2026-07-22"
 topic: "AEO"
 pillar: true
 draft: false
-image: "/images/wp/2025/05/search-engine-6370763_1280.webp"
+image: "/images/wp/2026/03/answer-engine-optimization-aeo-ai-artificial-intelligence.webp"
 ---
 ## What Is AEO and GEO? The Business Owner’s Guide to Getting Found in AI Search Introduction to Answer Engine Optimization
 
