@@ -7,6 +7,7 @@ date: "2026-11-11"
 topic: "AI"
 pillar: false
 draft: false
+image: "/images/wp/2025/07/hand-using-laptop-with-secure-online-technology-data-policy.webp"
 faqs:
   - q: "How much do AI integration services cost?"
     a: "Cost depends on scope. The main drivers are how many workflows you cover, whether you need custom software or only configured off-the-shelf tools, and how much training your team needs. The most reliable way to get a number is a scoped proposal after an initial conversation about your workflows."

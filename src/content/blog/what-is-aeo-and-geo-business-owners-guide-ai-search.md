@@ -7,7 +7,7 @@ date: "2026-03-24"
 topic: "AEO"
 pillar: false
 draft: false
-image: "/images/wp/2026/03/seo-geo-aeo-neon-signs-digital-marketing-and-technology.webp"
+image: "/images/wp/2026/01/aeo-geo-seo-generative-engine-optimization-answer-engine.webp"
 ---
 Something changed in [how people find businesses online](https://thegratzi.com/how-do-people-find-businesses-on-the-internet), and most business owners haven't caught up yet.
 
