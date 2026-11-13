@@ -130,7 +130,11 @@ test('endpoint: off-topic never reaches the model', async () => {
 test('endpoint: without a key it returns search results', async () => {
   const data = await (await onRequestPost(ctx({ question: 'who coined the term GEO' }))).json();
   assert.equal(data.mode, 'search');
+  assert.equal(data.reason, 'no_key');
   assert.equal(data.sources[0].url, '/blog/geo/#who-coined-it');
+  const empty = await (await onRequestPost(ctx({ question: 'who coined the term GEO' }, { ANTHROPIC_API_KEY: '  ' }))).json();
+  assert.equal(empty.reason, 'empty_key');
+  assert.deepEqual(empty.similar, ['ANTHROPIC_API_KEY']);
 });
 
 test('endpoint: streams sources, then the answer, and sends the key only to the API', async () => {
@@ -141,7 +145,7 @@ test('endpoint: streams sources, then the answer, and sends the key only to the 
     return new Response(upstreamBody(upstreamEvents));
   };
   try {
-    const c = ctx({ question: 'who coined the term GEO' }, { ANTHROPIC_API_KEY: 'secret-key', ASK_MODEL: 'test-model' });
+    const c = ctx({ question: 'who coined the term GEO' }, { 'ANTHROPIC_API_KEY ': ' secret-key\n', ASK_MODEL: 'test-model' });
     const res = await onRequestPost(c);
     const out = await readEvents(res.body);
     await Promise.all(c.pending);

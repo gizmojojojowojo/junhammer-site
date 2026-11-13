@@ -222,7 +222,7 @@ const examples = [
           say(data.limited ? 'AI answers are at their limit for now. These pages match your question:' : 'These pages match your question:');
           renderSources(sourceBox, data.sources, null, 'Best matches');
         }
-        if (debug) note = 'json ' + JSON.stringify({ status: res.status, mode: data.mode, reason: data.reason, error: data.error });
+        if (debug) note = 'json ' + JSON.stringify({ status: res.status, mode: data.mode, reason: data.reason, similar: data.similar, error: data.error });
       }
       // Setup aid: /ask/?debug=1 shows what the endpoint returned.
       if (debug) turn.append(el('p', 'meta', 'Diagnostic: ' + note));

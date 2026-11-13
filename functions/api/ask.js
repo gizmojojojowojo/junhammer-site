@@ -47,6 +47,13 @@ async function overLimit(env, ip) {
   return false;
 }
 
+/** Reads the key, forgiving stray spaces or lowercase in the dashboard entry. */
+function apiKey(env) {
+  const name = Object.keys(env).find((k) => k.trim().toUpperCase() === 'ANTHROPIC_API_KEY');
+  const value = name && typeof env[name] === 'string' ? env[name].trim() : '';
+  return { key: value, state: !name ? 'no_key' : value ? 'ok' : 'empty_key' };
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
   const started = Date.now();
@@ -84,9 +91,12 @@ export async function onRequestPost(context) {
     log({ mode: 'no_match' });
     return json({ mode: 'no_match', sources: [] });
   }
-  if (!env.ANTHROPIC_API_KEY) {
-    log({ mode: 'search' });
-    return json({ mode: 'search', reason: 'no_key', sources });
+  const { key, state } = apiKey(env);
+  if (!key) {
+    log({ mode: 'search', reason: state });
+    // Variable names only, never values: enough to spot a misnamed entry.
+    const similar = Object.keys(env).filter((k) => /anthropic|claude|api.?key/i.test(k));
+    return json({ mode: 'search', reason: state, similar, sources });
   }
   if (await overLimit(env, request.headers.get('cf-connecting-ip') || 'unknown')) {
     log({ mode: 'limited' });
@@ -95,7 +105,7 @@ export async function onRequestPost(context) {
 
   const upstream = await fetch(API, {
     method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+    headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
       model: env.ASK_MODEL || DEFAULT_MODEL,
       max_tokens: LIMITS.maxTokens,
