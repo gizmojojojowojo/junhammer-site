@@ -1,0 +1,124 @@
+---
+import Base from '../../layouts/Base.astro';
+import data from '../../data/ask-evals.json';
+
+const r = data.retrieval;
+const a = data.answers;
+const pct = (x: number, d: number) => (d ? `${Math.round((100 * x) / d)}%` : 'n/a');
+const day = (iso: string) => new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Denver' });
+const repo = 'https://github.com/gizmojojojowojo/junhammer-site';
+
+const retrievalRows = [
+  ['Right page ranked first', r.first, r.questions],
+  ['Right page in the top 3', r.top3, r.questions],
+  ['Right page reaches the model', r.reachedModel, r.questions],
+  ['Off-topic questions stopped before the model', r.offTopicStopped, r.offTopic],
+];
+const answerRows = a
+  ? [
+      ...a.checks.map((c) => [c.label, c.passed, a.answered]),
+      ['Off-topic questions that reached the model and were declined', a.offTopicDeclined, a.offTopicReachedModel],
+    ]
+  : [];
+const graded = data.questions.some((q) => 'pass' in q);
+// Failures first, so the weak spots are the first thing a reader sees.
+const questions = [...data.questions].sort((x, y) => Number(x.pass ?? true) - Number(y.pass ?? true) || (y.rank === 0 ? 0 : 1) - (x.rank === 0 ? 0 : 1));
+const rankLabel = (rank: number) => (rank < 0 ? 'missed' : `#${rank + 1}`);
+---
+<Base
+  title="Ask evals"
+  seoTitle="Live Eval Results for This Site's AI Search"
+  description="Automated test results for the AI search on junhammer.com: retrieval accuracy and rule-based answer grading on 60 questions, rerun on every site change."
+>
+  <div class="narrow evals">
+    <header class="page-head">
+      <h1>Ask evals</h1>
+      <p class="lede">Every time this site changes, a script asks <a href="/ask/">the Ask feature</a> {r.questions} test questions, grades the results with fixed rules and publishes them here. Failures included.</p>
+      <p class="meta">
+        Last run {day(a?.ranAt ?? data.ranAt)}
+        {data.commit && <> on commit <a href={`${repo}/commit/${data.commit}`}>{data.commit}</a></>}
+        {a && <> · model <code>{a.model}</code></>}
+      </p>
+    </header>
+
+    {a && (
+      <p class="evals-headline"><strong>{a.passedAll} of {a.answered}</strong> answers passed every check. The right page reached the model for <strong>{r.reachedModel} of {r.questions}</strong> questions.</p>
+    )}
+
+    <section>
+      <h2>Retrieval: does the right page get found?</h2>
+      <p>Each question lists the pages that hold its answer. Keyword search (BM25) runs over {r.passages} passages, and the test checks where the first of those pages lands.</p>
+      <table class="evals-table">
+        <thead><tr><th scope="col">Check</th><th scope="col">Result</th><th scope="col">Rate</th></tr></thead>
+        <tbody>
+          {retrievalRows.map(([label, x, d]) => (<tr><th scope="row">{label}</th><td>{x} of {d}</td><td>{pct(x as number, d as number)}</td></tr>))}
+        </tbody>
+      </table>
+      <p class="meta">Mean reciprocal rank: {r.mrr}. Questions wrongly turned away: {r.wronglyTurnedAway}.</p>
+    </section>
+
+    <section>
+      <h2>Answers: does the model stay inside the sources?</h2>
+      {a ? (
+        <>
+          <p>The model answers every question that passes retrieval. A script then checks each answer. No model grades another model here, so the same answer always gets the same grade.</p>
+          <table class="evals-table">
+            <thead><tr><th scope="col">Check</th><th scope="col">Result</th><th scope="col">Rate</th></tr></thead>
+            <tbody>
+              {answerRows.map(([label, x, d]) => (<tr><th scope="row">{label}</th><td>{x} of {d}</td><td>{pct(x as number, d as number)}</td></tr>))}
+            </tbody>
+          </table>
+          <p class="meta">Average size per answer: {a.avgTokensIn.toLocaleString('en-US')} tokens in, {a.avgTokensOut.toLocaleString('en-US')} tokens out.</p>
+        </>
+      ) : (
+        <p>Answer grading has not run yet. Retrieval results above are current. Answer results appear here after the next site change.</p>
+      )}
+    </section>
+
+    <section>
+      <h2>Every question</h2>
+      <p>Rank is where the first page that holds the answer landed in the search results.</p>
+      <div class="evals-scroll">
+        <table class="evals-table evals-questions">
+          <thead><tr><th scope="col">Question</th><th scope="col">Rank</th>{graded && <th scope="col">Answer</th>}</tr></thead>
+          <tbody>
+            {questions.map((q) => (
+              <tr class={q.pass === false ? 'is-fail' : undefined}>
+                <th scope="row">
+                  <a href={`/ask/?q=${encodeURIComponent(q.q)}`}>{q.q}</a>
+                  {q.pass === false && <span class="evals-why">{q.failed.join('. ')}.</span>}
+                </th>
+                <td>{rankLabel(q.rank)}</td>
+                {graded && <td>{q.pass === false ? 'Fail' : q.pass ? 'Pass' : ''}</td>}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="prose">
+      <h2>How this works</h2>
+      <p>A GitHub Actions workflow runs on every push. It builds the search index from the site's content, runs the test set, writes the results to a JSON file and commits it. That commit rebuilds this page. The <a href={`${repo}/blob/main/evals/ask/questions.json`}>questions</a>, the <a href={`${repo}/blob/main/src/ask/grade.mjs`}>grading rules</a> and the <a href={`${repo}/blob/main/.github/workflows/ask-evals.yml`}>workflow</a> are public.</p>
+      <p>The rules check what a script can verify: that an answer cites a source, that each citation points at a passage the model was given, that at least one cited page holds the answer, that every link came from the sources, and that the answer stays short. They do not judge writing quality. Read <a href="/work/site-ai-search/">the case study</a> for how the feature is built.</p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .evals { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .evals section { margin-top: 2.75rem; }
+  .evals h2 { font-size: var(--step-2); margin-bottom: .6rem; }
+  .evals-headline { margin-top: 1.5rem; padding: 1rem 1.2rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); font-size: var(--step-1); line-height: 1.4; }
+  .evals-scroll { overflow-x: auto; }
+  .evals-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-ui); font-size: var(--step--1); }
+  .evals-table th, .evals-table td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .evals-table thead th { color: var(--ink-soft); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; font-size: .75rem; }
+  .evals-table tbody th { font-weight: 500; }
+  .evals-table td { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .evals-questions a { color: var(--ink); text-decoration-color: var(--rule); }
+  .evals-questions a:hover { color: var(--fjord); }
+  .is-fail td:last-child { font-weight: 700; color: var(--fjord); }
+  .evals-why { display: block; margin-top: .2rem; color: var(--ink-soft); font-weight: 400; }
+  code { font-size: .9em; }
+</style>

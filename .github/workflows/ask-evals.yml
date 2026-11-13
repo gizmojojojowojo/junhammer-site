@@ -1,0 +1,43 @@
+# Grades the /ask/ feature on every change to the site and publishes the
+# results at /ask/evals/. Needs the ANTHROPIC_API_KEY repository secret to grade
+# answers; without it only retrieval is measured.
+name: Ask evals
+
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'functions/**', 'evals/**', 'scripts/ask/**', 'tests/**', '.github/workflows/ask-evals.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ask-evals
+  cancel-in-progress: true
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pip install --quiet pyyaml
+      - run: npm test
+      - name: Run the test set
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/ask/eval_report.mjs
+      - name: Publish results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/ask-evals.json
+          if git diff --cached --quiet; then echo "No change."; exit 0; fi
+          git commit -m "Update Ask eval results for ${GITHUB_SHA::7}"
+          git pull --rebase origin main
+          git push origin HEAD:main

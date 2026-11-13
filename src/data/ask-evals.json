@@ -1,0 +1,258 @@
+{
+  "ranAt": "2026-11-13T22:09:46.815Z",
+  "commit": "",
+  "retrieval": {
+    "questions": 60,
+    "passages": 730,
+    "first": 51,
+    "top3": 56,
+    "reachedModel": 60,
+    "mrr": 0.898,
+    "wronglyTurnedAway": 0,
+    "offTopic": 8,
+    "offTopicStopped": 4
+  },
+  "answers": null,
+  "questions": [
+    {
+      "q": "What is the difference between AEO and GEO?",
+      "rank": 0
+    },
+    {
+      "q": "What does generative engine optimization mean?",
+      "rank": 0
+    },
+    {
+      "q": "Who came up with the term GEO?",
+      "rank": 0
+    },
+    {
+      "q": "How long until SEO shows results?",
+      "rank": 0
+    },
+    {
+      "q": "Why isn't my content appearing in ChatGPT?",
+      "rank": 0
+    },
+    {
+      "q": "How do AI search engines pick which sites to cite?",
+      "rank": 0
+    },
+    {
+      "q": "What is the 40 word rule?",
+      "rank": 0
+    },
+    {
+      "q": "How should I write paragraphs so AI tools quote them?",
+      "rank": 0
+    },
+    {
+      "q": "How do I get featured in Google AI Overviews?",
+      "rank": 0
+    },
+    {
+      "q": "What is semantic search?",
+      "rank": 0
+    },
+    {
+      "q": "Explain search intent and the different types",
+      "rank": 0
+    },
+    {
+      "q": "What is E-E-A-T and how do I show it to AI systems?",
+      "rank": 0
+    },
+    {
+      "q": "Which schema markup matters for medical pages?",
+      "rank": 0
+    },
+    {
+      "q": "How can a small regional hospital compete in AI search?",
+      "rank": 0
+    },
+    {
+      "q": "How do pharma companies optimize content for Perplexity?",
+      "rank": 2
+    },
+    {
+      "q": "What is entity-based optimization for health systems?",
+      "rank": 0
+    },
+    {
+      "q": "Why is healthcare AEO different from other industries?",
+      "rank": 0
+    },
+    {
+      "q": "What is the difference between an AI agent and an AI workflow?",
+      "rank": 0
+    },
+    {
+      "q": "When should I use a workflow instead of an agent?",
+      "rank": 1
+    },
+    {
+      "q": "What are AI integration services?",
+      "rank": 0
+    },
+    {
+      "q": "Is SEO dead?",
+      "rank": 0
+    },
+    {
+      "q": "How does AEO reporting differ from SEO reporting?",
+      "rank": 3
+    },
+    {
+      "q": "What should I look for when hiring an AEO consultant?",
+      "rank": 0
+    },
+    {
+      "q": "What am I actually paying for with AEO services?",
+      "rank": 0
+    },
+    {
+      "q": "What tools are used for answer engine optimization?",
+      "rank": 0
+    },
+    {
+      "q": "What replaces third-party cookies?",
+      "rank": 0
+    },
+    {
+      "q": "What technical SEO does a GEO strategy need?",
+      "rank": 0
+    },
+    {
+      "q": "How do I do keyword research now?",
+      "rank": 0
+    },
+    {
+      "q": "What does a site audit cover?",
+      "rank": 0
+    },
+    {
+      "q": "How should humans and AI work together on content?",
+      "rank": 0
+    },
+    {
+      "q": "Who is Joe Unhammer?",
+      "rank": 0
+    },
+    {
+      "q": "Was Joe in the military?",
+      "rank": 0
+    },
+    {
+      "q": "Where does Joe work?",
+      "rank": 0
+    },
+    {
+      "q": "What AI tools has Joe built?",
+      "rank": 3
+    },
+    {
+      "q": "What is LandmAIn?",
+      "rank": 0
+    },
+    {
+      "q": "Has Joe built a chatbot for a hospital?",
+      "rank": 0
+    },
+    {
+      "q": "What results did the spine clinic get?",
+      "rank": 0
+    },
+    {
+      "q": "Tell me about the healthcare website consolidation project",
+      "rank": 0
+    },
+    {
+      "q": "Does Joe have ecommerce SEO experience?",
+      "rank": 0
+    },
+    {
+      "q": "Can Joe build an MCP server for Claude?",
+      "rank": 0
+    },
+    {
+      "q": "What does an AI agent project involve?",
+      "rank": 0
+    },
+    {
+      "q": "Can you automate our marketing reports?",
+      "rank": 2
+    },
+    {
+      "q": "Do you offer AI strategy consulting?",
+      "rank": 0
+    },
+    {
+      "q": "Can you help with a site migration?",
+      "rank": 0
+    },
+    {
+      "q": "How do I get in touch about a project?",
+      "rank": 1
+    },
+    {
+      "q": "Does Joe work with companies in Denver?",
+      "rank": 0
+    },
+    {
+      "q": "What is the AEO playbook?",
+      "rank": 0
+    },
+    {
+      "q": "Give me statistics on why AEO matters",
+      "rank": 2
+    },
+    {
+      "q": "how does it take for seo to work?",
+      "rank": 0
+    },
+    {
+      "q": "seo how long",
+      "rank": 4
+    },
+    {
+      "q": "aeo vs geo",
+      "rank": 0
+    },
+    {
+      "q": "chatgpt not showing my site",
+      "rank": 0
+    },
+    {
+      "q": "joe army",
+      "rank": 0
+    },
+    {
+      "q": "mcp server",
+      "rank": 0
+    },
+    {
+      "q": "agents vs workflows",
+      "rank": 0
+    },
+    {
+      "q": "spine clinic",
+      "rank": 0
+    },
+    {
+      "q": "whats semantic search",
+      "rank": 0
+    },
+    {
+      "q": "ai overviews for hospitals",
+      "rank": 0
+    },
+    {
+      "q": "what do you charge",
+      "rank": 5
+    },
+    {
+      "q": "keyword research",
+      "rank": 0
+    }
+  ]
+}

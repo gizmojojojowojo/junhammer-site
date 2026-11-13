@@ -5,6 +5,7 @@ import { buildChunks, slugify } from '../src/ask/chunk.mjs';
 import { buildIndex, search, tokenize } from '../src/ask/retrieve.mjs';
 import { LIMITS, allowedLinks, answerable, buildMessages, parseRequest, publicSources, relayStream } from '../src/ask/answer.mjs';
 import { onRequestPost } from '../functions/api/ask.js';
+import { declined, grade, rankOf } from '../src/ask/grade.mjs';
 
 const docs = [
   {
@@ -189,4 +190,18 @@ test('endpoint: the hourly limit falls back to search results', async () => {
   } finally {
     globalThis.fetch = realFetch;
   }
+});
+
+test('grading: citations, links and length are checked by rule', () => {
+  const results = search(index, 'what is GEO').results;
+  const expect = ['/blog/geo/'];
+  const good = grade('GEO improves how often AI cites you [1]. See the [paper](https://arxiv.org/abs/2311.09735).', results, expect);
+  assert.deepEqual(Object.values(good), [true, true, true, true, true]);
+  const bad = grade(`Trust me [99]. See [this](https://evil.example/). ${'word '.repeat(230)}`, results, expect);
+  assert.deepEqual(bad, { cites: true, citesInRange: false, citesExpected: false, linksAllowed: false, short: false });
+  assert.equal(grade('No citation at all.', results, expect).cites, false);
+  assert.equal(rankOf(results, expect), 0);
+  assert.equal(rankOf(results, ['/nope/']), -1);
+  assert.equal(declined('This site does not cover that.'), true);
+  assert.equal(declined('This site does not cover that, but [1] says so.'), false);
 });
