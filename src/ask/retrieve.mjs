@@ -4,7 +4,7 @@
 import { plain } from './chunk.mjs';
 
 const STOP = new Set(
-  `a an and are as at be been but by can could do does did for from had has have he her his how i if in into is it its me my of on or our she should so than that the their them then there these they this to was we were what when where which who whom why will with would you your about am any some just also not no yes please tell give show`.split(' '),
+  `a an and are as at be been but by can could do does did for from had has have he her his how i if in into is it its me my of on or our she should so than that the their them then there these they this to was we were what when where which who whom why will with would you your about am any some just also not no yes please tell give show whats s`.split(' '),
 );
 
 // Domain shorthand. Each side is added to the query when the other appears.
@@ -15,6 +15,8 @@ const SYNONYMS = [
   ['llm', 'large language model'],
   ['mcp', 'model context protocol'],
   ['cost', 'price pricing budget'],
+  ['charge', 'cost price pricing budget rate'],
+  ['much', 'cost price pricing'],
   ['hire', 'contact project'],
   ['email', 'contact'],
   ['touch', 'contact'],
@@ -55,6 +57,7 @@ const B = 0.6;
 const W_HEADING = 2.5;
 const W_TITLE = 3;
 const W_EXPANSION = 0.3;
+const W_PAGE = 1;
 
 export function buildIndex(chunks) {
   const df = new Map();
@@ -72,7 +75,19 @@ export function buildIndex(chunks) {
     total += body.length;
     return { tf, len: body.length };
   });
-  return { chunks, docs, df, avg: total / Math.max(1, chunks.length), n: chunks.length };
+  // Page-level view: title, description and URL words. A question that matches
+  // a page's title lifts every passage on that page.
+  const pages = new Map();
+  for (const c of chunks) {
+    if (!pages.has(c.url)) pages.set(c.url, { tf: new Map(), text: `${c.title} ${c.url.replace(/[/-]/g, ' ')}` });
+    if (!c.heading && !c.anchor) pages.get(c.url).text += ` ${plain(c.text).slice(0, 300)}`;
+  }
+  const pageDf = new Map();
+  for (const p of pages.values()) {
+    for (const t of tokenize(p.text)) p.tf.set(t, (p.tf.get(t) || 0) + 1);
+    for (const t of p.tf.keys()) pageDf.set(t, (pageDf.get(t) || 0) + 1);
+  }
+  return { chunks, docs, df, avg: total / Math.max(1, chunks.length), n: chunks.length, pages, pageDf };
 }
 
 /**
@@ -80,7 +95,7 @@ export function buildIndex(chunks) {
  * the question's own terms found in the best chunk; the caller uses it to
  * decide whether the site can answer at all.
  */
-export function search(index, query, { k = 6, perUrl = 2 } = {}) {
+export function search(index, query, { k = 8, perUrl = 2 } = {}) {
   let own = [...new Set(tokenize(query))];
   // "What do you do?" is all stopwords. Treat a multi-word question with no
   // content terms as a question about Joe and his services.
@@ -105,6 +120,17 @@ export function search(index, query, { k = 6, perUrl = 2 } = {}) {
     }
     if (score > 0) scored.push({ i, score });
   }
+  const pageScore = new Map();
+  for (const [url, p] of index.pages) {
+    let ps = 0;
+    for (const [t, w] of terms) {
+      if (!p.tf.has(t)) continue;
+      const df = index.pageDf.get(t);
+      ps += w * Math.log(1 + (index.pages.size - df + 0.5) / (df + 0.5));
+    }
+    pageScore.set(url, ps);
+  }
+  for (const s of scored) s.score += W_PAGE * (pageScore.get(index.chunks[s.i].url) || 0);
   scored.sort((a, b) => b.score - a.score);
 
   const results = [];
