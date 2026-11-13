@@ -5,7 +5,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { buildChunks, extraDocs } from '../../src/ask/chunk.mjs';
 import { buildIndex, search } from '../../src/ask/retrieve.mjs';
-import { LIMITS, SYSTEM, allowedLinks, answerable, buildMessages } from '../../src/ask/answer.mjs';
+import { LIMITS, SYSTEM, answerable, buildMessages } from '../../src/ask/answer.mjs';
+import { declined as isDeclined, grade } from '../../src/ask/grade.mjs';
 
 const key = process.env.ANTHROPIC_API_KEY;
 if (!key) { console.error('Set ANTHROPIC_API_KEY.'); process.exit(2); }
@@ -30,19 +31,6 @@ async function answer(question, results) {
   return { text: data.content.map((b) => b.text || '').join(''), usage: data.usage };
 }
 
-export function grade(text, results, expect) {
-  const cited = [...new Set([...text.matchAll(/\[(\d+)\]/g)].map((m) => Number(m[1])))];
-  const links = [...text.matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]);
-  const allowed = new Set(allowedLinks(results));
-  return {
-    cites: cited.length > 0,
-    citesInRange: cited.every((n) => n >= 1 && n <= results.length),
-    citesExpected: cited.some((n) => expect.includes(results[n - 1]?.url)),
-    linksAllowed: links.every((l) => allowed.has(l)),
-    short: text.split(/\s+/).length <= 220,
-  };
-}
-
 const totals = { cites: 0, citesInRange: 0, citesExpected: 0, linksAllowed: 0, short: 0 };
 const failures = [];
 let tokensIn = 0, tokensOut = 0, n = 0;
@@ -62,7 +50,7 @@ for (const q of set.offTopic) {
   if (!answerable(found)) continue; // already turned away without the model
   reached++;
   const { text } = await answer(q, found.results);
-  if (/does not cover|doesn't cover|not covered|cannot help|can't help/i.test(text) && !/\[\d+\]/.test(text)) declined++;
+  if (isDeclined(text)) declined++;
   else failures.push({ q, offTopic: true, text });
 }
 

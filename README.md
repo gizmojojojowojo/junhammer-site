@@ -72,6 +72,10 @@ Tests and evals:
 
 If `/ask/` shows a list of pages instead of a written answer, open the browser's network tab and read `reason` in the `/api/ask` response: `no_key` means the secret is missing from that environment or the deployment predates it, and `model_401` or `model_404` means the key or model ID was rejected.
 
+- `node scripts/ask/eval_report.mjs`: runs both and writes `src/data/ask-evals.json`, which `/ask/evals/` displays.
+
+**Published results.** `.github/workflows/ask-evals.yml` runs the tests and the report on every push to `main` and commits the results, so `/ask/evals/` always shows the latest run. Answer grading needs an `ANTHROPIC_API_KEY` repository secret (GitHub > Settings > Secrets and variables > Actions). Without it the workflow still publishes retrieval results.
+
 Add a question to `evals/ask/questions.json` whenever a real visitor question gets a poor answer.
 
 ## AEO audit (AI agent)
