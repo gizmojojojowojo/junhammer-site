@@ -45,6 +45,35 @@ Useful scripts:
 
 `functions/_middleware.js` returns **410 Gone** for retired URLs. `public/_headers` sets security headers.
 
+## Ask this site (AI answers with sources)
+
+`/ask/` answers visitor questions from this site's own content and links every source.
+
+How it works:
+
+1. **Index.** At build time `src/pages/ask-index.json.ts` splits every post, service, case study and page into passages by heading (`src/ask/chunk.mjs`).
+2. **Retrieve.** `functions/api/ask.js` scores passages against the question with BM25 (`src/ask/retrieve.mjs`). If nothing matches, it says so and never calls the model.
+3. **Answer.** The top eight passages go to Claude with instructions to answer only from them and cite each claim. The answer streams back to the page.
+4. **Check.** The page turns `[1]` into a link to the source and refuses to render any link that was not in the retrieved passages.
+
+Setup in Cloudflare Pages (Settings > Variables and Secrets, for both Production and Preview):
+
+- `ANTHROPIC_API_KEY` (secret): required for AI answers. Without it, `/ask/` still works and returns the best-matching pages.
+- `ASK_MODEL` (optional): model ID. Defaults to the value of `DEFAULT_MODEL` in `functions/api/ask.js`.
+- `ASK_KV` (optional KV namespace binding): turns on limits of 20 questions per visitor per hour and 400 per day site-wide. Change them with `ASK_HOURLY_LIMIT` and `ASK_DAILY_LIMIT`.
+
+Set a monthly spend limit on the API key in the Anthropic Console as the hard cost cap.
+
+Tests and evals:
+
+- `npm test`: unit tests for chunking, retrieval, the prompt, the stream relay and the endpoint (no network, no key).
+- `npm run eval:ask`: retrieval quality on `evals/ask/questions.json`. Fails if the right page reaches the model for fewer than 90% of questions. Needs PyYAML unless the site has been built.
+- `ANTHROPIC_API_KEY=... npm run eval:answers`: calls the model for every test question and checks citations, links and length.
+
+If `/ask/` shows a list of pages instead of a written answer, open the browser's network tab and read `reason` in the `/api/ask` response: `no_key` means the secret is missing from that environment or the deployment predates it, and `model_401` or `model_404` means the key or model ID was rejected.
+
+Add a question to `evals/ask/questions.json` whenever a real visitor question gets a poor answer.
+
 ## Contact form
 
 The form appears when `formEndpoint` is set in *Site settings*. Free option: create an access key at web3forms.com, then set `formEndpoint` to `https://api.web3forms.com/submit` and `formAccessKey` to your key. Until then, the contact page shows email only.
