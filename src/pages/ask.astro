@@ -172,6 +172,7 @@ const examples = [
     turn.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     const say = (text) => answer.replaceChildren(el('p', '', text));
+    let note = '';
     try {
       const res = await fetch('/api/ask', {
         method: 'POST',
@@ -184,7 +185,9 @@ const examples = [
         let sources = [];
         let links = new Set();
         let failed = '';
+        const seen = {};
         await readStream(res, (event, data) => {
+          seen[event] = (seen[event] || 0) + 1;
           if (event === 'sources') {
             sources = data.sources;
             links = new Set(data.links);
@@ -194,8 +197,11 @@ const examples = [
             renderAnswer(answer, text, sources, links);
           } else if (event === 'error') failed = data.message;
         });
-        if (failed && !text) say(failed);
-        else {
+        if (debug) note = 'stream ' + JSON.stringify(seen) + ', ' + text.length + ' characters' + (failed ? ', error: ' + failed : '');
+        if (!text.trim()) {
+          say(failed || 'No answer came back. Try again in a moment.');
+          renderSources(sourceBox, sources, null, 'Best matches');
+        } else {
           const cited = renderAnswer(answer, text, sources, links);
           if (failed) answer.append(el('p', 'meta', failed));
           renderSources(sourceBox, sources, cited, cited.size ? 'Sources' : 'Related pages');
@@ -215,13 +221,15 @@ const examples = [
         } else {
           say(data.limited ? 'AI answers are at their limit for now. These pages match your question:' : 'These pages match your question:');
           renderSources(sourceBox, data.sources, null, 'Best matches');
-          // Setup aid: /ask/?debug=1 shows why no written answer came back.
-          if (debug && data.reason) answer.append(el('p', 'meta', 'Diagnostic: ' + data.reason));
         }
+        if (debug) note = 'json ' + JSON.stringify({ status: res.status, mode: data.mode, reason: data.reason, error: data.error });
       }
+      // Setup aid: /ask/?debug=1 shows what the endpoint returned.
+      if (debug) turn.append(el('p', 'meta', 'Diagnostic: ' + note));
       status.textContent = 'Answer ready.';
     } catch (err) {
       say('Something went wrong. Try again in a moment.');
+      if (debug) turn.append(el('p', 'meta', 'Diagnostic: exception ' + err));
       status.textContent = 'Something went wrong.';
     }
     busy = false;
