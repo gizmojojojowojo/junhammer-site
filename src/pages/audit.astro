@@ -1,0 +1,295 @@
+---
+import Base from '../layouts/Base.astro';
+
+const checks = [
+  ['AI crawler access', 'Whether GPTBot, ClaudeBot, PerplexityBot and other crawlers are allowed to fetch the page, and whether the content is in the HTML they receive.'],
+  ['Answer structure', 'Whether headings match the questions people ask and each section opens with a direct answer.'],
+  ['Structured data', 'Whether the schema markup is valid, fits the page and names an author and dates.'],
+  ['Trust signals', 'Whether the page shows who wrote it, when it was updated and where its facts come from.'],
+  ['Technical basics', 'Title, description, canonical URL, language and redirects.'],
+];
+const schema = [
+  {
+    '@type': 'WebApplication',
+    name: 'AEO Audit',
+    url: 'https://junhammer.com/audit/',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Any',
+    description: 'An AI agent that audits a web page for how ready it is to be cited by AI search, with a score and specific fixes.',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    creator: { '@id': 'https://junhammer.com/#person' },
+  },
+];
+---
+<Base
+  title="AEO audit"
+  seoTitle="Free AEO Audit: Is Your Page Ready for AI Search?"
+  description="Paste a URL. An AI agent checks crawler access, answer structure, schema and trust signals, then scores the page for AI search and lists specific fixes."
+  schema={schema}
+>
+  <div class="narrow audit">
+    <header class="page-head">
+      <h1>AEO audit</h1>
+      <p class="lede">Paste a page URL. An AI agent inspects the page, scores how ready it is to be cited by AI search, and lists what to fix first. It takes about a minute.</p>
+    </header>
+
+    <form id="audit-form" class="audit-form">
+      <label class="audit-sr" for="audit-url">Page URL</label>
+      <input id="audit-url" name="url" type="text" inputmode="url" maxlength="2000" required autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="https://example.com/your-page/" />
+      <button class="btn" type="submit">Run audit</button>
+    </form>
+    <p id="audit-error" class="audit-error" role="alert" hidden></p>
+
+    <section id="audit-run" class="audit-run" hidden aria-labelledby="audit-run-h">
+      <h2 id="audit-run-h">What the agent is doing</h2>
+      <ol id="audit-steps" class="audit-steps"></ol>
+      <p id="audit-status" class="audit-sr" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="audit-report" class="audit-report" hidden aria-labelledby="audit-report-h"></section>
+
+    <section id="audit-about" class="prose audit-about">
+      <h2>What it checks</h2>
+      <dl>
+        {checks.map(([term, text]) => (<><dt>{term}</dt><dd>{text}</dd></>))}
+      </dl>
+      <h2>How it works</h2>
+      <p>This is an AI agent. It gets a goal and a set of tools: fetch a page, map its headings, read a section, inspect its schema, check robots.txt. Claude, an AI model from Anthropic, decides which tools to use and in what order based on what it finds. Two pages can get two different sets of checks. You can watch each step as it runs.</p>
+      <p>The audit reads one page and the site's robots.txt. It only fetches public web pages, and it does not store the page or the report. The URL you enter is sent to Anthropic so the model can write the report. Limit: three audits per hour.</p>
+      <p>A score is a starting point. It reflects what one page shows, and it cannot see your analytics or how often AI systems cite you today. For that, read <a href="/services/answer-engine-optimization/">how I approach answer engine optimization</a> or <a href="/contact/">ask me about a full audit</a>.</p>
+    </section>
+    <noscript><p class="meta">This tool needs JavaScript. You can read <a href="/services/answer-engine-optimization/">about AEO services</a> instead.</p></noscript>
+  </div>
+</Base>
+
+<script>
+  const form = document.getElementById('audit-form');
+  const input = document.getElementById('audit-url');
+  const button = form.querySelector('button');
+  const errorBox = document.getElementById('audit-error');
+  const run = document.getElementById('audit-run');
+  const steps = document.getElementById('audit-steps');
+  const status = document.getElementById('audit-status');
+  const reportBox = document.getElementById('audit-report');
+  let busy = false;
+
+  // All text from the server goes in through textContent. The report never becomes markup.
+  const el = (tag, cls, text) => {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text) node.textContent = text;
+    return node;
+  };
+
+  const verdict = (score) => (score >= 85 ? 'Ready' : score >= 70 ? 'Solid, with gaps' : score >= 50 ? 'Needs work' : 'Holding you back');
+
+  function fail(message) {
+    errorBox.textContent = message;
+    errorBox.hidden = false;
+    status.textContent = message;
+  }
+
+  function renderReport(r) {
+    const head = el('div', 'audit-score');
+    const num = el('p', 'audit-score-num', r.score === null ? 'n/a' : String(r.score));
+    num.append(el('span', '', '/100'));
+    const side = el('div');
+    side.append(el('h2', '', r.score === null ? 'Audit report' : verdict(r.score)));
+    side.lastChild.id = 'audit-report-h';
+    const where = el('p', 'meta audit-url', r.url);
+    if (r.pageType) where.textContent = r.pageType + ' · ' + r.url;
+    side.append(where);
+    head.append(num, side);
+
+    const cats = el('ul', 'audit-cats');
+    for (const c of r.categories) {
+      const li = el('li');
+      const top = el('div', 'audit-cat-top');
+      top.append(el('span', 'audit-cat-name', c.label), el('span', 'audit-cat-score', c.score === null ? 'not checked' : c.score + '/100'));
+      const bar = el('div', 'audit-bar');
+      const fill = el('span');
+      fill.style.width = (c.score ?? 0) + '%';
+      bar.append(fill);
+      bar.setAttribute('aria-hidden', 'true');
+      li.append(top, bar);
+      if (c.note) li.append(el('p', 'audit-cat-note', c.note));
+      cats.append(li);
+    }
+
+    const parts = [head];
+    if (r.summary) parts.push(el('p', 'audit-summary', r.summary));
+    parts.push(cats);
+
+    if (r.findings.length) {
+      parts.push(el('h3', '', 'What to fix, in order'));
+      const list = el('ol', 'audit-findings');
+      for (const f of r.findings) {
+        const li = el('li');
+        const title = el('h4', '', f.title);
+        title.prepend(el('span', 'audit-sev audit-sev-' + f.severity, f.severity === 'high' ? 'High impact' : f.severity === 'medium' ? 'Medium impact' : 'Low impact'), ' ');
+        li.append(title);
+        if (f.evidence) {
+          const p = el('p', '', f.evidence);
+          p.prepend(el('strong', '', 'Found: '));
+          li.append(p);
+        }
+        const fix = el('p', '', f.fix);
+        fix.prepend(el('strong', '', 'Fix: '));
+        li.append(fix);
+        list.append(li);
+      }
+      parts.push(list);
+    }
+    if (r.strengths.length) {
+      parts.push(el('h3', '', 'What already works'));
+      const list = el('ul', 'audit-strengths');
+      for (const s of r.strengths) list.append(el('li', '', s));
+      parts.push(list);
+    }
+
+    const next = el('div', 'audit-next');
+    next.append(el('h3', '', 'Want these fixed across the whole site?'));
+    next.append(el('p', '', 'This audit covers one page. I run full AEO audits, fix the templates behind the findings and track whether AI systems start citing you.'));
+    const cta = el('a', 'btn', 'Talk to me about a full audit');
+    cta.href = '/contact/';
+    next.append(cta);
+    parts.push(next, el('p', 'meta', 'Written by an AI model from what it found on the page. Check a finding against the page before you act on it.'));
+
+    reportBox.replaceChildren(...parts);
+    reportBox.hidden = false;
+    reportBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function readStream(res, onEvent) {
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const blocks = buffer.split('\n\n');
+      buffer = blocks.pop();
+      for (const block of blocks) {
+        const event = block.match(/^event: (.+)$/m);
+        const data = block.match(/^data: (.+)$/m);
+        if (event && data) onEvent(event[1], JSON.parse(data[1]));
+      }
+    }
+  }
+
+  async function audit(url) {
+    if (busy || !url.trim()) return;
+    busy = true;
+    button.disabled = true;
+    button.textContent = 'Auditing…';
+    errorBox.hidden = true;
+    reportBox.hidden = true;
+    steps.replaceChildren();
+    run.hidden = false;
+    status.textContent = 'Audit started.';
+    let current = null;
+    let finished = false;
+    const settle = (text) => {
+      if (!current) return;
+      current.classList.remove('is-running');
+      if (text) current.append(el('span', 'audit-step-result', text));
+      current = null;
+    };
+    try {
+      const res = await fetch('/api/audit', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url }) });
+      const type = res.headers.get('content-type') || '';
+      if (!type.includes('text/event-stream')) {
+        const data = await res.json().catch(() => ({}));
+        run.hidden = true;
+        fail(data.error || 'The audit could not start. Try again in a moment.');
+      } else {
+        await readStream(res, (event, data) => {
+          if (event === 'step') {
+            settle();
+            current = el('li', 'is-running', data.label);
+            steps.append(current);
+            status.textContent = data.label;
+          } else if (event === 'result') settle(data.summary);
+          else if (event === 'report') {
+            settle();
+            finished = true;
+            renderReport(data);
+            status.textContent = data.score === null ? 'Audit finished.' : 'Audit finished. Score ' + data.score + ' out of 100.';
+          } else if (event === 'error') {
+            settle();
+            finished = true;
+            fail(data.message);
+          }
+        });
+        if (!finished) {
+          settle();
+          fail('The audit was cut off. Try again in a moment.');
+        }
+      }
+    } catch {
+      fail('Something went wrong. Try again in a moment.');
+    }
+    busy = false;
+    button.disabled = false;
+    button.textContent = 'Run audit';
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    audit(input.value);
+  });
+
+  // A link can prefill the box (/audit/?url=...). It never starts an audit by itself.
+  const preset = new URLSearchParams(location.search).get('url');
+  if (preset) input.value = preset.slice(0, 2000);
+</script>
+
+<style is:global>
+  .audit { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .audit-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .audit-form { display: flex; gap: .6rem; margin-top: 1rem; }
+  .audit-form input { flex: 1; min-width: 0; font: inherit; font-family: var(--font-ui); padding: .8rem .9rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); color: var(--ink); }
+  .audit-form .btn { cursor: pointer; white-space: nowrap; }
+  .audit-form button:disabled { opacity: .55; cursor: default; }
+  .audit-error { margin-top: .9rem; padding: .7rem .9rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); font-family: var(--font-ui); font-size: var(--step--1); }
+
+  .audit-run { margin-top: 2rem; }
+  .audit-run h2, .audit-report h3 { font-family: var(--font-ui); font-size: var(--step--1); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); margin-bottom: .6rem; }
+  .audit-steps { margin: 0; padding-left: 1.5rem; display: grid; gap: .3rem; font-family: var(--font-ui); font-size: var(--step--1); }
+  .audit-steps li.is-running { color: var(--fjord); font-weight: 600; }
+  .audit-steps li.is-running::after { content: ' …'; }
+  .audit-step-result { color: var(--ink-soft); }
+  .audit-step-result::before { content: ' · '; }
+
+  .audit-report { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--rule); scroll-margin-top: 5rem; }
+  .audit-report h3 { margin-top: 2.2rem; }
+  .audit-score { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .audit-score-num { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: var(--step-5); line-height: 1; color: var(--fjord); font-variant-numeric: tabular-nums; }
+  .audit-score-num span { font-size: var(--step-0); font-weight: 500; color: var(--ink-soft); margin-left: .15em; }
+  .audit-score h2 { font-size: var(--step-2); margin: 0; }
+  .audit-url { margin: .3rem 0 0; overflow-wrap: anywhere; }
+  .audit-summary { margin-top: 1.25rem; max-width: var(--measure); }
+  .audit-cats { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1.1rem; }
+  .audit-cat-top { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--font-ui); font-weight: 600; }
+  .audit-cat-score { font-variant-numeric: tabular-nums; color: var(--ink-soft); font-weight: 500; }
+  .audit-bar { height: .5rem; margin-top: .35rem; border-radius: 999px; background: var(--rule); overflow: hidden; }
+  .audit-bar span { display: block; height: 100%; border-radius: 999px; background: var(--fjord); }
+  .audit-cat-note { margin: .4rem 0 0; font-size: var(--step--1); color: var(--ink-soft); }
+  .audit-findings { margin: 0; padding-left: 1.5rem; display: grid; gap: 1.4rem; max-width: var(--measure); }
+  .audit-findings h4 { font-size: var(--step-0); margin: 0 0 .35rem; }
+  .audit-findings p { margin: .25rem 0 0; }
+  .audit-sev { display: inline-block; font-family: var(--font-ui); font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; padding: .12rem .45rem; border: 1px solid var(--rule); border-radius: var(--radius-s); color: var(--ink-soft); vertical-align: .15em; }
+  .audit-sev-high { border-color: var(--fjord); color: var(--fjord); }
+  .audit-strengths { margin: 0; padding-left: 1.3rem; display: grid; gap: .35rem; max-width: var(--measure); }
+  .audit-next { margin-top: 2.5rem; padding: 1.5rem; border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--surface); }
+  .audit-next h3 { margin: 0 0 .4rem; font-family: var(--font-display); font-size: var(--step-1); text-transform: none; letter-spacing: 0; color: var(--ink); }
+  .audit-next p { margin: 0 0 1rem; max-width: 52ch; }
+  .audit-report > .meta { margin-top: 1.25rem; }
+
+  .audit-about { margin-top: 3rem; }
+  .audit-about dl { margin: 0; }
+  .audit-about dt { font-family: var(--font-ui); font-weight: 600; margin-top: .9rem; }
+  .audit-about dd { margin: .1rem 0 0; color: var(--ink-soft); }
+  @media (max-width: 520px) { .audit-form { flex-direction: column; } .audit-form .btn { justify-content: center; } }
+</style>

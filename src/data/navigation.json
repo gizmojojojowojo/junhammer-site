@@ -17,7 +17,8 @@
     { "label": "Work", "href": "/work/", "children": [] },
     { "label": "Writing", "href": "/blog/", "children": [] },
     { "label": "About", "href": "/about/", "children": [] },
-    { "label": "Ask", "href": "/ask/", "children": [] }
+    { "label": "Ask", "href": "/ask/", "children": [] },
+    { "label": "AEO Audit", "href": "/audit/", "children": [] }
   ],
   "cta": { "label": "Start a project", "href": "/contact/" }
 }

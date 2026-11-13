@@ -66,13 +66,33 @@ Set a monthly spend limit on the API key in the Anthropic Console as the hard co
 
 Tests and evals:
 
-- `npm test`: unit tests for chunking, retrieval, the prompt, the stream relay and the endpoint (no network, no key).
+- `npm test`: unit tests for chunking, retrieval, the prompt, the stream relay and both endpoints (no network, no key).
 - `npm run eval:ask`: retrieval quality on `evals/ask/questions.json`. Fails if the right page reaches the model for fewer than 90% of questions. Needs PyYAML unless the site has been built.
 - `ANTHROPIC_API_KEY=... npm run eval:answers`: calls the model for every test question and checks citations, links and length.
 
 If `/ask/` shows a list of pages instead of a written answer, open the browser's network tab and read `reason` in the `/api/ask` response: `no_key` means the secret is missing from that environment or the deployment predates it, and `model_401` or `model_404` means the key or model ID was rejected.
 
 Add a question to `evals/ask/questions.json` whenever a real visitor question gets a poor answer.
+
+## AEO audit (AI agent)
+
+`/audit/` takes a URL and returns a scored report on how ready the page is to be cited by AI search.
+
+How it works:
+
+1. **Guard.** `src/audit/guard.mjs` accepts only public http(s) addresses on standard ports and refuses IP addresses, local names and redirects to them. Every fetch has a time limit and a size cap.
+2. **Agent loop.** `src/audit/agent.mjs` gives Claude a goal and six tools (fetch a page, map headings, read a section, inspect schema, check trust signals, check robots.txt for AI crawlers). The model picks the next tool from what it has found so far. The loop stops at 8 turns and 3 page fetches, all on the audited site.
+3. **Report.** The model finishes by calling `submit_report`. The code fixes the category list, clamps scores and computes the weighted total, so the page layout never depends on free-form model output.
+4. **Stream.** `functions/api/audit.js` streams each step to the page as it runs.
+
+Settings (same place as the Ask settings):
+
+- `ANTHROPIC_API_KEY`: shared with `/ask/`.
+- `AUDIT_MODEL` (optional): defaults to `DEFAULT_MODEL` in `functions/api/audit.js`.
+- `ASK_KV` (optional, shared): makes the limits site-wide. Without it they are counted per server instance only.
+- `AUDIT_HOURLY_LIMIT` (default 3 per visitor) and `AUDIT_DAILY_LIMIT` (default 60 site-wide).
+
+`npm test` covers the URL guard, the HTML and robots.txt parsing, the loop limits and the endpoint with a scripted model (no network, no key).
 
 ## Contact form
 
