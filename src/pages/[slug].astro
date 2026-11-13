@@ -12,6 +12,20 @@ const d = page.data;
 const { Content } = await render(page);
 const schema: Record<string, unknown>[] = [];
 if (d.faqs.length) schema.push({ '@type': 'FAQPage', mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+if (d.areaServed.length) {
+  const url = `https://junhammer.com/${page.id}/`;
+  schema.push({
+    '@type': 'ProfessionalService',
+    '@id': `${url}#service`,
+    name: `Joe Unhammer: ${d.title}`,
+    description: d.description,
+    url,
+    founder: { '@id': 'https://junhammer.com/#person' },
+    provider: { '@id': 'https://junhammer.com/#person' },
+    areaServed: d.areaServed.map((name) => ({ '@type': 'Place', name: name === 'Colorado' || name === 'Douglas County' ? name : `${name}, CO` })),
+    knowsAbout: ['AI consulting', 'AI agent development', 'AI automation', 'Answer engine optimization', 'Generative engine optimization', 'SEO'],
+  });
+}
 if (page.id === 'about') schema.push({ '@type': 'ProfilePage', mainEntity: { '@id': 'https://junhammer.com/#person' } });
 ---
 <Base title={d.title} seoTitle={d.seoTitle} description={d.description} schema={schema}>
