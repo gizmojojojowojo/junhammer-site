@@ -117,6 +117,8 @@ export function buildChunks(docs) {
         continue;
       }
       for (const piece of splitLong(s.text)) {
+        // A table of contents repeats every heading and outranks the real sections.
+        if (/table of contents$/i.test(heading)) continue;
         const text = carry ? `${carry}\n\n${piece}` : piece;
         if (words(text) < MIN_WORDS) carry = text;
         else {
