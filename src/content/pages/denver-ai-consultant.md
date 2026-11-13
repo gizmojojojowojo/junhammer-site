@@ -17,7 +17,7 @@ faqs:
 ---
 I'm Joe Unhammer, an AI engineer and AEO/SEO consultant in the Denver metro area. I help Colorado businesses do two things: put AI to work inside the business, and get found when customers ask AI tools for answers.
 
-Most consultants do one or the other. I build [AI agents](/services/ai-agent-development/), [automations](/services/ai-automation/) and [Claude integrations](/services/claude-mcp-implementation/), and I run [answer engine optimization](/services/answer-engine-optimization/) and [SEO](/services/seo/) programs. Doing both means the tools I build are findable, and the search work is informed by how AI systems actually read and cite content.
+I work on both sides. I build [AI agents](/services/ai-agent-development/), [automations](/services/ai-automation/) and [Claude integrations](/services/claude-mcp-implementation/), and I run [answer engine optimization](/services/answer-engine-optimization/) and [SEO](/services/seo/) programs. Doing both means the tools I build are findable, and the search work is informed by how AI systems actually read and cite content.
 
 ## What I help Denver businesses with
 
