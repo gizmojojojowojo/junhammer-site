@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --test tests/ask.test.mjs",
+    "test": "node --test tests/*.test.mjs",
     "eval:ask": "node scripts/ask/eval.mjs",
     "eval:answers": "node scripts/ask/eval_answers.mjs"
   },
