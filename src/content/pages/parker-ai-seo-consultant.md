@@ -5,7 +5,7 @@ description: "Joe Unhammer is an AI and AEO/SEO consultant in Parker, Colorado, 
 areaServed: ["Parker", "Castle Rock", "Lone Tree", "Highlands Ranch", "Centennial", "Castle Pines", "Aurora", "Douglas County", "Denver"]
 faqs:
   - q: "Do you meet with clients in Parker?"
-    a: "Yes. I am based in the south metro and meet Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial clients in person. Most ongoing work happens remotely."
+    a: "Yes. I am based in the south metro, so Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial are close by, and I meet clients in person anywhere along the Front Range. Most ongoing work happens remotely."
   - q: "What can an AI consultant do for a small Parker business?"
     a: "For a small business, AI usually pays off first in routine work: answering common inquiries, drafting follow-ups, summarizing reports and keeping content consistent. I find the one or two tasks worth automating and build them so your team can run them."
   - q: "Do you do local SEO for Parker businesses?"
