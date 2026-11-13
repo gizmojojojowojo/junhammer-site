@@ -111,7 +111,9 @@ export const TOOLS = [
   },
 ];
 
-const clip = (v, n) => (typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, n) : '');
+// The model sometimes spills the next field's markup into a text value. Cut it off there.
+const LEAK = /<\/?(?:parameter|summary|invoke|function_calls|antml)\b[\s\S]*$/i;
+const clip = (v, n) => (typeof v === 'string' ? v.replace(LEAK, '').replace(/\s+/g, ' ').trim().slice(0, n) : '');
 
 /** Makes the model's report safe and predictable for the page: fixed categories, clamped scores, capped text. */
 export function normalizeReport(input, target) {

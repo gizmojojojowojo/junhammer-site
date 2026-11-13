@@ -111,6 +111,8 @@ test('normalizeReport fixes categories, clamps scores and weights the total', ()
   assert.equal(r.findings[0].severity, 'high');
   assert.deepEqual(r.strengths, ['a', 'b']);
   assert.equal(normalizeReport(null, new URL('https://example.org/')).score, null);
+  const leaky = normalizeReport({ summary: 'Add an <h1> tag.</summary> <parameter name="page_type">home page', categories: [], findings: [] }, new URL('https://example.org/'));
+  assert.equal(leaky.summary, 'Add an <h1> tag.');
 });
 
 // A scripted model: each entry is the list of tool calls for that turn.
