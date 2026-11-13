@@ -6,6 +6,7 @@ import { buildIndex, search, tokenize } from '../src/ask/retrieve.mjs';
 import { LIMITS, allowedLinks, answerable, buildMessages, parseRequest, publicSources, relayStream } from '../src/ask/answer.mjs';
 import { onRequestPost } from '../functions/api/ask.js';
 import { declined, grade, rankOf } from '../src/ask/grade.mjs';
+import { buildStore, decodeStore, embedInput, encodeStore, hybridSearch, nearest, pack } from '../src/ask/semantic.mjs';
 
 const docs = [
   {
@@ -204,4 +205,59 @@ test('grading: citations, links and length are checked by rule', () => {
   assert.equal(rankOf(results, ['/nope/']), -1);
   assert.equal(declined('This site does not cover that.'), true);
   assert.equal(declined('This site does not cover that, but [1] says so.'), false);
+});
+
+// A toy embedding: one dimension per concept, so "meaning" is controllable in tests.
+const CONCEPTS = ['geo|generative|cited|coined', 'seo|audit|keyword|visibility', 'cost|price|charge|fee'];
+const toy = (text) => CONCEPTS.map((c) => (new RegExp(c, 'i').test(text) ? 1 : 0.01));
+
+test('semantic: vectors pack, survive a round trip and rank by meaning', async () => {
+  const store = await buildStore(chunks, async (texts) => texts.map(toy));
+  assert.equal(store.n, chunks.length);
+  assert.ok(embedInput(chunks[2]).startsWith('Generative Engine Optimization: What is GEO?'));
+  const back = decodeStore(encodeStore(store), chunks.length);
+  assert.deepEqual([...back.data], [...store.data]);
+  assert.equal(decodeStore(encodeStore(store), chunks.length + 1), null, 'stale vectors are rejected');
+  assert.equal(chunks[nearest(toy('visibility'), store, 1)[0].i].url, '/services/seo/');
+  assert.deepEqual(nearest([1, 0], store), [], 'wrong dimensions return nothing');
+  assert.equal(pack([[3, 4]]).data[1], Math.round(0.8 * 127));
+  await assert.rejects(buildStore(chunks, async () => []), /mismatch/);
+});
+
+test('semantic: hybrid finds a page that shares no words with the question', async () => {
+  const store = await buildStore(chunks, async (texts) => texts.map(toy));
+  const q = 'more visibility online';
+  assert.ok(!search(index, q).results.some((r) => r.url === '/services/seo/'), 'keyword search misses it');
+  const found = hybridSearch(index, q, toy(q), store);
+  assert.equal(found.results[0].url, '/services/seo/');
+  assert.equal(found.coverage, search(index, q).coverage, 'the answerable gate still uses keyword coverage');
+  const both = hybridSearch(index, 'who coined the term GEO', toy('coined geo'), store);
+  assert.equal(both.results[0].url, '/blog/geo/');
+  assert.ok(both.results.filter((r) => r.url === '/blog/geo/').length <= 2);
+});
+
+test('endpoint: dry run reports the ranking, builds vectors in the background and never calls the model', async () => {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => assert.fail('model was called');
+  try {
+    const store = new Map();
+    const ASK_KV = { get: async (k) => store.get(k) ?? null, put: async (k, v) => void store.set(k, v) };
+    let runs = 0;
+    const AI = { run: async (model, { text, pooling }) => (runs++, assert.equal(pooling, 'cls'), { data: text.map(toy) }) };
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV, AI };
+    const body = { question: 'who coined the term GEO', dry: true, retrieval: 'hybrid' };
+    const first = ctx(body, env);
+    const cold = await (await onRequestPost(first)).json();
+    assert.equal(cold.retrieval, 'keyword', 'served by keywords while vectors build');
+    await Promise.all(first.pending);
+    assert.ok([...store.keys()].some((k) => k.startsWith('ask:vec:1:')));
+    const warm = await (await onRequestPost(ctx(body, env))).json();
+    assert.deepEqual([warm.mode, warm.retrieval, warm.answerable, warm.urls[0]], ['dry', 'hybrid', true, '/blog/geo/']);
+    assert.equal((await (await onRequestPost(ctx({ ...body, retrieval: 'keyword' }, env))).json()).retrieval, 'keyword');
+    const broken = { ...env, AI: { run: async () => { throw new Error('down'); } } };
+    assert.equal((await (await onRequestPost(ctx(body, broken))).json()).retrieval, 'keyword', 'falls back when embeddings fail');
+    assert.ok(runs >= 2);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
 });

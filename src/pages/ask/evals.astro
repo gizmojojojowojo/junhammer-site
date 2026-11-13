@@ -20,6 +20,14 @@ const answerRows = a
       ['Off-topic questions that reached the model and were declined', a.offTopicDeclined, a.offTopicReachedModel],
     ]
   : [];
+const s = data.semantic;
+const compare = s
+  ? [
+      ['Right page ranked first', s.keyword.first, s.hybrid.first],
+      ['Right page in the top 3', s.keyword.top3, s.hybrid.top3],
+      ['Right page reaches the model', s.keyword.reachedModel, s.hybrid.reachedModel],
+    ]
+  : [];
 const graded = data.questions.some((q) => 'pass' in q);
 // Failures first, so the weak spots are the first thing a reader sees.
 const questions = [...data.questions].sort((x, y) => Number(x.pass ?? true) - Number(y.pass ?? true) || (y.rank === 0 ? 0 : 1) - (x.rank === 0 ? 0 : 1));
@@ -56,6 +64,21 @@ const rankLabel = (rank: number) => (rank < 0 ? 'missed' : `#${rank + 1}`);
       </table>
       <p class="meta">Mean reciprocal rank: {r.mrr}. Questions wrongly turned away: {r.wronglyTurnedAway}.</p>
     </section>
+
+    {s && (
+      <section>
+        <h2>Keywords alone vs. keywords plus meaning</h2>
+        <p>The live site blends the keyword ranking with search by meaning: each passage and each question is turned into an embedding, and the closest passages are merged in. Both versions ran on the same {s.questions} questions against the deployed site on {day(s.measuredOn + 'T12:00:00Z')}. The table above tracks the keyword half on every change.</p>
+        <table class="evals-table">
+          <thead><tr><th scope="col">Check</th><th scope="col">Keywords</th><th scope="col">Hybrid</th></tr></thead>
+          <tbody>
+            {compare.map(([label, k, h]) => (<tr><th scope="row">{label}</th><td>{k} of {s.questions}</td><td>{h} of {s.questions}</td></tr>))}
+            <tr><th scope="row">Mean reciprocal rank</th><td>{s.keyword.mrr}</td><td>{s.hybrid.mrr}</td></tr>
+          </tbody>
+        </table>
+        <p>Hybrid moved {s.improved.length} questions up and {s.worse.length} down. The one that got worse: {s.worse.map(([q, k, h]) => `"${q}" went from #${k} to #${h}`).join('; ')}.</p>
+      </section>
+    )}
 
     <section>
       <h2>Answers: does the model stay inside the sources?</h2>

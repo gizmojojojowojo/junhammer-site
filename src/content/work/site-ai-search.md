@@ -11,8 +11,8 @@ order: 7
 services: ["ai-engineering", "ai-agent-development"]
 results:
   - { value: "60 of 60", label: "test questions get the right page in front of the model" }
-  - { value: "85%", label: "of test questions rank the right page first" }
-  - { value: "0", label: "new dependencies or databases added to the site" }
+  - { value: "93%", label: "of test questions rank the right page first, up from 85% with keywords alone" }
+  - { value: "0", label: "packages added to the site" }
 ---
 ## The problem
 
@@ -51,13 +51,27 @@ Two limits apply to these numbers. I tuned the ranking on the same 60 questions,
 
 The retrieval test fails the build if the right page reaches the model for fewer than 90% of questions. Every poor answer a real visitor gets becomes a new test question.
 
+## Adding search by meaning
+
+Keyword ranking misses a question that shares no words with the page that answers it. So I added a second ranking based on meaning. Each passage is turned into an embedding, a list of numbers that places similar meanings close together, using the [bge-base model on Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/models/bge-base-en-v1.5/). The question is embedded the same way. The two rankings are merged with [reciprocal rank fusion](https://learn.microsoft.com/en-us/azure/search/hybrid-search-ranking), which rewards passages that rank well in either list.
+
+I measured both versions on the same 60 questions against the deployed site.
+
+| Measure | Keywords alone | Keywords plus meaning |
+|---|---|---|
+| Right page ranked first | 51 of 60 (85%) | 56 of 60 (93%) |
+| Right page in the top three | 56 of 60 | 59 of 60 |
+| Right page reaches the model | 60 of 60 | 60 of 60 |
+
+Eight questions moved up and one moved down. The biggest gains came on short, vague questions, where one moved from sixth place to third and another from fifth to second. Keyword search already got the right page to the model every time, so the gain is in ordering. The hybrid version is now live, and it falls back to keywords if the embedding service is slow or down. Current numbers are on the [eval results page](/ask/evals/).
+
 ## What failed
 
 - **A typo beat the ranking.** The first real question, typed with a word missing, ranked the right post fifth. Adding page-title matching moved it to first, and the question went into the test set.
 - **Synonym expansion backfired.** Expanding "SEO" to "search engine optimization" let the common words "engine" and "optimization" outweigh the question itself. Expanded terms now count for 30% of an original term.
 - **Tables of contents outranked real sections.** A table of contents repeats every heading on the page, so it matched everything. Those sections are now left out of the index.
 - **The off-topic gate catches half.** Four of eight off-topic questions share enough ordinary words with the site to pass retrieval. The model's instructions handle the rest. I would not rely on a keyword gate alone.
-- **Keyword ranking has a ceiling.** A question that shares no words with the page will miss. Embedding-based retrieval is the next step.
+- **Keyword ranking has a ceiling.** A question that shares no words with the page will miss. That led to the hybrid ranking above.
 - **The longest delay had nothing to do with AI.** A renamed secret in the hosting dashboard kept its name and lost its value, so the function saw a key that was blank. I added a diagnostic mode that reports why an answer fell back to links, and it found the cause in one request. Production AI features need that visibility from the first day.
 
 See [AI engineering](/services/ai-engineering/) and [AI agent development](/services/ai-agent-development/) for how this applies to your site or product.

@@ -1,13 +1,13 @@
 {
-  "ranAt": "2026-11-13T22:09:46.815Z",
+  "ranAt": "2026-11-13T22:19:49.280Z",
   "commit": "",
   "retrieval": {
     "questions": 60,
-    "passages": 730,
+    "passages": 731,
     "first": 51,
     "top3": 56,
     "reachedModel": 60,
-    "mrr": 0.898,
+    "mrr": 0.897,
     "wronglyTurnedAway": 0,
     "offTopic": 8,
     "offTopicStopped": 4
@@ -248,11 +248,77 @@
     },
     {
       "q": "what do you charge",
-      "rank": 5
+      "rank": 6
     },
     {
       "q": "keyword research",
       "rank": 0
     }
-  ]
+  ],
+  "semantic": {
+    "measuredOn": "2026-11-13",
+    "model": "@cf/baai/bge-base-en-v1.5",
+    "questions": 60,
+    "keyword": {
+      "first": 51,
+      "top3": 56,
+      "reachedModel": 60,
+      "mrr": 0.898
+    },
+    "hybrid": {
+      "first": 56,
+      "top3": 59,
+      "reachedModel": 60,
+      "mrr": 0.957
+    },
+    "improved": [
+      [
+        "How does AEO reporting differ from SEO reporting?",
+        4,
+        1
+      ],
+      [
+        "What AI tools has Joe built?",
+        4,
+        1
+      ],
+      [
+        "How do pharma companies optimize content for Perplexity?",
+        3,
+        1
+      ],
+      [
+        "Can you automate our marketing reports?",
+        3,
+        1
+      ],
+      [
+        "When should I use a workflow instead of an agent?",
+        2,
+        1
+      ],
+      [
+        "How do I get in touch about a project?",
+        2,
+        1
+      ],
+      [
+        "seo how long",
+        5,
+        2
+      ],
+      [
+        "what do you charge",
+        6,
+        3
+      ]
+    ],
+    "worse": [
+      [
+        "Does Joe have ecommerce SEO experience?",
+        1,
+        4
+      ]
+    ]
+  }
 }
