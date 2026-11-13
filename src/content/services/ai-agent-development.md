@@ -32,7 +32,7 @@ faqs:
   - q: "Do I own the agent after it is built?"
     a: "Yes. You own the code, prompts, evaluation sets and accounts. I document how it works and keep the stack simple enough for a generalist developer to maintain."
   - q: "Do you work with businesses outside Colorado?"
-    a: "Yes. I am based in the Denver metro area and work with teams anywhere in the US. Local clients can meet in person."
+    a: "Yes. I am based in the Denver metro area and work with teams anywhere in the US. Clients along Colorado's Front Range can meet in person."
 ---
 ## Agents that do one job well
 

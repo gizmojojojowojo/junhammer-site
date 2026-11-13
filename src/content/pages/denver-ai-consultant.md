@@ -2,14 +2,14 @@
 title: "AI Consultant and AEO Expert in Denver"
 seoTitle: "AI Consultant in Denver, Colorado | Joe Unhammer"
 description: "Joe Unhammer is a Denver-area AI consultant and AEO/SEO expert. He builds AI agents and workflows and gets Colorado businesses cited in AI search."
-areaServed: ["Denver", "Aurora", "Lakewood", "Englewood", "Greenwood Village", "Centennial", "Parker", "Castle Rock", "Highlands Ranch", "Lone Tree", "Littleton", "Boulder", "Colorado"]
+areaServed: ["Denver", "Aurora", "Lakewood", "Englewood", "Greenwood Village", "Centennial", "Parker", "Castle Rock", "Highlands Ranch", "Lone Tree", "Littleton", "Boulder", "Fort Collins", "Colorado Springs", "Colorado"]
 faqs:
   - q: "Are you based in Denver?"
-    a: "Yes. I live in the Denver metro area, in the south metro, and have been in Colorado since moving here after high school. I studied at MSU Denver and managed SEO and AEO for enterprise accounts at a Denver agency. I meet local clients in person and work remotely with teams across the US."
+    a: "Yes. I live in the Denver metro area, in the south metro, and have been in Colorado since moving here after high school. I studied at MSU Denver and managed SEO and AEO for enterprise accounts at a Denver agency. I meet clients in person anywhere along the Front Range, from Fort Collins to Colorado Springs, and work remotely with teams across the US."
   - q: "What does an AI consultant in Denver do?"
     a: "An AI consultant helps a business decide where AI is worth using, then builds or guides the build. My work covers AI strategy, custom AI agents and automations, Claude and MCP setup, and answer engine optimization so your business shows up in AI search answers."
   - q: "Do you only work with Denver companies?"
-    a: "No. Most of my work is remote and national. Denver and Front Range clients get the option of in-person workshops and planning sessions."
+    a: "No. Most of my work is remote and national. Clients anywhere along the Front Range can meet in person for workshops and planning sessions."
   - q: "Can you help my business show up in ChatGPT and Google AI Overviews?"
     a: "Yes. That is answer engine optimization (AEO). I audit which AI assistants mention or cite you today for the questions your customers ask, then fix the content, structured data and technical issues that keep you out."
   - q: "What industries do you work with?"
@@ -42,6 +42,6 @@ AI summaries now sit above many search results. A [Pew Research Center analysis]
 
 ## Serving the Denver metro
 
-I work with businesses across Denver, Aurora, Lakewood, Englewood, Greenwood Village, Centennial, Littleton and Boulder, and across the [south metro, including Parker, Castle Rock, Lone Tree and Highlands Ranch](/parker-ai-seo-consultant/).
+I work with businesses across Denver, Aurora, Lakewood, Englewood, Greenwood Village, Centennial, Littleton and Boulder, and meet in person anywhere on the Front Range. That includes the [south metro, including Parker, Castle Rock, Lone Tree and Highlands Ranch](/parker-ai-seo-consultant/).
 
 [Tell me about your project](/contact/). I reply within two business days.
