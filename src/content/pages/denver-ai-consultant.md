@@ -42,6 +42,6 @@ AI summaries now sit above many search results. A [Pew Research Center analysis]
 
 ## Serving the Denver metro
 
-I work with businesses across Denver, Aurora, Lakewood, Englewood, Greenwood Village, Centennial, Littleton and Boulder, and meet in person anywhere on the Front Range. That includes the [south metro, including Parker, Castle Rock, Lone Tree and Highlands Ranch](/parker-ai-seo-consultant/).
+I work with businesses across Denver, Aurora, Lakewood, Englewood, Greenwood Village, Centennial, Littleton and Boulder, and meet in person anywhere on the Front Range. That covers the [south metro: Parker, Castle Rock, Lone Tree and Highlands Ranch](/parker-ai-seo-consultant/).
 
 [Tell me about your project](/contact/). I reply within two business days.
