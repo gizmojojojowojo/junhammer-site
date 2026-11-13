@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node --test tests/ask.test.mjs",
+    "eval:ask": "node scripts/ask/eval.mjs",
+    "eval:answers": "node scripts/ask/eval_answers.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.12",
