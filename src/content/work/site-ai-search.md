@@ -63,7 +63,7 @@ I measured both versions on the same 60 questions against the deployed site.
 | Right page in the top three | 56 of 60 | 59 of 60 |
 | Right page reaches the model | 60 of 60 | 60 of 60 |
 
-Eight questions moved up and one moved down. "What do you charge" went from sixth to third, and "seo how long" from fifth to second. Keyword search already got the right page to the model every time, so the gain is in ordering. The hybrid version is now live, and it falls back to keywords if the embedding service is slow or down. Current numbers are on the [eval results page](/ask/evals/).
+Eight questions moved up and one moved down. The biggest gains came on short, vague questions, where one moved from sixth place to third and another from fifth to second. Keyword search already got the right page to the model every time, so the gain is in ordering. The hybrid version is now live, and it falls back to keywords if the embedding service is slow or down. Current numbers are on the [eval results page](/ask/evals/).
 
 ## What failed
 
