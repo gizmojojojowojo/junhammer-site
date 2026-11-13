@@ -6,6 +6,9 @@
       "children": [
         { "label": "AI Consulting & Strategy", "href": "/services/ai-consulting/" },
         { "label": "AI Engineering", "href": "/services/ai-engineering/" },
+        { "label": "AI Agent Development", "href": "/services/ai-agent-development/" },
+        { "label": "AI Automation", "href": "/services/ai-automation/" },
+        { "label": "Claude & MCP Implementation", "href": "/services/claude-mcp-implementation/" },
         { "label": "Answer Engine Optimization", "href": "/services/answer-engine-optimization/" },
         { "label": "SEO", "href": "/services/seo/" },
         { "label": "Technical SEO & Migrations", "href": "/services/technical-seo/" }
