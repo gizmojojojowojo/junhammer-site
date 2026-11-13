@@ -10,10 +10,15 @@
 //   ASK_KV             optional KV binding. Turns on per-visitor and daily limits.
 //   ASK_HOURLY_LIMIT   optional, per visitor. Default 20.
 //   ASK_DAILY_LIMIT    optional, whole site. Default 400.
+//   AI                 optional Workers AI binding. Makes search by meaning available.
+//   ASK_RETRIEVAL      optional. "keyword" or "hybrid" (keyword plus meaning). Defaults to DEFAULT_RETRIEVAL below.
 import { buildIndex, search } from '../../src/ask/retrieve.mjs';
 import { LIMITS, SYSTEM, allowedLinks, answerable, buildMessages, parseRequest, publicSources, relayStream, sse } from '../../src/ask/answer.mjs';
 
+import { EMBED_MODEL, QUERY_PREFIX, buildStore, decodeStore, encodeStore, hybridSearch } from '../../src/ask/semantic.mjs';
+
 const DEFAULT_MODEL = 'claude-haiku-5-5';
+const DEFAULT_RETRIEVAL = 'keyword';
 const API = 'https://api.anthropic.com/v1/messages';
 
 let cached; // one index per isolate; a new deployment starts new isolates
@@ -22,9 +27,67 @@ async function loadIndex(context) {
   if (!cached) {
     const res = await context.env.ASSETS.fetch(new URL('/ask-index.json', context.request.url));
     if (!res.ok) throw new Error(`index ${res.status}`);
-    cached = buildIndex((await res.json()).chunks);
+    const text = await res.text();
+    const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)));
+    cached = buildIndex(JSON.parse(text).chunks);
+    // Passage vectors are stored under this hash, so new content gets new vectors.
+    cached.hash = [...digest.slice(0, 8)].map((b) => b.toString(16).padStart(2, '0')).join('');
   }
   return cached;
+}
+
+const embed = async (env, texts) => (await env.AI.run(EMBED_MODEL, { text: texts, pooling: 'cls' })).data;
+
+let vectors; // { key, store } for this isolate
+let building; // one build at a time
+
+/**
+ * Passage vectors for the current index, or null while they are not ready.
+ * The first request after a content change starts the build in the background
+ * and is served by keyword search; the vectors are then saved to KV for every isolate.
+ */
+async function loadVectors(context, index) {
+  const { env } = context;
+  if (!env.AI) return null;
+  const key = `ask:vec:1:${index.hash}`;
+  if (vectors?.key === key) return vectors.store;
+  if (env.ASK_KV) {
+    const saved = await env.ASK_KV.get(key);
+    const store = saved && decodeStore(saved, index.n);
+    if (store) {
+      vectors = { key, store };
+      return store;
+    }
+  }
+  if (!building) {
+    building = (async () => {
+      const store = await buildStore(index.chunks, (texts) => embed(env, texts));
+      vectors = { key, store };
+      if (env.ASK_KV) await env.ASK_KV.put(key, encodeStore(store), { expirationTtl: 60 * 86400 });
+    })()
+      .catch((e) => console.error('ask: embedding build failed', e))
+      .finally(() => {
+        building = null;
+      });
+    context.waitUntil(building);
+  }
+  return null;
+}
+
+/** Hybrid results, or null when meaning search is unavailable, not ready or slow. The caller falls back to keywords. */
+async function semantic(context, index, query) {
+  try {
+    const store = await loadVectors(context, index);
+    if (!store) return null;
+    const [vector] = await Promise.race([
+      embed(context.env, [QUERY_PREFIX + query]),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('embedding timeout')), 3000)),
+    ]);
+    return hybridSearch(index, query, vector, store);
+  } catch (e) {
+    console.error('ask: semantic search failed', e);
+    return null;
+  }
 }
 
 const json = (data, status = 200) =>
@@ -82,10 +145,24 @@ export async function onRequestPost(context) {
 
   // A follow-up like "how much does that cost?" needs the earlier question to retrieve well.
   const lastAsked = [...history].reverse().find((m) => m.role === 'user')?.content ?? '';
-  const found = search(index, lastAsked ? `${question} ${lastAsked}` : question);
+  const query = lastAsked ? `${question} ${lastAsked}` : question;
+  // A dry run returns the ranking only and never calls the answer model. The
+  // evals use it to compare keyword and hybrid retrieval on the live site.
+  const dry = body.dry === true;
+  const wanted = dry && (body.retrieval === 'hybrid' || body.retrieval === 'keyword') ? body.retrieval : env.ASK_RETRIEVAL || DEFAULT_RETRIEVAL;
+  let found = search(index, query);
+  let retrieval = 'keyword';
+  if (wanted === 'hybrid') {
+    const hybrid = await semantic(context, index, query);
+    if (hybrid) {
+      found = hybrid;
+      retrieval = 'hybrid';
+    }
+  }
+  if (dry) return json({ mode: 'dry', retrieval, answerable: answerable(found), urls: found.results.map((r) => r.url) });
   const sources = publicSources(found.results);
   const log = (extra) =>
-    console.log(JSON.stringify({ ask: 1, chars: question.length, top: found.results[0]?.url ?? null, coverage: +found.coverage.toFixed(2), ms: Date.now() - started, ...extra }));
+    console.log(JSON.stringify({ ask: 1, chars: question.length, top: found.results[0]?.url ?? null, coverage: +found.coverage.toFixed(2), retrieval, ms: Date.now() - started, ...extra }));
 
   if (!answerable(found)) {
     log({ mode: 'no_match' });
