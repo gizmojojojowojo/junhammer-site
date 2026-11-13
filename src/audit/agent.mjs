@@ -2,7 +2,7 @@
 // decides which tool to call next. The code here runs the tools and enforces
 // the limits; the model chooses the checks. Tested in tests/audit.test.mjs.
 import { checkUrl, safeFetch, sameSite } from './guard.mjs';
-import { AI_CRAWLERS, QUESTION, parsePage, parseRobots, robotsAllows } from './page.mjs';
+import { AI_CRAWLERS, QUESTION, nameOf, parsePage, parseRobots, robotsAllows } from './page.mjs';
 
 export const LIMITS = { turns: 8, pageFetches: 3, maxTokens: 2500, sectionChars: 1500, findings: 8, modelTimeoutMs: 45000 };
 
@@ -227,7 +227,7 @@ function structuredData(state) {
   const nodes = p.schema.slice(0, 15).map((n) => {
     const types = [].concat(n['@type'] || []).map(String);
     const out = { types, properties: Object.keys(n).filter((k) => !k.startsWith('@')).slice(0, 30) };
-    if (n.author) out.author = clip(typeof n.author === 'string' ? n.author : [].concat(n.author).map((a) => a?.name || '').join(', '), 120);
+    if (n.author) out.author = clip(nameOf(n.author, p.schema), 120) || 'present, but no name could be read';
     if (n.datePublished) out.datePublished = clip(String(n.datePublished), 40);
     if (n.dateModified) out.dateModified = clip(String(n.dateModified), 40);
     if (n.headline) out.headline = clip(String(n.headline), 160);

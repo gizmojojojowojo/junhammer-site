@@ -75,6 +75,11 @@ test('parsePage reads head, schema, sections and links', () => {
   assert.ok(!p.text.includes('not a heading'));
 });
 
+test('schema author given as an @id reference resolves to the named node', () => {
+  const html = '<html><head><script type="application/ld+json">{"@graph":[{"@type":"Person","@id":"https://x.org/#me","name":"Ref Person"},{"@type":"BlogPosting","author":{"@id":"https://x.org/#me"}}]}</script></head><body><p>Hi</p></body></html>';
+  assert.equal(parsePage(html, 'https://x.org/').author, 'Ref Person');
+});
+
 test('robots rules: named group beats wildcard, longest match wins', () => {
   const robots = parseRobots('User-agent: *\nDisallow: /private/\nAllow: /private/open/\n\nUser-agent: GPTBot\nUser-agent: CCBot\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow:\n\nSitemap: https://example.org/sitemap.xml\nUser-agent: Bingbot\nDisallow: /*.pdf$');
   assert.deepEqual(robotsAllows(robots, 'GPTBot', '/geo/'), { allowed: false, rule: 'named' });

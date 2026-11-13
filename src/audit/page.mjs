@@ -51,7 +51,15 @@ export function schemaNodes(blocks) {
 }
 
 const typesOf = (node) => [].concat(node['@type'] || []).map(String);
-const nameOf = (v) => (typeof v === 'string' ? v : Array.isArray(v) ? v.map(nameOf).filter(Boolean).join(', ') : v?.name ? String(v.name) : '');
+/** Name of a person or organisation value. Follows an { "@id": ... } reference to the node it points at. */
+export function nameOf(v, nodes = []) {
+  if (typeof v === 'string') return v;
+  if (Array.isArray(v)) return v.map((x) => nameOf(x, nodes)).filter(Boolean).join(', ');
+  if (!v || typeof v !== 'object') return '';
+  if (v.name) return String(v.name);
+  const ref = v['@id'] && nodes.find((n) => n !== v && n['@id'] === v['@id'] && n.name);
+  return ref ? String(ref.name) : '';
+}
 
 /** Splits the main content into sections by heading. The first section is the text before any heading. */
 function sections(content) {
@@ -145,7 +153,7 @@ export function parsePage(html, pageUrl) {
     jsonLd: blocks,
     schema: nodes,
     microdata: /\bitemscope\b/i.test(body),
-    author: meta('author') || nameOf(article.author) || strip((body.match(/<[^>]+rel\s*=\s*["']?author["']?[^>]*>([\s\S]*?)<\//i) || [, ''])[1]),
+    author: meta('author') || nameOf(article.author, nodes) || strip((body.match(/<[^>]+rel\s*=\s*["']?author["']?[^>]*>([\s\S]*?)<\//i) || [, ''])[1]),
     published: meta('article:published_time') || String(article.datePublished || '') || times[0] || '',
     modified: meta('article:modified_time') || String(article.dateModified || ''),
     statistics: (text.match(/\b\d[\d,]*(?:\.\d+)?[ ]?(?:%|percent\b|million\b|billion\b)|\b\d+(?:\.\d+)?x\b/gi) || []).length,
