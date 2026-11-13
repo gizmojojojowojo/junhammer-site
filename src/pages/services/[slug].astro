@@ -23,7 +23,7 @@ const schema: Record<string, unknown>[] = [
     description: d.description ?? d.summary,
     url,
     provider: { '@id': 'https://junhammer.com/#person' },
-    areaServed: 'US',
+    areaServed: [{ '@type': 'Country', name: 'United States' }, { '@type': 'Place', name: 'Denver metro area, CO' }],
     serviceType: d.navLabel,
   },
   {

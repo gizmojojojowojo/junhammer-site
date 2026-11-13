@@ -62,6 +62,8 @@ const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: z.object({
     ...seo,
+    // Local landing pages: cities/areas served. Adds ProfessionalService schema.
+    areaServed: strList,
     faqs: z.preprocess((v) => (v == null ? [] : v), z.array(z.object({ q: z.string(), a: z.string() }))),
     updated: optDate,
   }),
