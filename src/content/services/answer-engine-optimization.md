@@ -2,7 +2,7 @@
 title: "Answer Engine Optimization (AEO)"
 navLabel: "AEO"
 seoTitle: "AEO Consultant: Get Cited in ChatGPT and AI Overviews"
-description: "AEO and GEO consulting: structure content, entities and technical signals so ChatGPT, Perplexity, Gemini and Google AI Overviews cite your brand."
+description: "AEO consultant and GEO consultant Joe Unhammer structures content, entities and technical signals so ChatGPT, Perplexity, Gemini and AI Overviews cite you."
 summary: "Get your brand cited in ChatGPT, Perplexity, Gemini and Google's AI Overviews, and measure whether it is working."
 order: 3
 topic: "AEO"
@@ -26,6 +26,10 @@ faqs:
     a: "The terms overlap. AEO usually means getting specific content pulled into AI answers for specific questions. GEO, generative engine optimization, is broader and longer term: making your brand a recognized, trusted entity that AI systems mention by name. A good program does both."
   - q: "How do you measure AEO results?"
     a: "I track a fixed set of priority questions across the major AI assistants and record whether your brand is cited, mentioned or absent, alongside Search Console data, AI referral traffic in analytics and branded search trends. Reporting shows movement against that baseline rather than vanity metrics."
+  - q: "Should I hire an AEO consultant or an AI SEO agency?"
+    a: "Hire a consultant when you want senior strategy and hands-on technical work from the person you talk to, and your team or existing agency can carry out content changes. Hire an agency when you need a large team producing content every month. I work as a consultant and can direct your team or your current agency."
+  - q: "What does an AEO audit include?"
+    a: "An AEO audit, also called an AI visibility audit, checks which AI assistants mention or cite you for your priority questions, reviews crawler access, structured data and entity signals, and identifies the pages to rewrite first. You get a prioritized list of fixes and a baseline to measure against."
   - q: "Does AEO replace SEO?"
     a: "No. AI systems still rely heavily on content that ranks and is crawlable, so technical SEO and strong content remain the foundation. AEO changes how that content is structured and how success is measured."
 ---
@@ -46,6 +50,14 @@ I have worked on AEO since before most agencies had a name for it, and I [write 
 **Technical access.** AI crawler rules, server-rendered content, llms.txt and page speed, the [technical foundation every GEO strategy needs](/blog/the-technical-seo-foundation-every-geo-strategy-needs-to-succeed/).
 
 **Reporting.** Citation share across assistants, tracked monthly next to your SEO numbers.
+
+## AEO consultant, GEO consultant or AI SEO consultant?
+
+They are three names for overlapping work. AEO focuses on getting your content pulled into answers for specific questions. GEO, [generative engine optimization](/blog/generative-engine-optimization/), focuses on how AI systems describe and recommend your brand overall. "AI SEO" is the umbrella term many buyers search for. I do all three as one program, built on technical SEO.
+
+I work as a consultant, not an agency. You work directly with me on strategy, audits and technical fixes, and I can direct your in-house team or your current agency on the content work. If you are comparing options, read [what to look for when hiring an AEO consultant](/blog/hiring-an-aeo-consultant-work-evidence-look-for/).
+
+Based in Colorado? See [AI consulting and AEO in Denver](/denver-ai-consultant/).
 
 ## Healthcare AEO
 
