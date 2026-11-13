@@ -24,6 +24,7 @@ const index = buildIndex(chunks);
 const set = read('evals/ask/questions.json');
 
 let top1 = 0, hit3 = 0, hit6 = 0, mrr = 0, gated = 0;
+// hit6 counts a hit anywhere in the passages that go to the model.
 const misses = [];
 for (const { q, expect } of set.answerable) {
   const found = search(index, q);
@@ -48,7 +49,7 @@ console.log(`Chunks: ${chunks.length}`);
 console.log(`Answerable questions: ${n}`);
 console.log(`  Right page ranked first:  ${pct(top1, n)}`);
 console.log(`  Right page in top 3:      ${pct(hit3, n)}`);
-console.log(`  Right page in top 6:      ${pct(hit6, n)}`);
+console.log(`  Right page sent to model: ${pct(hit6, n)}`);
 console.log(`  Mean reciprocal rank:     ${(mrr / n).toFixed(3)}`);
 console.log(`  Wrongly turned away:      ${gated}`);
 console.log(`Off-topic questions: ${set.offTopic.length}`);

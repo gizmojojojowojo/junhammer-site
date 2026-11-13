@@ -86,11 +86,11 @@ export async function onRequestPost(context) {
   }
   if (!env.ANTHROPIC_API_KEY) {
     log({ mode: 'search' });
-    return json({ mode: 'search', sources });
+    return json({ mode: 'search', reason: 'no_key', sources });
   }
   if (await overLimit(env, request.headers.get('cf-connecting-ip') || 'unknown')) {
     log({ mode: 'limited' });
-    return json({ mode: 'search', limited: true, sources });
+    return json({ mode: 'search', reason: 'limited', limited: true, sources });
   }
 
   const upstream = await fetch(API, {
@@ -107,8 +107,9 @@ export async function onRequestPost(context) {
   if (!upstream.ok || !upstream.body) {
     console.error('ask: model call failed', upstream.status, (await upstream.text()).slice(0, 300));
     log({ mode: 'model_error', status: upstream.status });
-    // The visitor still gets the matching pages.
-    return json({ mode: 'search', sources });
+    // The visitor still gets the matching pages. The status code helps diagnose
+    // setup problems (401 bad key, 404 unknown model, 429 or 529 busy).
+    return json({ mode: 'search', reason: `model_${upstream.status}`, sources });
   }
 
   const head = new TransformStream();
