@@ -49,6 +49,7 @@ const examples = [
   const button = form.querySelector('button');
   const history = [];
   let busy = false;
+  const debug = new URLSearchParams(location.search).has('debug');
 
   const el = (tag, cls, text) => {
     const node = document.createElement(tag);
@@ -214,6 +215,8 @@ const examples = [
         } else {
           say(data.limited ? 'AI answers are at their limit for now. These pages match your question:' : 'These pages match your question:');
           renderSources(sourceBox, data.sources, null, 'Best matches');
+          // Setup aid: /ask/?debug=1 shows why no written answer came back.
+          if (debug && data.reason) answer.append(el('p', 'meta', 'Diagnostic: ' + data.reason));
         }
       }
       status.textContent = 'Answer ready.';
