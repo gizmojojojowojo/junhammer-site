@@ -60,6 +60,7 @@ Setup in Cloudflare Pages (Settings > Variables and Secrets, for both Production
 
 - `ANTHROPIC_API_KEY` (secret): required for AI answers. Without it, `/ask/` still works and returns the best-matching pages.
 - `ASK_MODEL` (optional): model ID. Defaults to the value of `DEFAULT_MODEL` in `functions/api/ask.js`.
+- `AI` (optional Workers AI binding): turns on search by meaning. Passages are embedded once per content change and stored in `ASK_KV`; the first question after a deploy starts that build and is answered by keyword search. Set `ASK_RETRIEVAL` to `keyword` to switch it off.
 - `ASK_KV` (optional KV namespace binding): turns on limits of 20 questions per visitor per hour and 400 per day site-wide. Change them with `ASK_HOURLY_LIMIT` and `ASK_DAILY_LIMIT`.
 
 Set a monthly spend limit on the API key in the Anthropic Console as the hard cost cap.

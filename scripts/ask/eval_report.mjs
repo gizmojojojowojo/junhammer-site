@@ -23,6 +23,8 @@ const set = read('evals/ask/questions.json');
 const previous = existsSync(new URL(OUT, root)) ? read(OUT) : {};
 
 // ---- retrieval ----
+// This measures keyword ranking, which runs anywhere. The hybrid comparison needs
+// Workers AI, so it is measured against the deployed site and kept in `semantic`.
 const rows = set.answerable.map(({ q, expect }) => {
   const found = search(index, q);
   return { q, expect, found, rank: rankOf(found.results, expect), gated: !answerable(found) };
@@ -104,7 +106,7 @@ if (key) {
   questions = rows.map((r) => ({ ...(old.get(r.q) || {}), q: r.q, rank: r.rank }));
 }
 
-const report = { ranAt: new Date().toISOString(), commit: (process.env.GITHUB_SHA || previous.commit || '').slice(0, 7), retrieval, answers, questions };
+const report = { ranAt: new Date().toISOString(), commit: (process.env.GITHUB_SHA || previous.commit || '').slice(0, 7), retrieval, answers, questions, ...(previous.semantic ? { semantic: previous.semantic } : {}) };
 writeFileSync(new URL(OUT, root), JSON.stringify(report, null, 2) + '\n');
 
 console.log(`Retrieval: right page first ${retrieval.first}/${n}, in top 3 ${retrieval.top3}/${n}, sent to model ${retrieval.reachedModel}/${n}`);

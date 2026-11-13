@@ -18,7 +18,8 @@ import { LIMITS, SYSTEM, allowedLinks, answerable, buildMessages, parseRequest, 
 import { EMBED_MODEL, QUERY_PREFIX, buildStore, decodeStore, encodeStore, hybridSearch } from '../../src/ask/semantic.mjs';
 
 const DEFAULT_MODEL = 'claude-haiku-5-5';
-const DEFAULT_RETRIEVAL = 'keyword';
+// Hybrid ranked the right page first for 56 of 60 test questions, keyword alone for 51 (see /ask/evals/).
+const DEFAULT_RETRIEVAL = 'hybrid';
 const API = 'https://api.anthropic.com/v1/messages';
 
 let cached; // one index per isolate; a new deployment starts new isolates
