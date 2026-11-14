@@ -1,0 +1,64 @@
+# The budget agent. Runs once a day, measures whether AI search cites this site
+# for its target questions, takes one action, and writes a journal entry.
+# Any content it writes goes into a pull request for review, never straight to main.
+name: Budget agent
+
+on:
+  schedule:
+    - cron: '17 14 * * *' # 07:17 America/Denver
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: 'Dry run: decide and report, write nothing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: budget-agent
+
+jobs:
+  day:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pip install --quiet pyyaml
+      - name: Run the day
+        id: run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/agent/run.mjs ${{ inputs.dry && '--dry' || '' }}
+      - name: Commit the journal
+        if: ${{ !inputs.dry && steps.run.outputs.day }}
+        run: |
+          git config user.name "budget-agent[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then echo "Nothing changed."; exit 0; fi
+          # The journal is a record of what happened, so it goes to main. Any
+          # content the agent wrote goes to a branch for review instead.
+          if [ "${{ steps.run.outputs.files }}" = "0" ]; then
+            git add src/data/agent.json
+            git commit -m "Agent day ${{ steps.run.outputs.day }}: ${{ steps.run.outputs.title }}"
+            git pull --rebase origin main && git push origin HEAD:main
+          else
+            BRANCH="agent/day-${{ steps.run.outputs.day }}"
+            git add src/data/agent.json
+            git commit -m "Agent day ${{ steps.run.outputs.day }}: journal"
+            git pull --rebase origin main && git push origin HEAD:main
+            git checkout -b "$BRANCH"
+            git add -A
+            git commit -m "Agent day ${{ steps.run.outputs.day }}: ${{ steps.run.outputs.title }}"
+            git push origin "$BRANCH"
+            gh pr create --base main --head "$BRANCH" \
+              --title "Agent day ${{ steps.run.outputs.day }}: ${{ steps.run.outputs.title }}" \
+              --body "Written by the budget agent on day ${{ steps.run.outputs.day }}. Read its reasoning at /agent/ and review the content before merging."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

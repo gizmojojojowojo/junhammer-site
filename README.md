@@ -109,6 +109,18 @@ Settings (same place as the Ask settings):
 - Limits: `ARCADE_DAILY_LIMIT` (default 300 messages a day, whole site) and `ARCADE_GAMES_PER_DAY` (default 3 per visitor). Each message writes to KV twice, so the daily limit also keeps the game inside the KV free tier of 1,000 writes a day.
 - `/tools/` lists every tool on the site.
 
+## The budget agent
+
+A long-running agent with a goal, a dollar budget and a public diary at `/agent/`.
+
+- `.github/workflows/agent.yml` runs it once a day. `scripts/agent/run.mjs` is the loop: measure, decide, act, journal. `scripts/agent/lib.mjs` holds the rules and arithmetic, unit tested.
+- **Measure.** Each target question is asked through the Messages API with the web search tool, and the answer's citations say whether this site was cited, where it ranked in the results, and who was cited instead.
+- **Decide.** The evidence, the earlier journal and three tools (`read_page`, `write_file`, `finish_day`) go to the model, which takes one action a day.
+- **Guards.** `write_file` accepts only `src/content/{blog,services,work,pages}/*.md`, at most two files a day, 60 KB each, and rejects em dashes. The agent cannot touch code, settings, the workflow or the measurement.
+- **Review.** Content goes to a branch and a pull request. Only `src/data/agent.json`, the journal and measurements, is committed to `main` automatically.
+- **Budget.** Costs are computed per call from `PRICES` in `lib.mjs` and `$10 per 1,000` web searches, accumulated into `spentUsd`. A run stops at `CONFIG.dailyCapUsd`, and the campaign stops when the budget or day count runs out. Update `PRICES` when model pricing changes.
+- Needs the `ANTHROPIC_API_KEY` repository secret. `node scripts/agent/run.mjs --dry` runs a day and writes nothing.
+
 ## Contact form
 
 The form appears when `formEndpoint` is set in *Site settings*. Free option: create an access key at web3forms.com, then set `formEndpoint` to `https://api.web3forms.com/submit` and `formAccessKey` to your key. Until then, the contact page shows email only.
