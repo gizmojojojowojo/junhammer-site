@@ -29,39 +29,16 @@ export function costOf(model, usage = {}) {
   return (tokensIn * p.input + (usage.output_tokens || 0) * p.output) / 1e6 + (usage.server_tool_use?.web_search_requests || 0) * SEARCH_USD;
 }
 
-const hostOf = (url) => {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '');
-  } catch {
-    return '';
-  }
-};
-const isSite = (host, site) => host === site || host.endsWith(`.${site}`);
+// The citation reading lives in src/visibility/lib.mjs so the budget agent and
+// the visibility checker share one tested implementation.
+import { forSite, readCitations } from '../../src/visibility/lib.mjs';
 
 /**
- * Reads one web-search answer. "retrieved" means the site appeared in the search
- * results the model saw. "cited" means the answer cites it. Position is where
- * the site first appears among the results (1 is first), or null.
+ * Reads one web-search answer. "retrieved" means the site appeared in the
+ * search results the model saw. "cited" means the answer cites it.
  */
 export function readAnswer(content, site = SITE) {
-  const results = [];
-  const cited = [];
-  for (const block of content || []) {
-    if (block.type === 'web_search_tool_result' && Array.isArray(block.content)) for (const r of block.content) if (r.url) results.push(r.url);
-    if (block.type === 'text') for (const c of block.citations || []) if (c.url) cited.push(c.url);
-  }
-  const resultHosts = results.map(hostOf);
-  const citedHosts = [...new Set(cited.map(hostOf).filter(Boolean))];
-  const at = resultHosts.findIndex((h) => isSite(h, site));
-  const sitePages = [...new Set([...cited, ...results].filter((u) => isSite(hostOf(u), site)).map((u) => new URL(u).pathname))];
-  return {
-    cited: citedHosts.some((h) => isSite(h, site)),
-    retrieved: at >= 0,
-    position: at >= 0 ? at + 1 : null,
-    results: results.length,
-    citedDomains: citedHosts.slice(0, 8),
-    sitePages: sitePages.slice(0, 5),
-  };
+  return forSite(readCitations(content), site);
 }
 
 /** The agent may only write Markdown content. No code, config, data or workflow files. */
