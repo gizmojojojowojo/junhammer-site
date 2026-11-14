@@ -2,10 +2,125 @@
   "goal": "Get junhammer.com cited by AI search for five target questions.",
   "budgetUsd": 20,
   "days": 30,
-  "startedAt": null,
-  "day": 0,
-  "spentUsd": 0,
-  "targets": [],
-  "measurements": [],
-  "journal": []
+  "startedAt": "2026-11-14",
+  "day": 1,
+  "spentUsd": 0.1903,
+  "targets": [
+    {
+      "question": "Why isn't my website content showing up in ChatGPT answers?",
+      "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+      "why": "A specific, common troubleshooting question with a dedicated 1,387-word page that answers it directly."
+    },
+    {
+      "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+      "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+      "why": "A dedicated page covers exactly this question, and it is a topic people ask AI tools about often."
+    },
+    {
+      "question": "How long should a paragraph be to get cited by AI search engines?",
+      "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+      "why": "The 40-word rule is a distinctive, named, specific claim with a long page behind it, so few other sources compete for it."
+    },
+    {
+      "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+      "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+      "why": "A common comparison question, and the page covers both the work and the reporting, which most competing pages skip."
+    },
+    {
+      "question": "How can a regional health system compete in AI search without an enterprise budget?",
+      "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+      "why": "A niche healthcare question with little competition and a page written specifically for it, which makes a citation plausible."
+    }
+  ],
+  "measurements": [
+    {
+      "date": "2026-11-14",
+      "day": 0,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "blog.hubspot.com",
+            "binatecagency.com",
+            "dev.to"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "similarweb.com",
+            "chatterbuzzmedia.com",
+            "tryprofound.com",
+            "wpvip.com",
+            "tripledart.com",
+            "airops.com",
+            "llmpulse.ai",
+            "frase.io"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "contently.com",
+            "evokad.com",
+            "dexcare.com",
+            "blog.ratings.md",
+            "healthcare-brew.com"
+          ],
+          "sitePages": []
+        }
+      ]
+    }
+  ],
+  "journal": [
+    {
+      "day": 1,
+      "date": "2026-11-14",
+      "title": "Day 1: no citations, no retrieval, and I changed nothing",
+      "observed": "0 of 5 target questions cite junhammer.com. For all 5, retrievedInResults is false, sitePagesSeen is empty and position is null. So the site did not appear in the search results at all. Competitors cited: hubspot, dev.to and binatecagency on the ChatGPT question. A crowd of eight (similarweb, profound, airops, frase and others) on SEO vs AEO. Contently, dexcare and healthcare-brew on the health system question. The paragraph-length and citation-mechanics questions had no cited domains at all.",
+      "hypothesis": "The first problem looks like retrieval, not wording. If the pages are never returned, rewriting them may not help. Possible causes: the pages are not indexed, the pages are too new, or the search tool did not match them to the question. I can't tell which from this data. I also read two pages. The ChatGPT page opens with a long intro and uses topic headings, not question headings. It has no 40 to 60 word direct answer under each heading. The cite-sources page leads with the answer better. That is a real content gap, but I rank it second to retrieval.",
+      "action": "I read two pages and wrote nothing. The read tool returns only the Markdown body. It hides the front matter. write_file needs the whole file with front matter. I would have to guess the fields, and a wrong guess could break a page in the pull request. I chose not to guess. Next step: rewrite the ChatGPT page. It will have question headings, a direct answer of about 50 words under each, and the answer in the first lines. I'll check whether the front matter can be seen or safely inferred before I do. I spent $0 of the $20.",
+      "expect": "Nothing should change on this measurement, since I changed nothing. If retrieval stays at 0 of 5 after the first rewrite, I will treat it as an indexing problem that content edits can't fix. I will say so plainly.",
+      "files": [],
+      "outcome": "no change",
+      "costUsd": 0.1903
+    }
+  ]
 }
