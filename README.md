@@ -121,6 +121,17 @@ A long-running agent with a goal, a dollar budget and a public diary at `/agent/
 - **Budget.** Costs are computed per call from `PRICES` in `lib.mjs` and `$10 per 1,000` web searches, accumulated into `spentUsd`. A run stops at `CONFIG.dailyCapUsd`, and the campaign stops when the budget or day count runs out. Update `PRICES` when model pricing changes.
 - Needs the `ANTHROPIC_API_KEY` repository secret. `node scripts/agent/run.mjs --dry` runs a day and writes nothing.
 
+## Prompt evolution
+
+An optimization loop over the Ask feature's system prompt, published at `/ask/prompt-evolution/`.
+
+- `node scripts/optimize/run.mjs [--generations N] [--dry]`. Needs `ANTHROPIC_API_KEY`.
+- The question set is split by a hash of each question into a training set and a holdout. The split is stable, so adding a question does not reshuffle the rest, and the holdout is never used to choose a prompt.
+- Each generation: the writer model sees the best prompts so far and the answers that failed, writes four variations, and each is scored on the training questions with `src/ask/grade.mjs`, the same rules the evals use. Retrieval is identical for every candidate, so only the prompt varies.
+- At the end the winner and the baseline are both measured on the holdout. `verdict()` in `scripts/optimize/lib.mjs` states plainly whether the gain transferred.
+- Nothing is adopted automatically. If the holdout supports the winner, paste its prompt into `SYSTEM` in `src/ask/answer.mjs` by hand and set `winner.adopted` to true.
+- Cost: roughly `(variants + 1) x generations x training questions` answer calls, plus the holdout. Start with `--generations 1` to see the scale.
+
 ## Contact form
 
 The form appears when `formEndpoint` is set in *Site settings*. Free option: create an access key at web3forms.com, then set `formEndpoint` to `https://api.web3forms.com/submit` and `formAccessKey` to your key. Until then, the contact page shows email only.
