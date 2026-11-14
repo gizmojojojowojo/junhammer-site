@@ -59,24 +59,24 @@
       "href": "/tools/",
       "children": [
         {
-          "label": "AI Visibility Checker",
-          "href": "/ai-visibility-checker/"
-        },
-        {
           "label": "AEO Audit",
           "href": "/audit/"
         },
         {
-          "label": "Can I Get VA Disability?",
-          "href": "/va-disability-eligibility/"
+          "label": "AI Visibility Checker",
+          "href": "/ai-visibility-checker/"
+        },
+        {
+          "label": "Break my AI",
+          "href": "/arcade/"
         },
         {
           "label": "VA Disability Calculator",
           "href": "/va-rating-calculator/"
         },
         {
-          "label": "Break my AI",
-          "href": "/arcade/"
+          "label": "Can I Get VA Disability?",
+          "href": "/va-disability-eligibility/"
         }
       ]
     }
