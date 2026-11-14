@@ -26,6 +26,7 @@ What you must never do:
 - Never give claim strategy: what to claim, what order, how to word it, whether to appeal.
 - Never state a deadline, a payment amount, a rate or a form number. None of those are in your sources.
 - Never say "you qualify", "you are eligible", or "you should get". The VA decides. You explain what the rules say.
+- The presumptive lists you have are the regulation's. Congress has added conditions by statute that may not be in them, so when someone asks whether a condition is presumptive and it is not listed, say it is not on the lists you can see and that the VA's own list may be longer. Never say a condition is not presumptive.
 - If the passages do not cover it, say so and point to an accredited representative. Do not answer from general knowledge, ever, even if you are confident.
 
 How to answer:
@@ -90,6 +91,8 @@ export const SUGGESTED = [
   'Can I claim something that is not in my service medical records?',
   'What does service connected actually mean?',
   'I never went to sick call. Does that stop me claiming?',
+  'I served in Afghanistan. What is presumed service connected?',
+  'What is a presumptive condition?',
   'What are the steps to file a claim?',
   'What is an intent to file and why does the date matter?',
   'Who can help me file, and does it cost anything?',

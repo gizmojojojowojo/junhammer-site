@@ -183,3 +183,33 @@ test('endpoint: a reply cut off at the token ceiling is not shown', async () => 
     globalThis.fetch = real;
   }
 });
+
+// ---- presumptive conditions ----
+const { PRESUMPTIVE, NOT_COVERED, findCondition } = await import('../src/va/presumptive.mjs');
+
+test('every presumptive group cites its section and carries the rule', () => {
+  assert.deepEqual(PRESUMPTIVE.map((p) => p.id), ['particulate', 'chronic', 'herbicide', 'lejeune']);
+  for (const p of PRESUMPTIVE) {
+    assert.match(p.cite, /^38 CFR 3\.3/);
+    assert.match(p.url, /ecfr\.gov/);
+    assert.ok(p.service.length > 30 && p.rule.length > 30, `${p.id} states who it covers and what the rule is`);
+    assert.ok(CORPUS.some((c) => c.cite === p.cite), `${p.id} is backed by a passage the answer agent can cite`);
+  }
+  assert.equal(PRESUMPTIVE.find((p) => p.id === 'chronic').groups[0].conditions.length, 41);
+  assert.equal(PRESUMPTIVE.find((p) => p.id === 'lejeune').groups[0].conditions.length, 8);
+  assert.ok(NOT_COVERED.some((n) => /statute/.test(n)), 'the lookup says statute-added conditions may be missing');
+});
+
+test('a condition lookup finds the list and never more than that', () => {
+  const asthma = findCondition('asthma');
+  assert.equal(asthma.length, 1);
+  assert.equal(asthma[0].id, 'particulate');
+  assert.match(asthma[0].service, /Afghanistan/);
+  // Some conditions sit on more than one list, with different rules.
+  assert.deepEqual(findCondition("Parkinson's disease").map((m) => m.id).sort(), ['herbicide', 'lejeune']);
+  assert.ok(findCondition('lung carcinoma').length >= 3, 'word order does not matter');
+  assert.equal(findCondition('arthritis')[0].id, 'chronic');
+  assert.deepEqual(findCondition('knee pain'), []);
+  assert.deepEqual(findCondition('as'), [], 'too short to mean anything');
+  assert.deepEqual(findCondition(null), []);
+});
