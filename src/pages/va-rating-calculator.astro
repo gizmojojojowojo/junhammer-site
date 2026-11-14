@@ -6,7 +6,7 @@ const schema = [
   {
     '@type': 'WebApplication',
     name: 'VA Combined Disability Rating Calculator',
-    url: 'https://junhammer.com/va-combined-rating-calculator/',
+    url: 'https://junhammer.com/va-rating-calculator/',
     applicationCategory: 'UtilitiesApplication',
     operatingSystem: 'Any',
     description: 'Works out a VA combined disability rating using the combined ratings table in 38 CFR 4.25 and the bilateral factor in 38 CFR 4.26, showing every step.',
@@ -36,18 +36,18 @@ const schema = [
 ];
 ---
 <Base
-  title="VA combined rating calculator"
+  title="VA rating calculator"
   seoTitle="VA Combined Disability Rating Calculator (38 CFR 4.25 and 4.26)"
   description="Work out a VA combined disability rating with every step shown, including the bilateral factor for paired limbs and the 38 CFR 4.16(a) unemployability threshold. Nothing is sent anywhere."
   schema={schema}
 >
   <div class="narrow vac">
     <header class="page-head">
-      <h1>VA combined rating calculator</h1>
+      <h1>VA rating calculator</h1>
       <p class="lede">VA disability ratings do not add up. 50 percent and 30 percent pay as 70, not 80. This works the combination the way <a href={`${CFR}/section-4.25`}>38 CFR 4.25</a> and <a href={`${CFR}/section-4.26`}>38 CFR 4.26</a> require and shows every step, so you can check it against your decision letter.</p>
     </header>
 
-    <p class="vac-jump">Wondering if you qualify for disability? <a href="#eligibility">Can I get disability at all?</a></p>
+    <h2 class="vac-jump">Wondering if you qualify for disability? <a href="#eligibility">Can I get disability at all?</a></h2>
 
     <form id="vac-form" class="vac-form">
       <h2 class="vac-h">Your ratings</h2>
@@ -481,8 +481,8 @@ const schema = [
   .vac-unlocks p { margin: .2rem 0 0; }
   .vac-unlock-label { font-family: var(--font-ui); font-weight: 600; }
   .vac-unlock-who { font-family: var(--font-ui); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-left: .5rem; }
-  .vac-jump { margin-top: 1.25rem; font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); }
-  .vac-jump a { font-weight: 600; color: var(--fjord); }
+  .vac-jump { margin-top: 1.5rem; padding: .85rem 1.1rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); font-family: var(--font-ui); font-size: var(--step-0); font-weight: 700; max-width: var(--measure); }
+  .vac-jump a { color: var(--fjord); }
   #eligibility { scroll-margin-top: 5rem; }
   .vac-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .vac-about { margin-top: 3rem; }
