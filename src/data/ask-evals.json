@@ -1,258 +1,445 @@
 {
-  "ranAt": "2026-11-13T22:19:49.280Z",
-  "commit": "",
+  "ranAt": "2026-11-14T13:30:48.225Z",
+  "commit": "84fc773",
   "retrieval": {
     "questions": 60,
-    "passages": 731,
+    "passages": 732,
     "first": 51,
     "top3": 56,
     "reachedModel": 60,
-    "mrr": 0.897,
+    "mrr": 0.898,
     "wronglyTurnedAway": 0,
     "offTopic": 8,
     "offTopicStopped": 4
   },
-  "answers": null,
+  "answers": {
+    "model": "claude-haiku-5-5",
+    "answered": 60,
+    "passedAll": 50,
+    "checks": [
+      {
+        "id": "cites",
+        "label": "Cites a source",
+        "passed": 59
+      },
+      {
+        "id": "citesInRange",
+        "label": "Every citation number is real",
+        "passed": 60
+      },
+      {
+        "id": "citesExpected",
+        "label": "Cites a page that holds the answer",
+        "passed": 56
+      },
+      {
+        "id": "linksAllowed",
+        "label": "Uses only links found in the sources",
+        "passed": 54
+      },
+      {
+        "id": "short",
+        "label": "Stays under 220 words",
+        "passed": 60
+      }
+    ],
+    "offTopicReachedModel": 4,
+    "offTopicDeclined": 3,
+    "avgTokensIn": 2366,
+    "avgTokensOut": 312,
+    "ranAt": "2026-11-14T13:30:48.224Z",
+    "commit": "84fc773"
+  },
   "questions": [
     {
       "q": "What is the difference between AEO and GEO?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What does generative engine optimization mean?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Who came up with the term GEO?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How long until SEO shows results?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Why isn't my content appearing in ChatGPT?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "The site has an article on this exact frustration. It says the causes tend to cluster around a handful of issues, and most don't require a technical background to fix [2]. The article is titled \"Why Your Content Isn't Showing Up in ChatGPT Answers\" [1]. More broadly, AI search engines build answers and pull in sources that say something useful, rather than ranking pages, so content has to be structured to be cited [4]. Common pitfalls include thin content, outdated information, and restricted content behind paywalls or registration [6]. For help with your specific site, you can reach Joe through [the contact page](/contact/)."
     },
     {
       "q": "How do AI search engines pick which sites to cite?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is the 40 word rule?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How should I write paragraphs so AI tools quote them?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do I get featured in Google AI Overviews?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is semantic search?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Explain search intent and the different types",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is E-E-A-T and how do I show it to AI systems?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "E-E-A-T stands for Experience, Expertise, Authoritativeness and Trustworthiness, and Google's guidelines use it to judge content quality [3][8]. AI search engines evaluate these signals computationally, so the ways to show them include the following:\n\n- **Structured data:** Schema markup that formats author information, professional qualifications and organizational affiliations gives AI systems machine-readable credentials, since credentials in flowing prose may not register as clearly [1].\n- **Citations:** Cite respected publications and primary research, and earn citations from authoritative sources, because AI systems analyze citation patterns in both directions [1][3].\n- **Author entiti"
     },
     {
       "q": "Which schema markup matters for medical pages?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "For medical pages, this site recommends health-specific schema types, not just general Article and FAQ markup. MedicalWebPage, MedicalCondition, and Drug are named as examples [8].\n\nThe right combination depends on the page type:\n- **Condition education pages:** MedicalWebPage as the main type, MedicalCondition for the condition, Person for authors, and Article linking content to authors and publishers [2].\n- **Treatment comparisons:** MedicalWebPage, Drug, MedicalProcedure, and ItemList [2].\n- **Provider directories:** Physician, MedicalBusiness, LocalBusiness properties, and Review where appropriate [2].\n- **Symptom checkers:** MedicalWebPage, MedicalCondition, and MedicalSymptom [2].\n\nFor"
     },
     {
       "q": "How can a small regional hospital compete in AI search?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do pharma companies optimize content for Perplexity?",
-      "rank": 2
+      "rank": 2,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is entity-based optimization for health systems?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Why is healthcare AEO different from other industries?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is the difference between an AI agent and an AI workflow?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "When should I use a workflow instead of an agent?",
-      "rank": 1
+      "rank": 1,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What are AI integration services?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "AI integration services go beyond a single automation. They cover the assessment, policy, tool selection, training, and measurement that make AI work across a business, with AI workflow automation being one part of them [1]. Cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, so a scoped proposal after an initial conversation is the most reliable way to get a number [2]. For questions about working with Joe on this, see the [contact page](/contact/)."
     },
     {
       "q": "Is SEO dead?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How does AEO reporting differ from SEO reporting?",
-      "rank": 3
+      "rank": 3,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What should I look for when hiring an AEO consultant?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What am I actually paying for with AEO services?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ]
     },
     {
       "q": "What tools are used for answer engine optimization?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What replaces third-party cookies?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What technical SEO does a GEO strategy need?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do I do keyword research now?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What does a site audit cover?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "A technical SEO audit covers crawlability and indexation, site architecture and internal linking, page speed and Core Web Vitals, structured data, duplicate and thin content, international setup where relevant, and AI crawler access [4]. The result is a prioritized list of fixes ranked by impact and effort, rather than a dump of every warning a tool reports [4]. Joe also frames audits as integrated reviews of SEO and user experience, since changes in one area often affect the other [1]. For details on working with Joe, see the [technical SEO service page](/services/technical-seo/) or the [contact page](/contact/)."
     },
     {
       "q": "How should humans and AI work together on content?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Who is Joe Unhammer?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Was Joe in the military?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Where does Joe work?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Joe is based in Denver, Colorado, and works with teams anywhere in the US [8]. He also serves businesses in the Denver metro area and Colorado's south metro, including Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial [5][7]."
     },
     {
       "q": "What AI tools has Joe built?",
-      "rank": 3
+      "rank": 3,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is LandmAIn?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Has Joe built a chatbot for a hospital?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What results did the spine clinic get?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Tell me about the healthcare website consolidation project",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Does Joe have ecommerce SEO experience?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Can Joe build an MCP server for Claude?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What does an AI agent project involve?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Can you automate our marketing reports?",
-      "rank": 2
+      "rank": 2,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Do you offer AI strategy consulting?",
-      "rank": 0
+      "rank": 0,
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, the rules, and how to measure results [1]. He often starts with off-the-shelf tools configured well and recommends custom builds only where the workflow is specific to your business or the data must stay in your systems [2]. If you want to discuss a project, you can reach out through the [contact page](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do I get in touch about a project?",
-      "rank": 1
+      "rank": 1,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Does Joe work with companies in Denver?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is the AEO playbook?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Give me statistics on why AEO matters",
-      "rank": 2
+      "rank": 2,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "how does it take for seo to work?",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "seo how long",
-      "rank": 4
+      "rank": 4,
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Joe's FAQ says SEO is a long-term investment, but timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth usually appears between three and six months, and substantial, compounding results often show at six to twelve months [1]. Visibility in AI systems for AEO and GEO can shift faster, since those platforms update their knowledge bases [1]. For more detail on a specific situation, visit /contact/."
     },
     {
       "q": "aeo vs geo",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "chatgpt not showing my site",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "joe army",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "mcp server",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "agents vs workflows",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "spine clinic",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "whats semantic search",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "ai overviews for hospitals",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "what do you charge",
-      "rank": 6
+      "rank": 5,
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "This site doesn't list Joe's rates. The [FAQ page](/faq/) covers pricing, but the excerpt I have doesn't include figures. For a quote, use the contact page at /contact/. When you compare proposals, the site suggests pricing each one against the same agreed scope [2]."
     },
     {
       "q": "keyword research",
-      "rank": 0
+      "rank": 0,
+      "pass": true,
+      "failed": []
     }
   ],
   "semantic": {
