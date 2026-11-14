@@ -23,11 +23,11 @@ export const THRESHOLDS = [
   {
     id: 'compensation',
     at: 10,
-    label: 'Monthly compensation begins',
+    label: 'The rating is compensable',
     who: 'The veteran',
-    summary: 'A compensable rating starts monthly disability compensation. A 0 percent rating establishes service connection but pays nothing.',
+    summary: 'A rating of 10 percent or more is compensable. Below that the schedule assigns a zero percent evaluation, which records the disability without a compensable one.',
     test: ({ rated }) => rated >= 10,
-    cite: { section: '38 CFR 4.31', url: eCFR(38, 4, '4.31'), note: 'A zero percent evaluation is assigned where the schedule does not provide one and the requirements for a compensable evaluation are not met.' },
+    cite: { section: '38 CFR 4.31', url: eCFR(38, 4, '4.31'), note: 'In every instance where the schedule does not provide a zero percent evaluation for a diagnostic code, a zero percent evaluation shall be assigned when the requirements for a compensable evaluation are not met.' },
   },
   {
     id: 'healthcare-3',
