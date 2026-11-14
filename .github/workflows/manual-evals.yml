@@ -1,0 +1,50 @@
+# The prompt optimizer and the audit agent grading. Both spend API money, so
+# neither runs on every push: this fires when this file changes and when
+# started by hand from the Actions tab. Results are committed to main and
+# appear on /ask/prompt-evolution/ and /audit/.
+name: Optimizer and audit grading
+
+on:
+  workflow_dispatch:
+    inputs:
+      generations:
+        description: 'Optimizer generations'
+        default: '3'
+  push:
+    branches: [main]
+    paths: ['.github/workflows/manual-evals.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: manual-evals
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pip install --quiet pyyaml
+      - name: Grade the audit agent
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/audit/eval.mjs --write
+      - name: Run the prompt optimizer
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/optimize/run.mjs --generations ${{ inputs.generations || '3' }}
+      - name: Publish results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/audit-evals.json src/data/prompt-evolution.json
+          if git diff --cached --quiet; then echo "Nothing changed."; exit 0; fi
+          git commit -m "Update optimizer and audit grading results"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
