@@ -1,0 +1,10 @@
+{
+  "note": "Public job boards. Each company's own board API, no key needed. Slugs are a starting point: run the script and it reports which ones did not respond, then fix or remove those.",
+  "greenhouse": ["anthropic", "scaleai", "ramp", "vercel", "retool", "sierraai"],
+  "lever": ["perplexityai", "mistral"],
+  "filters": {
+    "titleMust": ["ai engineer", "ml engineer", "machine learning engineer", "applied ai", "forward deployed", "solutions engineer", "ai solutions", "search engineer", "developer relations"],
+    "include": ["RAG", "retrieval", "agent", "evals", "evaluation", "LLM", "prompt", "fine-tun", "embedding", "vector", "Claude", "OpenAI", "semantic search", "python", "typescript", "customer", "consulting"],
+    "exclude": ["intern", "staff ", "principal", "director", "manager", "research scientist"]
+  }
+}
