@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-14T15:25:21.450Z",
-  "commit": "46f445c",
+  "ranAt": "2026-11-14T18:13:33.629Z",
+  "commit": "9eceaa2",
   "retrieval": {
     "questions": 60,
     "passages": 732,
@@ -15,7 +15,7 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 47,
+    "passedAll": 52,
     "checks": [
       {
         "id": "cites",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 54
+        "passed": 56
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 53
+        "passed": 56
       },
       {
         "id": "short",
@@ -46,9 +46,9 @@
     "offTopicReachedModel": 4,
     "offTopicDeclined": 3,
     "avgTokensIn": 2366,
-    "avgTokensOut": 319,
-    "ranAt": "2026-11-14T15:25:21.450Z",
-    "commit": "46f445c"
+    "avgTokensOut": 291,
+    "ranAt": "2026-11-14T18:13:33.629Z",
+    "commit": "9eceaa2"
   },
   "questions": [
     {
@@ -72,17 +72,17 @@
     {
       "q": "How long until SEO shows results?",
       "rank": 0,
-      "pass": true,
-      "failed": []
-    },
-    {
-      "q": "Why isn't my content appearing in ChatGPT?",
-      "rank": 0,
       "pass": false,
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "The site suggests that this is a common frustration and is usually fixable, with causes that tend to cluster around a handful of issues, most of which don't require a technical background to address [2]. AI search engines like ChatGPT don't rank pages; they build answers and pull in sources to support them, asking whether a page \"says something I can use\" [4]. Common reasons content gets passed over include thin content, outdated information, missing structured data, and restricted content behind paywalls or registration [6]. For a deeper look, the [AEO Playbook](/the-complete-aeo-playbook/) covers how AI engines decide what to cite, and Joe can be reached through the [contact page](/contact"
+      "answer": "Based on this site, timelines vary by business. For established businesses with existing domain authority and a content library, the article gives an expected timeline of 3-6 months for significant improvements [1]. It also notes that existing authority speeds up how new content performs and that technical optimizations can show quick results [1]. The site does not give a timeline for newer sites, so for a specific estimate for your situation, you can reach out via the [contact page](/contact/)."
+    },
+    {
+      "q": "Why isn't my content appearing in ChatGPT?",
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do AI search engines pick which sites to cite?",
@@ -105,8 +105,11 @@
     {
       "q": "How do I get featured in Google AI Overviews?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ]
     },
     {
       "q": "What is semantic search?",
@@ -123,11 +126,8 @@
     {
       "q": "What is E-E-A-T and how do I show it to AI systems?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "E-E-A-T stands for Experience, Expertise, Authoritativeness and Trustworthiness, and Google's guidelines use it to judge content quality [3][8]. To show it to AI systems, the site suggests several steps:\n\n- Use schema markup to present author information, professional qualifications and organizational affiliations in machine-readable form, since credentials in flowing prose may not register as clearly [1].\n- Showcase author credentials with detailed bios, cite authoritative sources, build a comprehensive resource center and earn links from respected industry sites [3].\n- Make verifiable, accurate claims that align with authoritative sources, and cite sources that AI systems can check [1].\n\nT"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Which schema markup matters for medical pages?",
@@ -162,11 +162,8 @@
     {
       "q": "What is the difference between an AI agent and an AI workflow?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "An AI workflow runs a model and tools through a fixed path that a developer defines, while an AI agent lets the model decide its own next steps and tools until the task is done [1][2]. Workflows are more predictable and easier to test, so they suit repeatable tasks, while agents suit open-ended work where the steps can't be known in advance [2]. Agents usually make more model calls and run slower, so Joe uses workflows by default and builds agents only when a task needs that flexibility [3]. For help deciding which one a project needs, see [AI agent vs AI workflow](/blog/ai-agent-vs-ai-workflow/) or the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "When should I use a workflow instead of an agent?",
@@ -181,7 +178,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "AI integration services cover more than automation alone. They include assessment, policy, tool selection, training, and measurement that make automation work across a business, while AI workflow automation is one part that handles a specific sequence of steps [1]. Cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, so this site recommends a scoped proposal after an initial conversation about your workflows [2]. Joe Unhammer, an AI engineer in the Denver metro area, builds AI agents, automations, and Claude integrations for Colorado businesses [6]. To discuss your needs, visit the [conta"
+      "answer": "AI integration services go beyond a single automation. They cover the assessment, policy, tool selection, training, and measurement that make AI automation work across a business, while AI workflow automation is one part of them, handling a specific sequence of steps [1]. The cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, and a scoped proposal after an initial conversation is the most reliable way to get a number [2]. To discuss your own needs, you can reach out via the [contact page](/contact/)."
     },
     {
       "q": "Is SEO dead?",
@@ -204,11 +201,8 @@
     {
       "q": "What am I actually paying for with AEO services?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Joe's AEO program covers five areas, all described on the [AEO service page](/services/answer-engine-optimization/) [3]:\n\n- **Visibility baseline:** Joe picks the questions your buyers or patients ask and checks which brands each AI assistant cites today [3].\n- **Content structure:** Pages are rebuilt around direct, self-contained answers and question-based headings [3].\n- **Entities and schema:** Consistent organization, person, service, and medical schema, plus off-site signals that identify your business to AI systems [3].\n- **Technical access:** AI crawler rules, server-rendered content, llms.txt, and page speed [3].\n- **Reporting:** Citation share across assistants, tracked monthly next"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -265,16 +259,13 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. He is in the Denver area and works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [5][7]. His contact page says he is based in Denver and works with teams anywhere in the US [8]."
+      "answer": "Joe is based in Colorado. He is in Denver, and he works with teams anywhere in the US [8]. He also works with businesses in the south metro area, including Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial [5]. To get in touch, see the [contact page](/contact/)."
     },
     {
       "q": "What AI tools has Joe built?",
       "rank": 3,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Joe has built several AI tools. He built LandmAIn, an AI land intelligence platform for data center and energy site selection, where every finding ties to a dated, inspectable source [5][6]. He has also designed and built AI chat functions for hospital systems that help patients find services and care information [7]. On the engineering side, he builds agentic workflows, Claude skills, MCP connectors, plugins and browser extensions, and automated GA4 and Search Console reporting [4]. For details on working with Joe, see [the contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is LandmAIn?",
@@ -331,7 +322,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how you will measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. You can reach out through the [contact page](/contact/) to discuss your situation."
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He often starts with off-the-shelf tools configured well and recommends custom builds only where the workflow is specific to your business or the data must stay in your systems [2]. For details or to discuss your situation, see the [contact page](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -370,7 +361,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Most sites see early movement in three to six months and compounding results in six to twelve, depending on competition, site health, and how much content needs to be built. New sites in competitive fields take longer. Joe sets milestones for each quarter so progress is visible before rankings fully arrive [6]. You can read more on the [SEO service page](/services/seo/)."
+      "answer": "Most sites see early movement in three to six months and compounding results in six to twelve, depending on competition, site health and how much content needs to be built [6]. New sites in competitive fields take longer [6]. Joe sets quarterly milestones so progress is visible before rankings fully arrive [6]. You can read more on the [SEO service page](/services/seo/)."
     },
     {
       "q": "seo how long",
@@ -379,7 +370,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe's FAQ says SEO is a long-term investment, but timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results are often visible at six to twelve months [1]. Visibility in AI systems for AEO and GEO can shift faster, since those platforms update their knowledge bases [1]. For more detail on your situation, see the contact page at /contact/."
+      "answer": "Según este sitio, el SEO es una inversión a largo plazo, aunque los plazos varían según el punto de partida, la competencia y los objetivos. Las mejoras técnicas y las victorias rápidas pueden notarse en semanas, el crecimiento significativo del tráfico orgánico suele aparecer entre tres y seis meses, y los resultados acumulativos suelen verse entre seis y doce meses [1]. Para AEO y GEO, la visibilidad en sistemas de IA puede cambiar más rápido [1]. Joe establece expectativas realistas desde el principio según cada situación [1]."
     },
     {
       "q": "aeo vs geo",
@@ -390,12 +381,8 @@
     {
       "q": "chatgpt not showing my site",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ],
-      "answer": "This site says a page missing from ChatGPT answers is usually fixable. ChatGPT tends to cite the page that most directly and specifically answers the question, not the best-"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "joe army",
@@ -430,11 +417,8 @@
     {
       "q": "ai overviews for hospitals",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "This site offers healthcare AEO built on E-E-A-T and YMYL standards, along with an AI visibility audit and reporting alongside classic SEO metrics [4]. To track results, test relevant healthcare queries regularly, document which sources appear in AI responses, and monitor featured snipp"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "what do you charge",
@@ -443,7 +427,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "This site does not list Joe's rates, so I can't tell you what he charges. The [FAQ page](/faq/) covers pricing questions and how Joe works with clients [6], and the [contact page](/contact/) is the best place to ask for a quote. When you compare any provider's proposal, ask each one to price the same initial brief, so the costs are comparable [2]."
+      "answer": "This site doesn't list Joe's prices. The [FAQ page](/faq/) covers pricing questions [6], but the excerpt I can see doesn't include specific figures. For a quote, use the [contact page](/contact/). When you ask, it helps to share a defined scope, since pricing depends on factors like the number of pages to revise, the technical changes included, and the reporting frequency [2]."
     },
     {
       "q": "keyword research",
