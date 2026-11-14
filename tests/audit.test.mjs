@@ -5,6 +5,8 @@ import { checkUrl, safeFetch, sameSite } from '../src/audit/guard.mjs';
 import { parsePage, parseRobots, robotsAllows } from '../src/audit/page.mjs';
 import { LIMITS, TOOLS, normalizeReport, runAudit } from '../src/audit/agent.mjs';
 import { onRequestPost } from '../functions/api/audit.js';
+import { FIXTURES, fixtureFetch } from '../evals/audit/fixtures.mjs';
+import { foundDefect, gradeAudit, summarize } from '../scripts/audit/grade.mjs';
 
 const HTML = `<!doctype html><html lang="en"><head><title>What is GEO? A Guide &amp; Checklist</title>
 <meta name="description" content="A guide to GEO."><link rel="canonical" href="https://example.org/geo/">
@@ -261,4 +263,54 @@ test('endpoint: a model failure ends with an error event', async () => {
   } finally {
     globalThis.fetch = realFetch;
   }
+});
+
+// ---- the eval harness itself ----
+
+const report = (over = {}) => normalizeReport({ summary: 'ok', categories: [{ id: 'crawler_access', score: 30, note: 'robots.txt blocks GPTBot.' }], findings: [{ category: 'crawler_access', severity: 'high', title: 'AI crawlers blocked', evidence: 'robots.txt disallows GPTBot and ClaudeBot.', fix: 'Allow them.' }], ...over }, new URL('https://blocked.test/guide/'));
+
+test('grading an audit: a defect counts only when the report names it', () => {
+  const expect = { defect: 'AI crawlers are blocked', words: ['robots', 'gptbot', 'claudebot', 'disallow'], need: 2, category: 'crawler_access' };
+  assert.equal(foundDefect(report(), expect).found, true);
+  const vague = report({ categories: [{ id: 'crawler_access', score: 30, note: 'Something is off.' }], findings: [{ category: 'crawler_access', severity: 'high', title: 'Problem', evidence: 'The page has an issue.', fix: 'Fix it.' }] });
+  assert.equal(foundDefect(vague, expect).found, false, 'one word is not enough');
+  const wrongPlace = report({ categories: [{ id: 'technical', score: 30, note: 'robots.txt disallows GPTBot' }], findings: [{ category: 'technical', severity: 'low', title: 'x', evidence: 'y', fix: 'z' }] });
+  assert.equal(foundDefect(wrongPlace, expect).inRightCategory, false, 'the right words in the wrong category do not count');
+});
+
+test('grading an audit: counts misses, thin findings and injection resistance', () => {
+  const fixture = { id: 'f', expect: [{ defect: 'Blocked crawlers', words: ['robots', 'gptbot'], need: 2, category: 'crawler_access' }, { defect: 'No schema', words: ['schema'], need: 1 }], mustNotScore: 100 };
+  const g = gradeAudit(report(), fixture);
+  assert.deepEqual([g.found, g.planted, g.missed, g.invented], [1, 2, ['No schema'], 0]);
+  assert.equal(g.scoredAllCategories, false, 'four categories were left unscored');
+  assert.equal(g.resistedInjection, true);
+  const thin = gradeAudit(report({ findings: [{ category: 'technical', severity: 'low', title: 'x', evidence: 'short', fix: 'f' }] }), { id: 'f', expect: [] });
+  assert.equal(thin.invented, 1);
+  assert.equal(thin.resistedInjection, null, 'only injection fixtures are judged on it');
+  const s = summarize([g, thin]);
+  assert.deepEqual([s.pages, s.planted, s.found, s.rate, s.invented, s.injectionResisted], [2, 2, 1, 0.5, 1, true]);
+  assert.equal(summarize([thin]).injectionResisted, null);
+});
+
+test('fixtures are well formed and reachable only through their own fetch', async () => {
+  assert.ok(FIXTURES.length >= 5);
+  for (const f of FIXTURES) {
+    assert.ok(f.files[f.url], `${f.id} serves its own page`);
+    for (const e of f.expect) assert.ok(e.words.length >= e.need && e.defect, `${f.id} expectations are usable`);
+    const fetchImpl = fixtureFetch(f);
+    assert.equal((await fetchImpl(f.url)).status, 200);
+    assert.equal((await fetchImpl('https://elsewhere.test/')).status, 404);
+  }
+  assert.ok(FIXTURES.some((f) => f.mustNotScore !== undefined), 'one fixture tries to instruct the auditor');
+});
+
+test('the agent runs end to end against a fixture with no network', async () => {
+  const f = FIXTURES.find((x) => x.id === 'blocked-crawlers');
+  const { callModel } = scripted([
+    [{ name: 'fetch_page', input: { url: f.url } }, { name: 'check_ai_crawler_access' }],
+    [{ name: 'submit_report', input: { summary: 'robots.txt blocks GPTBot and ClaudeBot.', categories: [{ id: 'crawler_access', score: 20, note: 'Blocked.' }], findings: [{ category: 'crawler_access', severity: 'high', title: 'AI crawlers blocked', evidence: 'robots.txt disallows GPTBot, ClaudeBot and PerplexityBot.', fix: 'Remove those rules.' }] } }],
+  ]);
+  const out = await runAudit({ target: new URL(f.url), callModel, fetchImpl: fixtureFetch(f), model: 'm' });
+  const g = gradeAudit(out.report, f);
+  assert.deepEqual([g.found, g.planted, g.missed], [1, 1, []]);
 });

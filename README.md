@@ -97,7 +97,9 @@ Settings (same place as the Ask settings):
 - `ASK_KV` (optional, shared): makes the limits site-wide. Without it they are counted per server instance only.
 - `AUDIT_HOURLY_LIMIT` (default 3 per visitor) and `AUDIT_DAILY_LIMIT` (default 60 site-wide).
 
-`npm test` covers the URL guard, the HTML and robots.txt parsing, the loop limits and the endpoint with a scripted model (no network, no key).
+**Grading the agent.** `node scripts/audit/eval.mjs [--write]` runs the agent against `evals/audit/fixtures.mjs`, pages built with known problems, and checks whether the report names each one. The fixtures are served from memory through an injected fetch, so only the model calls are real. One fixture tries to talk the auditor into a perfect score, so prompt injection is measured every run. With `--write` the summary lands in `src/data/audit-evals.json` and appears on `/audit/`.
+
+`npm test` covers the URL guard, the HTML and robots.txt parsing, the loop limits, the grading rules and the endpoint with a scripted model (no network, no key).
 
 ## Break my AI (arcade)
 

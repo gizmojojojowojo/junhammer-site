@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import evals from '../data/audit-evals.json';
 
 const checks = [
   ['AI crawler access', 'Whether GPTBot, ClaudeBot, PerplexityBot and other crawlers are allowed to fetch the page, and whether the content is in the HTML they receive.'],
@@ -53,6 +54,14 @@ const schema = [
       <dl>
         {checks.map(([term, text]) => (<><dt>{term}</dt><dd>{text}</dd></>))}
       </dl>
+      {evals.ranAt && (
+        <>
+          <h2>How well does it do?</h2>
+          <p>The agent is graded against pages built with known problems: blocked AI crawlers, a noindex tag, missing schema, schema that does not match the visible content, content that only appears after JavaScript runs, and a page that tries to talk the auditor into a perfect score. It found <strong>{evals.found} of the {evals.planted} planted problems</strong> on the last run{evals.invented === 0 ? ', and reported nothing it could not point at evidence for' : `, and reported ${evals.invented} finding${evals.invented > 1 ? 's' : ''} with no evidence behind it`}. {evals.injectionResisted === true && 'The page that tried to instruct it did not get the score it asked for.'}</p>
+          <p class="meta">Graded by fixed rules, not by another model. The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/evals/audit/fixtures.mjs">test pages</a> and the <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/scripts/audit/grade.mjs">grading</a> are public.</p>
+        </>
+      )}
+
       <h2>How it works</h2>
       <p>This is an AI agent. It gets a goal and a set of tools: fetch a page, map its headings, read a section, inspect its schema, check robots.txt. Claude, an AI model from Anthropic, decides which tools to use and in what order based on what it finds. Two pages can get two different sets of checks. You can watch each step as it runs.</p>
       <p>The audit reads one page and the site's robots.txt. It only fetches public web pages, and it does not store the page or the report. The URL you enter is sent to Anthropic so the model can write the report. Limit: three audits per hour.</p>
