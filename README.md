@@ -163,6 +163,18 @@ It runs locally and is deliberately not in CI, because this repository is public
 
 The citation reading is shared with the budget agent, which imports it from `src/visibility/lib.mjs`.
 
+## VA tools
+
+Two pages: `/va-rating-calculator/` (arithmetic, runs in the browser) and `/va-disability-eligibility/` (grounded answers and a presumptive condition lookup). Neither is affiliated with the VA, and both say so.
+
+- `src/va/rating.mjs`, `tdiu.mjs`: 38 CFR 4.25, 4.26 and 4.16(a), tested against all 684 cells of the printed table.
+- `src/va/thresholds.mjs`: what changes at each rating, federal entries cited to the regulation and four Colorado entries cited to the state agency pages.
+- `src/va/corpus.mjs`, `answer.mjs`, `functions/api/va-ask.js`: the answer agent. The whole corpus goes with every question. Answers are checked before they are shown, rewritten once if they fail, and refused if they fail again.
+- `src/va/presumptive.mjs`: presumptive lists from 38 CFR 3.307, 3.309 and 3.320, using the regulation's condition names.
+- `src/va/letter.mjs`, `functions/api/va-letter.js`: the decision letter reader. Order of operations is the design: redact in the browser, read with patterns in the browser, and only on request send the redacted text to a model, keeping nothing the letter does not back. The endpoint logs counts only. The patterns follow the standard wording of rating decisions and have not been tested on a wide range of real letters.
+
+To add a passage or a list, read it on eCFR and copy it with its citation. Nothing in these files is written from memory.
+
 ## Contact form
 
 The form appears when `formEndpoint` is set in *Site settings*. Free option: create an access key at web3forms.com, then set `formEndpoint` to `https://api.web3forms.com/submit` and `formAccessKey` to your key. Until then, the contact page shows email only.
