@@ -47,7 +47,7 @@ const schema = [
       <p class="lede">VA disability ratings do not add up. 50 percent and 30 percent pay as 70, not 80. This works the combination the way <a href={`${CFR}/section-4.25`}>38 CFR 4.25</a> and <a href={`${CFR}/section-4.26`}>38 CFR 4.26</a> require and shows every step, so you can check it against your decision letter.</p>
     </header>
 
-    <h2 class="vac-jump">Wondering if you qualify for disability? <a href="#eligibility">Can I get disability at all?</a></h2>
+    <h2 class="vac-jump">Wondering if you qualify for disability? <a href="/va-disability-eligibility/">Can I get disability at all?</a></h2>
 
     <form id="vac-form" class="vac-form">
       <h2 class="vac-h">Your ratings</h2>
@@ -65,28 +65,6 @@ const schema = [
     </form>
 
     <section id="vac-out" class="vac-out" aria-live="polite"></section>
-
-    <section id="eligibility" class="vac-qa" aria-labelledby="vac-qa-h">
-      <h2 id="vac-qa-h">Can I get disability at all?</h2>
-      <p class="vac-qa-lede">The rating arithmetic above only matters once something is service connected. Most people are stuck a step earlier, on whether they can claim at all. Ask about eligibility or the process and you get an answer from the text of Title 38, with the section cited so you can read it yourself.</p>
-
-      <p class="vac-qa-myth"><strong>The most common wrong belief, first:</strong> that a condition has to appear in your service medical records. It does not. 38 CFR 3.303(d) says service connection "may be granted for any disease diagnosed after discharge, when all the evidence, including that pertinent to service, establishes that the disease was incurred in service." Records help a great deal. Their absence is not the end of a claim.</p>
-
-      <form id="vaq-form" class="vaq-form">
-        <label class="vac-sr" for="vaq-q">Your question</label>
-        <input id="vaq-q" type="text" maxlength="400" autocomplete="off" placeholder="Can I claim something that is not in my records?" />
-        <button class="btn" type="submit">Ask</button>
-      </form>
-      <ul id="vaq-suggest" class="vaq-suggest"></ul>
-      <div id="vaq-out" class="vaq-out" aria-live="polite"></div>
-      <p class="meta">Answers come only from the sections of Title 38 listed at the foot of this page. It will not predict whether a claim succeeds, what rating a condition would get, or what to claim. Nobody can tell you that from a web page, and an answer that tried would be worth less than nothing.</p>
-    </section>
-
-    <section class="vac-next" aria-labelledby="vac-next-h">
-      <h2 id="vac-next-h">Where to actually go</h2>
-      <ol id="vac-links" class="vac-links"></ol>
-      <p class="meta">A VA accredited representative is free. A Veterans Service Organization can see your records and act on your behalf, which no website can do. If you read one thing on this page, read 38 CFR 3.155(b): filing an intent to file sets the date your claim counts from, and you then have a year to put the full claim together.</p>
-    </section>
 
     <section class="vac-about">
       <h2>The detail, if you want it</h2>
@@ -133,18 +111,13 @@ const schema = [
         <summary>What this page is and is not</summary>
         <div class="prose">
           <p>The calculator is arithmetic applied to ratings the VA has already assigned. It does not decide what rating any condition should get, which is the part that actually determines your compensation, and it cannot see your evidence, your effective dates or your file. The VA's own decision governs.</p>
-          <p class="meta">Nothing you type into the calculator leaves your browser: that part is the regulation's arithmetic running on your device, with no server call and no logging. Questions in the box above are sent to Anthropic to generate the answer. The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/va/rating.mjs">calculator</a> and the <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/va/corpus.mjs">passages behind the answers</a> are public. The arithmetic is tested against all 684 cells of the printed table in 4.25 and every worked example in 4.25, 4.26 and 4.16.</p>
+          <p class="meta">Nothing you type into the calculator leaves your browser: that part is the regulation's arithmetic running on your device, with no server call and no logging. The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/va/rating.mjs">code</a> is public. The arithmetic is tested against all 684 cells of the printed table in 4.25 and every worked example in 4.25, 4.26 and 4.16.</p>
         </div>
       </details>
 
-      <details class="vac-d">
-        <summary>Every section this page uses</summary>
-        <div class="prose">
-          <ul id="vac-corpus" class="vac-corpus"></ul>
-        </div>
-      </details>
     </section>
 
+    <p class="vac-disclaimer">This site is not affiliated with, endorsed by, or operated by the U.S. Department of Veterans Affairs. It is an independent tool built by an Army veteran.</p>
     <noscript><p class="meta">This calculator needs JavaScript.</p></noscript>
   </div>
 </Base>
@@ -153,7 +126,6 @@ const schema = [
   import { combinedRating, naiveGap, nextStep } from '../va/rating.mjs';
   import { tdiuThreshold } from '../va/tdiu.mjs';
   import { thresholdsFor } from '../va/thresholds.mjs';
-  import { CORPUS, LINKS, SUGGESTED } from '../va/answer.mjs';
 
   const rows = document.getElementById('vac-rows');
   const out = document.getElementById('vac-out');
@@ -335,111 +307,6 @@ const schema = [
   addRow(50);
   addRow(30);
   render();
-
-  // ---- where to go, and the sections behind the answers ----
-  const links = document.getElementById('vac-links');
-  for (const l of LINKS) {
-    const li = el('li');
-    const a = el('a', '', l.label);
-    a.href = l.url;
-    li.append(a, el('p', 'meta', l.note));
-    links.append(li);
-  }
-  const corpus = document.getElementById('vac-corpus');
-  for (const c of CORPUS) {
-    const li = el('li');
-    const a = el('a', '', c.cite);
-    a.href = c.url;
-    li.append(a, document.createTextNode(` — ${c.topic}`));
-    corpus.append(li);
-  }
-
-  // ---- the eligibility question box ----
-  const qForm = document.getElementById('vaq-form');
-  const qInput = document.getElementById('vaq-q');
-  const qOut = document.getElementById('vaq-out');
-  const qBtn = qForm.querySelector('button');
-  const suggest = document.getElementById('vaq-suggest');
-  let asking = false;
-  let history = [];
-
-  for (const q of SUGGESTED) {
-    const li = el('li');
-    const b = el('button', 'vaq-chip', q);
-    b.type = 'button';
-    b.addEventListener('click', () => {
-      qInput.value = q;
-      ask(q);
-    });
-    li.append(b);
-    suggest.append(li);
-  }
-
-  // Answers arrive whole and already checked, so they are rendered as text
-  // with light paragraph breaks. Nothing from the model becomes markup.
-  function showAnswer(text, sources) {
-    const box = el('div', 'vaq-answer');
-    for (const para of text.split(/\n{2,}/)) if (para.trim()) box.append(el('p', '', para.trim()));
-    if (sources?.length) {
-      const list = el('p', 'meta vaq-sources');
-      list.append(document.createTextNode('Sources: '));
-      sources.forEach((s, i) => {
-        const a = el('a', '', s.cite);
-        a.href = s.url;
-        if (i) list.append(document.createTextNode(', '));
-        list.append(a);
-      });
-      box.append(list);
-    }
-    qOut.replaceChildren(box);
-  }
-
-  async function ask(question) {
-    if (asking || !question.trim()) return;
-    asking = true;
-    qBtn.disabled = true;
-    qBtn.textContent = 'Asking…';
-    qOut.replaceChildren(el('p', 'vaq-wait', 'Reading the regulations…'));
-    try {
-      const res = await fetch('/api/va-ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question, history }) });
-      if (!(res.headers.get('content-type') || '').includes('text/event-stream')) {
-        const data = await res.json().catch(() => ({}));
-        qOut.replaceChildren(el('p', 'vaq-bad', data.error || 'That did not work. Try again in a moment.'));
-      } else {
-        const text = await new Response(res.body).text();
-        const blocks = text.split('\n\n').filter(Boolean);
-        let handled = false;
-        for (const block of blocks) {
-          const ev = block.match(/^event: (.+)$/m);
-          const da = block.match(/^data: (.+)$/m);
-          if (!ev || !da) continue;
-          const data = JSON.parse(da[1]);
-          handled = true;
-          if (ev[1] === 'answer') {
-            showAnswer(data.text, data.sources);
-            history = [...history, { role: 'user', content: question }, { role: 'assistant', content: data.text }].slice(-4);
-          } else if (ev[1] === 'refused') {
-            const p = el('p', 'vaq-bad', data.message + ' ');
-            const a = el('a', '', 'Find one near you');
-            a.href = data.link;
-            p.append(a);
-            qOut.replaceChildren(p);
-          } else qOut.replaceChildren(el('p', 'vaq-bad', data.message || 'Something went wrong.'));
-        }
-        if (!handled) qOut.replaceChildren(el('p', 'vaq-bad', 'The answer was cut off. Try again.'));
-      }
-    } catch {
-      qOut.replaceChildren(el('p', 'vaq-bad', 'Something went wrong. Try again in a moment.'));
-    }
-    asking = false;
-    qBtn.disabled = false;
-    qBtn.textContent = 'Ask';
-  }
-
-  qForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    ask(qInput.value);
-  });
 </script>
 
 <style is:global>
@@ -484,32 +351,14 @@ const schema = [
   .vac-jump { margin-top: 1.5rem; padding: .85rem 1.1rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); font-family: var(--font-ui); font-size: var(--step-0); font-weight: 700; max-width: var(--measure); }
   .vac-jump a { color: var(--fjord); }
   #eligibility { scroll-margin-top: 5rem; }
+  .vac-disclaimer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); max-width: var(--measure); }
   .vac-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .vac-about { margin-top: 3rem; }
-  .vac-about > h2, .vac-qa h2, .vac-next h2 { font-size: var(--step-2); margin-bottom: .5rem; }
-  .vac-qa, .vac-next { margin-top: 3rem; }
-  .vac-qa-lede { max-width: var(--measure); }
-  .vac-qa-myth { max-width: var(--measure); margin-top: 1rem; padding: .9rem 1.1rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); }
-  .vaq-form { display: flex; gap: .6rem; margin-top: 1.25rem; }
-  .vaq-form input { flex: 1; min-width: 0; font: inherit; font-family: var(--font-ui); padding: .75rem .9rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); color: var(--ink); }
-  .vaq-form .btn { cursor: pointer; }
-  .vaq-form button:disabled { opacity: .55; cursor: default; }
-  .vaq-suggest { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0 0; padding: 0; }
-  .vaq-chip { font-family: var(--font-ui); font-size: .78rem; padding: .35rem .7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--surface); color: var(--ink-soft); cursor: pointer; }
-  .vaq-chip:hover { border-color: var(--fjord); color: var(--fjord); }
-  .vaq-out:not(:empty) { margin-top: 1.25rem; }
-  .vaq-answer { max-width: var(--measure); padding: 1.1rem 1.25rem; border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--surface); }
-  .vaq-answer p { margin: 0 0 .7rem; }
-  .vaq-answer p:last-child { margin-bottom: 0; }
-  .vaq-wait { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--step--1); }
-  .vaq-bad { max-width: var(--measure); padding: .9rem 1.1rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); }
-  .vac-links { margin: 1rem 0 0; padding-left: 1.3rem; display: grid; gap: .7rem; max-width: var(--measure); }
-  .vac-links .meta { margin: .1rem 0 0; }
+  .vac-about > h2 { font-size: var(--step-2); margin-bottom: .5rem; }
   .vac-d { border-bottom: 1px solid var(--rule); }
   .vac-d summary { cursor: pointer; padding: .85rem 0; font-family: var(--font-ui); font-weight: 600; list-style-position: outside; }
   .vac-d summary:hover { color: var(--fjord); }
   .vac-d[open] summary { color: var(--fjord); }
   .vac-d > div { padding: 0 0 1.1rem; }
-  .vac-corpus { display: grid; gap: .3rem; }
   @media (max-width: 560px) { .vac-field, .vac-field-wide { flex: 1 1 100%; } .vac-row { gap: .5rem; } }
 </style>

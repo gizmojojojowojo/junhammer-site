@@ -26,6 +26,7 @@ What you must never do:
 - Never give claim strategy: what to claim, what order, how to word it, whether to appeal.
 - Never state a deadline, a payment amount, a rate or a form number. None of those are in your sources.
 - Never say "you qualify", "you are eligible", or "you should get". The VA decides. You explain what the rules say.
+- The presumptive lists you have are the regulation's. Congress has added conditions by statute that may not be in them, so when someone asks whether a condition is presumptive and it is not listed, say it is not on the lists you can see and that the VA's own list may be longer. Never say a condition is not presumptive.
 - If the passages do not cover it, say so and point to an accredited representative. Do not answer from general knowledge, ever, even if you are confident.
 
 How to answer:
@@ -61,16 +62,27 @@ export function parseRequest(body) {
   return { question, history };
 }
 
-const CITES = new Set(CORPUS.map((c) => c.cite));
+/**
+ * Maps a citation as the model wrote it to a passage in the corpus. A deeper
+ * paragraph of a known passage ("38 CFR 3.320(a)(2)" for "38 CFR 3.320(a)")
+ * and the bare section of one ("38 CFR 3.320") are both real citations to
+ * text the model was given, so both resolve. Anything else is invented.
+ */
+export function resolveCite(cited) {
+  const c = String(cited || '').replace(/\s+/g, ' ').trim();
+  return CORPUS.find((p) => p.cite === c) || CORPUS.find((p) => c.startsWith(`${p.cite}(`)) || CORPUS.find((p) => p.cite.startsWith(`${c}(`)) || null;
+}
+
+const citedIn = (text) => [...text.matchAll(/\[(38 [^\]]+)\]/g)].map((m) => m[1]);
 
 /**
- * Checks an answer before it is shown. Citations must name a section actually
- * in the corpus, and phrasing that decides a veteran's case is not allowed
+ * Checks an answer before it is shown. Citations must resolve to a passage in
+ * the corpus, and phrasing that decides a veteran's case is not allowed
  * through however well the answer reads.
  */
 export function checkAnswer(text) {
-  const cited = [...text.matchAll(/\[(38 [^\]]+)\]/g)].map((m) => m[1]);
-  const unknown = cited.filter((c) => !CITES.has(c));
+  const cited = citedIn(text);
+  const unknown = cited.filter((c) => !resolveCite(c));
   const decides = /\byou (?:do )?(?:qualify|are eligible|are entitled|will (?:get|receive|be awarded))\b|\byour claim will\b|\byou should (?:get|receive) (?:a )?\d+ percent\b/i.test(text);
   return {
     ok: unknown.length === 0 && !decides,
@@ -80,16 +92,26 @@ export function checkAnswer(text) {
   };
 }
 
+/** What to tell the model when its first answer fails the check. */
+export function correction(check) {
+  const parts = [];
+  if (check.unknownCitations.length) parts.push(`You cited ${check.unknownCitations.join(', ')}, which is not one of the sections you were given. Cite only the sections provided, written exactly as they appear in brackets.`);
+  if (check.decidesForTheVeteran) parts.push('You told the reader they qualify, are eligible, or will receive something. Only the VA decides that. Say what the regulation provides instead, for example "the regulation treats this as service connected when..." rather than "you qualify".');
+  return `${parts.join(' ')} Rewrite the whole answer with that fixed.`;
+}
+
 /** The sources an answer used, for the links under it. */
 export function sourcesFor(text) {
-  const cited = new Set([...text.matchAll(/\[(38 [^\]]+)\]/g)].map((m) => m[1]));
-  return CORPUS.filter((c) => cited.has(c.cite)).map(({ cite, url, topic }) => ({ cite, url, topic }));
+  const used = new Set(citedIn(text).map((c) => resolveCite(c)?.id).filter(Boolean));
+  return CORPUS.filter((c) => used.has(c.id)).map(({ cite, url, topic }) => ({ cite, url, topic }));
 }
 
 export const SUGGESTED = [
   'Can I claim something that is not in my service medical records?',
   'What does service connected actually mean?',
   'I never went to sick call. Does that stop me claiming?',
+  'I served in Afghanistan. What is presumed service connected?',
+  'What is a presumptive condition?',
   'What are the steps to file a claim?',
   'What is an intent to file and why does the date matter?',
   'Who can help me file, and does it cost anything?',

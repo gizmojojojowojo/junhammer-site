@@ -1,7 +1,7 @@
 // Run: npm test
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CORPUS, LINKS, SUGGESTED, SYSTEM, buildMessages, checkAnswer, parseRequest, sourcesFor } from '../src/va/answer.mjs';
+import { CORPUS, LINKS, SUGGESTED, SYSTEM, buildMessages, checkAnswer, correction, parseRequest, resolveCite, sourcesFor } from '../src/va/answer.mjs';
 
 test('the corpus is complete and every passage is citable', () => {
   assert.ok(CORPUS.length >= 15);
@@ -182,4 +182,68 @@ test('endpoint: a reply cut off at the token ceiling is not shown', async () => 
   } finally {
     globalThis.fetch = real;
   }
+});
+
+// ---- presumptive conditions ----
+const { PRESUMPTIVE, NOT_COVERED, findCondition } = await import('../src/va/presumptive.mjs');
+
+test('every presumptive group cites its section and carries the rule', () => {
+  assert.deepEqual(PRESUMPTIVE.map((p) => p.id), ['particulate', 'chronic', 'herbicide', 'lejeune']);
+  for (const p of PRESUMPTIVE) {
+    assert.match(p.cite, /^38 CFR 3\.3/);
+    assert.match(p.url, /ecfr\.gov/);
+    assert.ok(p.service.length > 30 && p.rule.length > 30, `${p.id} states who it covers and what the rule is`);
+    assert.ok(CORPUS.some((c) => c.cite === p.cite), `${p.id} is backed by a passage the answer agent can cite`);
+  }
+  assert.equal(PRESUMPTIVE.find((p) => p.id === 'chronic').groups[0].conditions.length, 41);
+  assert.equal(PRESUMPTIVE.find((p) => p.id === 'lejeune').groups[0].conditions.length, 8);
+  assert.ok(NOT_COVERED.some((n) => /statute/.test(n)), 'the lookup says statute-added conditions may be missing');
+});
+
+test('a condition lookup finds the list and never more than that', () => {
+  const asthma = findCondition('asthma');
+  assert.equal(asthma.length, 1);
+  assert.equal(asthma[0].id, 'particulate');
+  assert.match(asthma[0].service, /Afghanistan/);
+  // Some conditions sit on more than one list, with different rules.
+  assert.deepEqual(findCondition("Parkinson's disease").map((m) => m.id).sort(), ['herbicide', 'lejeune']);
+  assert.ok(findCondition('lung carcinoma').length >= 3, 'word order does not matter');
+  assert.equal(findCondition('arthritis')[0].id, 'chronic');
+  assert.deepEqual(findCondition('knee pain'), []);
+  assert.deepEqual(findCondition('as'), [], 'too short to mean anything');
+  assert.deepEqual(findCondition(null), []);
+});
+
+test('a deeper paragraph or the bare section of a known passage is a real citation', () => {
+  assert.equal(resolveCite('38 CFR 3.320(a)(2)').cite, '38 CFR 3.320(a)');
+  assert.equal(resolveCite('38 CFR 3.320').cite, '38 CFR 3.320(a)');
+  assert.equal(resolveCite('38 CFR 3.303(d)').cite, '38 CFR 3.303(d)');
+  assert.equal(resolveCite('38 CFR 9.999'), null);
+  assert.equal(resolveCite('38 CFR 3.32'), null, 'a prefix of a section number is not the section');
+  const ok = checkAnswer('Sinusitis is on the list [38 CFR 3.320(a)(2)] for qualifying service [38 CFR 3.320(a)(5)].');
+  assert.equal(ok.ok, true);
+  assert.deepEqual(sourcesFor('See [38 CFR 3.320(a)(2)] and [38 CFR 3.320(a)(5)].').map((x) => x.cite), ['38 CFR 3.320(a)'], 'both resolve to the one passage');
+});
+
+test('a failed first answer is rewritten once before anything is refused', async () => {
+  const real = globalThis.fetch;
+  const seen = [];
+  const replies = ['Good news, you qualify under [38 CFR 3.320(a)].', 'The regulation treats sinusitis as service connected for that service [38 CFR 3.320(a)].'];
+  globalThis.fetch = async (url, init) => {
+    seen.push(JSON.parse(init.body));
+    return Response.json({ content: [{ type: 'text', text: replies[seen.length - 1] }], usage: {} });
+  };
+  try {
+    const c = ctx({ question: 'Is my sinusitis presumptive?' }, { ANTHROPIC_API_KEY: 'k' });
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out[0].event, 'answer');
+    assert.match(out[0].data.text, /regulation treats/);
+    assert.equal(seen.length, 2);
+    assert.match(seen[1].messages.at(-1).content, /Only the VA decides that/);
+    assert.ok(!JSON.stringify(out).includes('you qualify'));
+  } finally {
+    globalThis.fetch = real;
+  }
+  assert.match(correction({ unknownCitations: ['38 CFR 9.999'], decidesForTheVeteran: false }), /38 CFR 9\.999/);
 });
