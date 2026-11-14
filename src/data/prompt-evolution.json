@@ -1,0 +1,14 @@
+{
+  "ranAt": null,
+  "commit": "",
+  "answerModel": "claude-haiku-5-5",
+  "writerModel": "claude-sonnet-5-5",
+  "trainQuestions": 0,
+  "holdoutQuestions": 0,
+  "offTopicQuestions": 0,
+  "generations": [],
+  "scores": null,
+  "verdict": null,
+  "winner": null,
+  "modelCalls": 0
+}

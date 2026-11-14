@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import data from '../../data/prompt-evolution.json';
+
+const ran = Boolean(data.ranAt);
+const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
+const day = (iso: string) => new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Denver' });
+const repo = 'https://github.com/gizmojojojowojo/junhammer-site';
+const gens = data.generations ?? [];
+// Scale the bars against the range actually used, so small differences stay visible.
+const all = gens.flatMap((g) => [g.best, ...g.candidates.map((c) => c.score)]);
+const low = all.length ? Math.max(0, Math.min(...all) - 0.03) : 0;
+const high = all.length ? Math.min(1, Math.max(...all) + 0.01) : 1;
+const bar = (score: number) => `${Math.round(((score - low) / (high - low || 1)) * 100)}%`;
+---
+<Base
+  title="Prompt evolution"
+  seoTitle="A Prompt That Rewrites Itself, Measured Against a Holdout"
+  description="An optimization loop writes variations of this site's answering prompt, scores each against a graded question set, and reports whether the winner's gain survived on questions it never trained on."
+>
+  <div class="narrow eve">
+    <header class="page-head">
+      <h1>Prompt evolution</h1>
+      <p class="lede">A loop writes variations of the prompt behind <a href="/ask/">Smart Search</a>, grades each one against the same test set the <a href="/ask/evals/">evals</a> use, and keeps the best. A share of the questions is held back, so the last number says whether the gain was real or fitted to the test.</p>
+      {ran && <p class="meta">Last run {day(data.ranAt)} · {data.trainQuestions} training questions, {data.holdoutQuestions} held back · answers from <code>{data.answerModel}</code>, rewrites from <code>{data.writerModel}</code> · {data.modelCalls.toLocaleString('en-US')} answer calls</p>}
+    </header>
+
+    {!ran ? (
+      <p class="eve-waiting">This has not run yet. The results appear here after the first run.</p>
+    ) : (
+      <>
+        <p class="eve-headline">
+          <strong>{pct(data.scores.winner.holdout)}</strong> on held-back questions, against <strong>{pct(data.scores.baseline.holdout)}</strong> for the prompt in production. {data.verdict.reads}
+        </p>
+
+        <section>
+          <h2>Generation by generation</h2>
+          <p>Each generation, the writer model sees the best prompts so far and the answers that failed, then writes {data.generations[1]?.candidates.length ?? 4} new versions. Every version is scored on the training questions only.</p>
+          <ol class="eve-gens">
+            {gens.map((g) => (
+              <li>
+                <div class="eve-gen-head">
+                  <h3>{g.generation === 0 ? 'Generation 0, the prompt in production' : `Generation ${g.generation}`}</h3>
+                  <span class="eve-best">best {pct(g.best)}</span>
+                </div>
+                <ul class="eve-cands">
+                  {g.candidates.map((c) => (
+                    <li>
+                      <div class="eve-cand-top"><span>{c.change}</span><span class="eve-score">{pct(c.score)}</span></div>
+                      <div class="eve-bar" aria-hidden="true"><span style={`width:${bar(c.score)}`}></span></div>
+                      <p class="meta">{c.chars.toLocaleString('en-US')} characters</p>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
+          <p class="meta">Bars are scaled to the range of scores in this run, not from zero, so small differences stay visible.</p>
+        </section>
+
+        <section>
+          <h2>Did it transfer?</h2>
+          <p>A search that is allowed to look at the questions it is scored on will find something that suits those questions. The only test that means anything is the one it never saw.</p>
+          <table class="eve-table">
+            <thead><tr><th scope="col">Prompt</th><th scope="col">Training questions</th><th scope="col">Held back</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">In production</th><td>{pct(data.scores.baseline.train)}</td><td>{pct(data.scores.baseline.holdout)}</td></tr>
+              <tr><th scope="row">Winner{data.winner.generation ? `, generation ${data.winner.generation}` : ''}</th><td>{pct(data.scores.winner.train)}</td><td>{pct(data.scores.winner.holdout)}</td></tr>
+              <tr class="eve-gap"><th scope="row">Difference</th><td>{data.verdict.trainGain >= 0 ? '+' : ''}{pct(data.verdict.trainGain)}</td><td>{data.verdict.holdoutGain >= 0 ? '+' : ''}{pct(data.verdict.holdoutGain)}</td></tr>
+            </tbody>
+          </table>
+          <p>{data.verdict.reads}</p>
+          <p class="meta">{data.winner.adopted ? 'The winner is now the prompt in production.' : data.winner.generation === 0 ? 'The production prompt won its own contest, so nothing changed.' : 'The winner has not been adopted. A prompt is only swapped in by hand, after the holdout supports it.'}</p>
+        </section>
+      </>
+    )}
+
+    <section class="prose eve-about">
+      <h2>How the scoring works</h2>
+      <p>Every answer is graded by the same five rules as the <a href="/ask/evals/">evals</a>: it cites a source, every citation number is real, at least one cited page holds the answer, every link came from the sources, and the answer stays under 220 words. Off-topic questions add one more check: did the answer decline. A candidate's score is the share of all those checks it passed. No model judges another model, so the same answer always gets the same score and the loop cannot drift toward what a judge happens to like.</p>
+      <p>Retrieval is identical for every candidate. Only the prompt changes, so the difference between two scores is the prompt and nothing else.</p>
+
+      <h2>Why the holdout matters more than the winner</h2>
+      <p>Optimizing a prompt against a fixed set of questions is a search, and searches find shortcuts. A prompt can pick up habits that suit these sixty questions and help nothing else. Splitting the questions, choosing on one half and reporting on the other, is what separates a real improvement from a number that went up. Running it and publishing the result either way is the point. The <a href={`${repo}/blob/main/scripts/optimize/run.mjs`}>loop</a>, its <a href={`${repo}/blob/main/scripts/optimize/lib.mjs`}>scoring</a> and the <a href={`${repo}/blob/main/evals/ask/questions.json`}>questions</a> are public.</p>
+      <p>See <a href="/tools/">the other tools here</a>, or <a href="/services/ai-engineering/">AI engineering</a> for this kind of work on your own system.</p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .eve { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .eve section { margin-top: 2.75rem; }
+  .eve h2 { font-size: var(--step-2); margin-bottom: .6rem; }
+  .eve-waiting, .eve-headline { margin-top: 1.5rem; padding: 1rem 1.2rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); }
+  .eve-headline { font-size: var(--step-0); line-height: 1.5; }
+  .eve-gens { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 1.9rem; }
+  .eve-gen-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--rule); padding-bottom: .3rem; }
+  .eve-gen-head h3 { font-size: var(--step-0); margin: 0; }
+  .eve-best { font-family: var(--font-ui); font-size: var(--step--1); font-weight: 600; color: var(--fjord); font-variant-numeric: tabular-nums; }
+  .eve-cands { list-style: none; margin: .8rem 0 0; padding: 0; display: grid; gap: .9rem; }
+  .eve-cand-top { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--font-ui); font-size: var(--step--1); }
+  .eve-score { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  .eve-bar { height: .45rem; margin-top: .3rem; border-radius: 999px; background: var(--rule); overflow: hidden; }
+  .eve-bar span { display: block; height: 100%; border-radius: 999px; background: var(--fjord); }
+  .eve-cands .meta { margin: .15rem 0 0; }
+  .eve-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-ui); font-size: var(--step--1); }
+  .eve-table th, .eve-table td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid var(--rule); }
+  .eve-table thead th { color: var(--ink-soft); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
+  .eve-table td { font-variant-numeric: tabular-nums; }
+  .eve-gap { font-weight: 700; }
+  .eve-about { margin-top: 3rem; }
+  code { font-size: .9em; }
+</style>

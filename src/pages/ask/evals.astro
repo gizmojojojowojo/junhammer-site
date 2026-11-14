@@ -123,6 +123,7 @@ const rankLabel = (rank: number) => (rank < 0 ? 'missed' : `#${rank + 1}`);
     <section class="prose">
       <h2>How this works</h2>
       <p>A GitHub Actions workflow runs on every push. It builds the search index from the site's content, runs the test set, writes the results to a JSON file and commits it. That commit rebuilds this page. The <a href={`${repo}/blob/main/evals/ask/questions.json`}>questions</a>, the <a href={`${repo}/blob/main/src/ask/grade.mjs`}>grading rules</a> and the <a href={`${repo}/blob/main/.github/workflows/ask-evals.yml`}>workflow</a> are public.</p>
+      <p>These same rules score the candidates in <a href="/ask/prompt-evolution/">prompt evolution</a>, where a loop rewrites the prompt and checks whether the gain survives on held-back questions.</p>
       <p>The rules check what a script can verify: that an answer cites a source, that each citation points at a passage the model was given, that at least one cited page holds the answer, that every link came from the sources, and that the answer stays short. They do not judge writing quality. Read <a href="/work/site-ai-search/">the case study</a> for how the feature is built.</p>
     </section>
   </div>
