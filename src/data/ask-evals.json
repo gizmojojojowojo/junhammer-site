@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-14T14:25:20.953Z",
-  "commit": "05a1354",
+  "ranAt": "2026-11-14T14:34:13.592Z",
+  "commit": "58166bd",
   "retrieval": {
     "questions": 60,
     "passages": 732,
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 53,
+    "passedAll": 49,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 60
+        "passed": 56
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 55
+        "passed": 53
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 58
+        "passed": 56
       },
       {
         "id": "short",
@@ -44,11 +44,11 @@
       }
     ],
     "offTopicReachedModel": 4,
-    "offTopicDeclined": 2,
+    "offTopicDeclined": 3,
     "avgTokensIn": 2366,
-    "avgTokensOut": 305,
-    "ranAt": "2026-11-14T14:25:20.953Z",
-    "commit": "05a1354"
+    "avgTokensOut": 321,
+    "ranAt": "2026-11-14T14:34:13.592Z",
+    "commit": "58166bd"
   },
   "questions": [
     {
@@ -60,11 +60,8 @@
     {
       "q": "What does generative engine optimization mean?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations. It involves optimizing your digital footprint so AI systems recognize your brand as authoritative, relevant, and trustworthy, which covers content strategy, entity optimization, reputation signals, and technical implementation [6]. Joe describes GEO as broader and longer term than AEO, focused on making a brand a recognized entity that AI systems mention by name [5]. Joe also notes that GEO depends on solid technical SEO, since AI search tools need content to be accessible and properly structured [8]."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Who came up with the term GEO?",
@@ -105,8 +102,12 @@
     {
       "q": "How do I get featured in Google AI Overviews?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Joe's guide on AI Overviews says content should answer specific questions thoroughly, offer insights not readily available elsewhere, and be"
     },
     {
       "q": "What is semantic search?",
@@ -123,11 +124,8 @@
     {
       "q": "What is E-E-A-T and how do I show it to AI systems?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "E-E-A-T stands for Experience, Expertise, Authoritativeness and Trustworthiness, and Google's quality guidelines use these factors to judge content quality [3]. To show it to AI systems, the site suggests using structured data such as schema markup for author information, professional qualifications and organizational affiliations, since credentials in flowing prose may not register as clearly [1]. Other steps include citing authoritative sources, building a comprehensive resource center, and earning links from respected sites in your industry [3]. Joe's site also notes that citation patterns and entity connections to authoritative organizations help AI systems judge expertise and trustworth"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Which schema markup matters for medical pages?",
@@ -186,14 +184,21 @@
     {
       "q": "How does AEO reporting differ from SEO reporting?",
       "rank": 3,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ]
     },
     {
       "q": "What should I look for when hiring an AEO consultant?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "This site's guide on [what to look"
     },
     {
       "q": "What am I actually paying for with AEO services?",
@@ -202,7 +207,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe's AEO service covers five areas:\n\n- **Visibility baseline:** choosing the questions your buyers ask and checking which brands each AI assistant cites today [3].\n- **Content structure:** rebuilding pages around direct, self-contained answers and question-"
+      "answer": "Joe's AEO service covers five areas:\n\n- **Visibility baseline:** Joe picks the questions your buyers or patients ask and checks which brands each AI assistant cites today. [3]\n- **Content structure:** Pages are rebuilt around direct, self-contained answers and question-based headings. [3]\n- **Entities and schema:** This includes organization, person, service, and medical schema, plus off-site signals that tell AI systems who you are. [3]\n- **Technical access:** This covers AI crawler rules, server-rendered content, llms.txt, and page speed. [3]\n- **Reporting:** Citation share across assistants is tracked monthly next to your SEO numbers. [3]\n\nThis site doesn't list prices, so it doesn"
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -259,13 +264,16 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. His site lists Denver as his base and says he works with teams anywhere in the US [8]. He also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, which are in Colorado's south metro area [5]."
+      "answer": "Joe Unhammer is based in Colorado. He works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [5]. His contact page lists Denver as his base and says he works with teams anywhere in the US [8]."
     },
     {
       "q": "What AI tools has Joe built?",
       "rank": 3,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Joe has built LandmAIn, an AI land intelligence platform for data center and energy site selection in Colorado, which runs from regional search to parcel-level analysis and ties every finding to a dated, inspectable source [2][5]. He has also designed and built AI chat functions for hospital systems that help patients find services and care information [7]. On the tooling side, he builds agentic AI tools, Claude skills, MCP connectors, plugins and browser extensions, and automated GA4 and Search Console reporting [4][6]. For details on a specific project or to discuss your own needs, see [/contact/](/contact/)."
     },
     {
       "q": "What is LandmAIn?",
@@ -300,8 +308,11 @@
     {
       "q": "Can Joe build an MCP server for Claude?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes. Joe works with MCP servers, which are an open standard that let Claude connect to outside tools and data. An MCP server can let Claude query Search Console, read a reporting database or call an internal API, within limits you set [1]. Joe builds Claude skills and MCP connectors as part of his AI engineering work [6], and he builds mostly with Claude and MCP [4]. To discuss a project, use the [contact page](/contact/)."
     },
     {
       "q": "What does an AI agent project involve?",
@@ -312,8 +323,11 @@
     {
       "q": "Can you automate our marketing reports?",
       "rank": 2,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes, this site describes automating marketing reports. Joe's AI automation service pulls GA4 and Search Console data, summarizes it, and formats it into the deliverable your clients or leadership expect [3]. The Claude & MCP Implementation service also covers MCP connections to Search Console, GA4 and reporting data [8]. The site notes that a person still reviews the output before it goes out [1]. For pricing or to discuss your setup, see [the contact page](/contact/)."
     },
     {
       "q": "Do you offer AI strategy consulting?",
@@ -322,7 +336,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, the rules, and how you will measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. For a conversation about your situation, see the [contact page](/contact/)."
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. For working with Joe, visit [contact](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -357,17 +371,17 @@
     {
       "q": "how does it take for seo to work?",
       "rank": 0,
-      "pass": true,
-      "failed": []
-    },
-    {
-      "q": "seo how long",
-      "rank": 4,
       "pass": false,
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Per this site's FAQ, SEO is a long-term investment, and timelines depend on your starting point, competition, and objectives. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results are often visible at six to twelve months [1]. AI visibility (AEO and GEO) can shift faster because AI platforms update their knowledge bases [1]. For a timeline specific to your situation, see the contact page at /contact/."
+      "answer": "According to this site, most SEO sites see early movement in three to six months and compounding results in six to twelve. The timeline depends on competition, site health, and how much content needs to be built, and new sites in competitive fields take longer [6]. Joe sets quarterly milestones so progress is visible before rankings fully arrive [6]. You can learn more on the [SEO](/services/seo/) page."
+    },
+    {
+      "q": "seo how long",
+      "rank": 4,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "aeo vs geo",
@@ -420,17 +434,18 @@
     {
       "q": "what do you charge",
       "rank": 5,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "This site doesn't list Joe's rates. The [FAQ page](/faq/) covers pricing questions, but the excerpt I can see doesn't include any figures. For a quote, use the contact page at /contact/.\n\nJoe's general advice is to compare providers against the same written scope, including the number of priority pages, technical work, and reporting frequency [2]."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "keyword research",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Keyword research is still important, but this site says it should be supplemented with newer approaches, since tradit"
     }
   ],
   "semantic": {
