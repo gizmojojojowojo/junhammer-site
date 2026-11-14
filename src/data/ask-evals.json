@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-14T13:30:48.225Z",
-  "commit": "84fc773",
+  "ranAt": "2026-11-14T13:37:46.412Z",
+  "commit": "0d235e9",
   "retrieval": {
     "questions": 60,
     "passages": 732,
@@ -15,7 +15,7 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 50,
+    "passedAll": 52,
     "checks": [
       {
         "id": "cites",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 56
+        "passed": 55
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 54
+        "passed": 56
       },
       {
         "id": "short",
@@ -44,11 +44,11 @@
       }
     ],
     "offTopicReachedModel": 4,
-    "offTopicDeclined": 3,
+    "offTopicDeclined": 1,
     "avgTokensIn": 2366,
-    "avgTokensOut": 312,
-    "ranAt": "2026-11-14T13:30:48.224Z",
-    "commit": "84fc773"
+    "avgTokensOut": 314,
+    "ranAt": "2026-11-14T13:37:46.412Z",
+    "commit": "0d235e9"
   },
   "questions": [
     {
@@ -60,8 +60,11 @@
     {
       "q": "What does generative engine optimization mean?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations. It involves optimizing your digital footprint so AI systems recognize your brand as authoritative, relevant, and trustworthy, which covers content strategy, entity optimization, reputation signals, and technical implementation [6]. Joe describes GEO as broader and longer term than AEO, focused on making a brand a recognized entity that AI systems mention by name [5]."
     },
     {
       "q": "Who came up with the term GEO?",
@@ -78,11 +81,8 @@
     {
       "q": "Why isn't my content appearing in ChatGPT?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "The site has an article on this exact frustration. It says the causes tend to cluster around a handful of issues, and most don't require a technical background to fix [2]. The article is titled \"Why Your Content Isn't Showing Up in ChatGPT Answers\" [1]. More broadly, AI search engines build answers and pull in sources that say something useful, rather than ranking pages, so content has to be structured to be cited [4]. Common pitfalls include thin content, outdated information, and restricted content behind paywalls or registration [6]. For help with your specific site, you can reach Joe through [the contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do AI search engines pick which sites to cite?",
@@ -93,14 +93,20 @@
     {
       "q": "What is the 40 word rule?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "The 40-word rule is Joe's approach to structuring paragraphs so AI systems can cite them. He uses it to keep answer paragraphs short and self-contained, usually opening each page with a direct answer and question-style headings [4]. On this site, the rule is also described as the 40-word paragraph rule that lets AI systems extract content cleanly [5]. For more detail, see [The 40-Word Rule](/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/)."
     },
     {
       "q": "How should I write paragraphs so AI tools quote them?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "The site's guidance is to open each section with a question-style H2 or H3 heading, then write a definition block of 40 to 60 words that answers it directly, starting with the subject and a verb and avoiding preamble [2]. Expand with supporting evidence, examples, or data afterward, since that part can be longer than the answer block [2]. The site also notes that expert-attributed statistics help content get cited in AI retrieval [2]. If you want help applying this to your own site, you can reach Joe through the [contact page](/contact/)."
     },
     {
       "q": "How do I get featured in Google AI Overviews?",
@@ -123,20 +129,14 @@
     {
       "q": "What is E-E-A-T and how do I show it to AI systems?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "E-E-A-T stands for Experience, Expertise, Authoritativeness and Trustworthiness, and Google's guidelines use it to judge content quality [3][8]. AI search engines evaluate these signals computationally, so the ways to show them include the following:\n\n- **Structured data:** Schema markup that formats author information, professional qualifications and organizational affiliations gives AI systems machine-readable credentials, since credentials in flowing prose may not register as clearly [1].\n- **Citations:** Cite respected publications and primary research, and earn citations from authoritative sources, because AI systems analyze citation patterns in both directions [1][3].\n- **Author entiti"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Which schema markup matters for medical pages?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "For medical pages, this site recommends health-specific schema types, not just general Article and FAQ markup. MedicalWebPage, MedicalCondition, and Drug are named as examples [8].\n\nThe right combination depends on the page type:\n- **Condition education pages:** MedicalWebPage as the main type, MedicalCondition for the condition, Person for authors, and Article linking content to authors and publishers [2].\n- **Treatment comparisons:** MedicalWebPage, Drug, MedicalProcedure, and ItemList [2].\n- **Provider directories:** Physician, MedicalBusiness, LocalBusiness properties, and Review where appropriate [2].\n- **Symptom checkers:** MedicalWebPage, MedicalCondition, and MedicalSymptom [2].\n\nFor"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How can a small regional hospital compete in AI search?",
@@ -177,11 +177,8 @@
     {
       "q": "What are AI integration services?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "AI integration services go beyond a single automation. They cover the assessment, policy, tool selection, training, and measurement that make AI work across a business, with AI workflow automation being one part of them [1]. Cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, so a scoped proposal after an initial conversation is the most reliable way to get a number [2]. For questions about working with Joe on this, see the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Is SEO dead?",
@@ -206,9 +203,9 @@
       "rank": 0,
       "pass": false,
       "failed": [
-        "Cites a source",
         "Cites a page that holds the answer"
-      ]
+      ],
+      "answer": "Joe's AEO service covers five areas [3]:\n\n- **Visibility baseline:** choosing the questions"
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -237,11 +234,8 @@
     {
       "q": "What does a site audit cover?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "A technical SEO audit covers crawlability and indexation, site architecture and internal linking, page speed and Core Web Vitals, structured data, duplicate and thin content, international setup where relevant, and AI crawler access [4]. The result is a prioritized list of fixes ranked by impact and effort, rather than a dump of every warning a tool reports [4]. Joe also frames audits as integrated reviews of SEO and user experience, since changes in one area often affect the other [1]. For details on working with Joe, see the [technical SEO service page](/services/technical-seo/) or the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How should humans and AI work together on content?",
@@ -268,13 +262,16 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe is based in Denver, Colorado, and works with teams anywhere in the US [8]. He also serves businesses in the Denver metro area and Colorado's south metro, including Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial [5][7]."
+      "answer": "Joe Unhammer is based in Colorado. He works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [5]. His contact page lists Denver, Colorado as his base, with work for teams anywhere in the US [8]. You can get in touch via the [contact page](/contact/)."
     },
     {
       "q": "What AI tools has Joe built?",
       "rank": 3,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Joe has built several AI tools. He built LandmAIn, an AI land intelligence platform for data center and energy site selection, where every finding ties to a dated, inspectable source [5][6]. He has also designed and built AI chat functions for hospital systems to help patients find services and care information [7]. Beyond those, he builds AI agents, automations and Claude integrations [3], along with plugins, browser extensions and Claude skills that package SEO and AEO processes [4]. For details on working with Joe, see [the contact page](/contact/)."
     },
     {
       "q": "What is LandmAIn?",
@@ -327,11 +324,8 @@
     {
       "q": "Do you offer AI strategy consulting?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, the rules, and how to measure results [1]. He often starts with off-the-shelf tools configured well and recommends custom builds only where the workflow is specific to your business or the data must stay in your systems [2]. If you want to discuss a project, you can reach out through the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Can you help with a site migration?",
@@ -342,8 +336,11 @@
     {
       "q": "How do I get in touch about a project?",
       "rank": 1,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "You can email Joe at brubeckunhammer@gmail.com, or reach him on [LinkedIn](https://www.linkedin.com/in/junhammer/) [2]. To start a project, send what you need, your timeline, and your site or product URL, and expect a reply within two business days [2]. The [contact page](/contact/) has the same details and is the place to start [2]."
     },
     {
       "q": "Does Joe work with companies in Denver?",
@@ -372,11 +369,8 @@
     {
       "q": "seo how long",
       "rank": 4,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Joe's FAQ says SEO is a long-term investment, but timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth usually appears between three and six months, and substantial, compounding results often show at six to twelve months [1]. Visibility in AI systems for AEO and GEO can shift faster, since those platforms update their knowledge bases [1]. For more detail on a specific situation, visit /contact/."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "aeo vs geo",
@@ -431,9 +425,11 @@
       "rank": 5,
       "pass": false,
       "failed": [
-        "Cites a page that holds the answer"
+        "Cites a source",
+        "Cites a page that holds the answer",
+        "Uses only links found in the sources"
       ],
-      "answer": "This site doesn't list Joe's rates. The [FAQ page](/faq/) covers pricing, but the excerpt I have doesn't include figures. For a quote, use the contact page at /contact/. When you compare proposals, the site suggests pricing each one against the same agreed scope [2]."
+      "answer": "This site doesn't list Joe's rates. The [FAQ page](/faq/) covers pricing, but the excerpt I have doesn't include specific figures. For a quote based on your project, use the [contact page](/contact/)."
     },
     {
       "q": "keyword research",
