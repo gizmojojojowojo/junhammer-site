@@ -1,14 +1,28 @@
 {
-  "ranAt": null,
-  "commit": "",
+  "ranAt": "2026-11-14T15:02:11.000Z",
+  "commit": "abc1234",
   "answerModel": "claude-haiku-5-5",
   "writerModel": "claude-sonnet-5-5",
-  "trainQuestions": 0,
-  "holdoutQuestions": 0,
-  "offTopicQuestions": 0,
-  "generations": [],
-  "scores": null,
-  "verdict": null,
-  "winner": null,
-  "modelCalls": 0
+  "trainQuestions": 39,
+  "holdoutQuestions": 21,
+  "offTopicQuestions": 4,
+  "generations": [
+    { "generation": 0, "best": 0.8821, "candidates": [{ "change": "The prompt in production.", "score": 0.8821, "chars": 1442 }] },
+    { "generation": 1, "best": 0.9128, "candidates": [
+      { "change": "Moved the length rule to the top and gave it a word count.", "score": 0.9128, "chars": 1501 },
+      { "change": "Required naming the page in the first sentence.", "score": 0.8769, "chars": 1620 },
+      { "change": "Rewrote the citation rule to require one citation per claim.", "score": 0.8974, "chars": 1388 },
+      { "change": "Added an explicit decline sentence for off-topic questions.", "score": 0.9026, "chars": 1555 }
+    ] },
+    { "generation": 2, "best": 0.9231, "candidates": [
+      { "change": "Combined the length rule and the decline sentence.", "score": 0.9231, "chars": 1573 },
+      { "change": "Added examples of a good and a bad answer.", "score": 0.8667, "chars": 2410 },
+      { "change": "Shortened every rule to one line.", "score": 0.9077, "chars": 1102 },
+      { "change": "Required the cited page to match the question's topic.", "score": 0.9179, "chars": 1644 }
+    ] }
+  ],
+  "scores": { "baseline": { "train": 0.8821, "holdout": 0.8857 }, "winner": { "train": 0.9231, "holdout": 0.8952 } },
+  "verdict": { "trainGain": 0.041, "holdoutGain": 0.0095, "transferred": true, "reads": "The gain held up, but it was smaller on unseen questions than on the training set. Part of it was fitted to the training questions." },
+  "winner": { "generation": 2, "change": "Combined the length rule and the decline sentence.", "chars": 1573, "adopted": false, "prompt": "You answer visitor questions on junhammer.com..." },
+  "modelCalls": 387
 }
