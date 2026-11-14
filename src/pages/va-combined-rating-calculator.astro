@@ -1,0 +1,281 @@
+---
+import Base from '../layouts/Base.astro';
+
+const CFR = 'https://www.ecfr.gov/current/title-38/chapter-I/part-4/subpart-A';
+const schema = [
+  {
+    '@type': 'WebApplication',
+    name: 'VA Combined Disability Rating Calculator',
+    url: 'https://junhammer.com/va-combined-rating-calculator/',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    description: 'Works out a VA combined disability rating using the combined ratings table in 38 CFR 4.25 and the bilateral factor in 38 CFR 4.26, showing every step.',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    creator: { '@id': 'https://junhammer.com/#person' },
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'Why is 50 percent plus 30 percent not 80 percent?',
+        acceptedAnswer: { '@type': 'Answer', text: 'VA ratings describe how much ability a disability takes away, so each rating applies to what is left after the ones before it. A 50 percent rating leaves 50 percent of ability. A further 30 percent rating takes 30 percent of that 50, which is 15, giving a combined value of 65. That 65 is then converted to the nearest multiple of ten, and values ending in 5 go up, so it pays as 70 percent.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the VA bilateral factor?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Under 38 CFR 4.26, when disabilities affect both arms, both legs, or paired skeletal muscles, those ratings are combined with each other first and then 10 percent of that figure is added rather than combined. The result is rounded and treated as a single disability for the rest of the calculation. It needs a compensable disability in each of two paired extremities, so one alone does not qualify.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can I get paid at 100 percent without a 100 percent rating?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Sometimes. A total disability rating based on individual unemployability pays at the 100 percent rate at a lower schedular rating. Under 38 CFR 4.16(a) the percentage threshold is one disability at 60 percent or more, or one disability at 40 percent or more with a combined rating of 70 percent or more. Meeting that threshold is not the same as qualifying: the VA also has to find that the service-connected disabilities prevent substantially gainful employment.' },
+      },
+    ],
+  },
+];
+---
+<Base
+  title="VA combined rating calculator"
+  seoTitle="VA Combined Disability Rating Calculator (38 CFR 4.25 and 4.26)"
+  description="Work out a VA combined disability rating with every step shown, including the bilateral factor for paired limbs and the 38 CFR 4.16(a) unemployability threshold. Nothing is sent anywhere."
+  schema={schema}
+>
+  <div class="narrow vac">
+    <header class="page-head">
+      <h1>VA combined rating calculator</h1>
+      <p class="lede">VA disability ratings do not add up. 50 percent and 30 percent pay as 70, not 80. This works the combination the way <a href={`${CFR}/section-4.25`}>38 CFR 4.25</a> and <a href={`${CFR}/section-4.26`}>38 CFR 4.26</a> require and shows every step, so you can check it against your decision letter.</p>
+    </header>
+
+    <form id="vac-form" class="vac-form">
+      <h2 class="vac-h">Your ratings</h2>
+      <p class="vac-hint">Enter each service-connected rating from your decision letter separately. Do not add them together.</p>
+      <ol id="vac-rows" class="vac-rows"></ol>
+      <div class="vac-actions">
+        <button type="button" id="vac-add" class="btn btn-quiet">Add a rating</button>
+        <button type="button" id="vac-clear" class="btn btn-quiet">Clear</button>
+      </div>
+    </form>
+
+    <section id="vac-out" class="vac-out" aria-live="polite"></section>
+
+    <section class="prose vac-about">
+      <h2>Why 50 plus 30 is 70</h2>
+      <p>A rating describes how much ability a disability takes away, so the second rating applies to what is left after the first. A 50 percent rating leaves 50 percent of your ability. A further 30 percent takes 30 percent of that 50, which is 15. The combined value is 65, and because 4.25(a) converts the final figure to the nearest multiple of ten with 5s going up, it pays as 70.</p>
+      <p>Three things trip people up, and all three are in the arithmetic above:</p>
+      <ul>
+        <li><strong>Each step rounds.</strong> The combined value is read from a table of whole numbers, and the next rating combines with that rounded figure, "exactly as found in table I".</li>
+        <li><strong>The conversion to a multiple of ten happens once.</strong> It is the last step of the whole calculation, not something applied along the way. Rounding early inflates the result.</li>
+        <li><strong>Paired limbs get a bonus.</strong> Under 4.26 the ratings for both arms, both legs, or paired skeletal muscles combine with each other first, then 10 percent is added rather than combined. The result is rounded and re-enters the order by severity as one disability.</li>
+      </ul>
+
+      <h2>What the bilateral factor needs</h2>
+      <p>A compensable disability in each of two paired extremities (4.26(c)). One bad knee is not bilateral, however much it affects you. Upper and lower extremities count as a whole, so a right thigh and a left foot are a pair (4.26(a)). Where leaving a disability out of the factor produces a better result, the VA leaves it out (4.26(d)), and this calculator tries every arrangement and keeps the most favourable one.</p>
+
+      <h2>Being paid at 100 percent without a 100 percent rating</h2>
+      <p>A total disability rating based on individual unemployability pays at the 100 percent rate while your schedular rating is lower. <a href={`${CFR}/section-4.16`}>38 CFR 4.16(a)</a> sets a percentage threshold: one disability ratable at 60 percent or more, or one at 40 percent or more with a combined rating of 70 percent or more.</p>
+      <p>The part people miss is that several disabilities can count as one for that test. Disabilities of paired limbs, disabilities from a common cause or a single accident, and disabilities in a single body system are each treated as one disability. Three separate 30 percent ratings combine to 70 but leave nothing at 40. Group two of them under one body system and they count as 51 together, which clears the 40 percent test while the combined rating does not change at all. Use the body system field above to see that.</p>
+      <p>Meeting the threshold is not the same as qualifying. The VA also has to find that your service-connected disabilities prevent substantially gainful employment, and under 4.16(b) it can grant unemployability below the threshold. This page cannot tell you either way.</p>
+
+      <h2>What this is and is not</h2>
+      <p>This is arithmetic, applied to ratings the VA has already assigned. It does not decide what rating any condition should get, which is the part that actually determines your compensation, and it cannot see your evidence, your effective dates or your file. The VA's own decision governs.</p>
+      <p>If you are filing, appealing, or trying to work out what you are owed, talk to a VA accredited representative. They are free, they are trained, and a Veterans Service Organization can act on your behalf in a way no website can. The VA has a <a href="https://www.va.gov/get-help-from-accredited-representative/">search for accredited representatives</a>.</p>
+      <p class="meta">Nothing you type here leaves your browser. There is no server call, no model and no logging: the whole calculation is the regulation's arithmetic running on your device. The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/va/rating.mjs">code</a> is public and is tested against all 684 cells of the printed table in 4.25 and every worked example in the text of 4.25, 4.26 and 4.16.</p>
+    </section>
+    <noscript><p class="meta">This calculator needs JavaScript.</p></noscript>
+  </div>
+</Base>
+
+<script>
+  import { combinedRating, naiveGap, nextStep } from '../va/rating.mjs';
+  import { tdiuThreshold } from '../va/tdiu.mjs';
+
+  const rows = document.getElementById('vac-rows');
+  const out = document.getElementById('vac-out');
+  const SYSTEMS = [['', 'None'], ['orthopedic', 'Orthopedic'], ['neuropsychiatric', 'Mental health'], ['respiratory', 'Respiratory'], ['cardiovascular-renal', 'Heart or kidney'], ['digestive', 'Digestive'], ['etiology', 'Same cause or accident']];
+  let seq = 0;
+
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  };
+
+  function addRow(rating = '', bilateral = false, group = '') {
+    const id = ++seq;
+    const li = el('li', 'vac-row');
+
+    const rLabel = el('label', 'vac-field');
+    rLabel.append(el('span', 'vac-label', 'Rating'));
+    const r = el('select');
+    for (const v of [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]) {
+      const o = el('option', '', `${v}%`);
+      o.value = String(v);
+      if (String(v) === String(rating)) o.selected = true;
+      r.append(o);
+    }
+    r.id = `vac-r-${id}`;
+    rLabel.htmlFor = r.id;
+    rLabel.append(r);
+
+    const nLabel = el('label', 'vac-field vac-field-wide');
+    nLabel.append(el('span', 'vac-label', 'Condition (optional)'));
+    const n = el('input');
+    n.type = 'text';
+    n.maxLength = 60;
+    n.placeholder = 'Right knee';
+    n.id = `vac-n-${id}`;
+    nLabel.htmlFor = n.id;
+    nLabel.append(n);
+
+    const gLabel = el('label', 'vac-field');
+    gLabel.append(el('span', 'vac-label', 'Body system'));
+    const g = el('select');
+    for (const [value, text] of SYSTEMS) {
+      const o = el('option', '', text);
+      o.value = value;
+      if (value === group) o.selected = true;
+      g.append(o);
+    }
+    g.id = `vac-g-${id}`;
+    gLabel.htmlFor = g.id;
+    gLabel.append(g);
+
+    const bLabel = el('label', 'vac-check');
+    const b = el('input');
+    b.type = 'checkbox';
+    b.checked = bilateral;
+    bLabel.append(b, el('span', '', 'Paired limb'));
+    bLabel.title = 'Tick when this affects an arm or a leg and another rating affects the opposite side.';
+
+    const del = el('button', 'vac-del', 'Remove');
+    del.type = 'button';
+    del.setAttribute('aria-label', 'Remove this rating');
+    del.addEventListener('click', () => {
+      li.remove();
+      if (!rows.children.length) addRow();
+      render();
+    });
+
+    li.append(rLabel, nLabel, gLabel, bLabel, del);
+    li.dataset.row = String(id);
+    rows.append(li);
+    for (const control of [r, n, g, b]) control.addEventListener('input', render);
+    return li;
+  }
+
+  function read() {
+    return [...rows.children].map((li) => ({
+      rating: Number(li.querySelector('select').value),
+      label: li.querySelector('input[type=text]').value.trim(),
+      group: li.querySelectorAll('select')[1].value,
+      bilateral: li.querySelector('input[type=checkbox]').checked,
+    }));
+  }
+
+  const pc = (n) => `${n}%`;
+
+  function render() {
+    const list = read().filter((d) => d.rating > 0);
+    if (!list.length) {
+      out.replaceChildren(el('p', 'vac-empty', 'Add your ratings above and the combined figure appears here.'));
+      return;
+    }
+    // Paired limbs are one group for 4.16(a)(1), whatever body system is set.
+    const forTdiu = list.map((d) => ({ ...d, group: d.bilateral ? 'extremities' : d.group }));
+    const r = combinedRating(list);
+    const gap = naiveGap(list);
+    const next = nextStep(list);
+    const t = tdiuThreshold(forTdiu);
+
+    const parts = [];
+    const head = el('div', 'vac-score');
+    const num = el('p', 'vac-num', pc(r.rated));
+    head.append(num);
+    const side = el('div');
+    side.append(el('h2', '', 'Combined rating'));
+    side.append(el('p', 'vac-sub', `Combined value ${r.combinedValue}, converted to the nearest ten. Your ratings add up to ${gap.ifTheyAdded} on paper.`));
+    head.append(side);
+    parts.push(head);
+
+    if (gap.difference > 0) parts.push(el('p', 'vac-gap', `Adding them up would overstate this by ${gap.difference} points.`));
+
+    parts.push(el('h3', '', 'Every step'));
+    const steps = el('ol', 'vac-steps');
+    for (const s of r.steps) {
+      const li = el('li');
+      const name = s.kind === 'factor' ? 'Bilateral factor, 10 percent added not combined' : s.kind === 'composite' ? `Bilateral group, treated as one disability at ${pc(s.rating)}` : `${s.label || 'Rating'} at ${pc(s.rating)}`;
+      li.append(el('span', 'vac-step-name', name), el('span', 'vac-step-math', `${s.before} → ${s.after}`));
+      if (s.kind === 'bilateral') li.classList.add('is-bilateral');
+      steps.append(li);
+    }
+    parts.push(steps, el('p', 'meta', `Converted once at the end: ${r.combinedValue} becomes ${pc(r.rated)}.`));
+
+    if (r.bilateralIgnored) parts.push(el('p', 'vac-note', 'One rating is marked as a paired limb. The bilateral factor needs a compensable disability in each of two paired extremities (38 CFR 4.26(c)), so it does not apply here.'));
+    if (r.bilateralPartial) parts.push(el('p', 'vac-note', `Leaving ${r.bilateralExcluded.join(' and ')} out of the bilateral factor pays better, so it is left out. 38 CFR 4.26(d) requires the most favourable arrangement.`));
+    if (next) parts.push(el('p', 'vac-note', `It would take another rating of ${pc(next.addRating)} to reach ${pc(next.reaches)}.`));
+
+    parts.push(el('h3', '', 'Unemployability threshold'));
+    const tdiu = el('p', t.meetsSchedularThreshold ? 'vac-tdiu is-met' : 'vac-tdiu');
+    tdiu.append(el('strong', '', t.meetsSchedularThreshold ? 'The percentage threshold in 38 CFR 4.16(a) is met. ' : 'The percentage threshold in 38 CFR 4.16(a) is not met. '), document.createTextNode(t.reads));
+    parts.push(tdiu);
+    parts.push(el('p', 'meta', t.meetsSchedularThreshold
+      ? 'This is arithmetic only. Unemployability also requires the VA to find that your service-connected disabilities prevent substantially gainful employment. An accredited representative can tell you whether it is worth pursuing.'
+      : 'Under 38 CFR 4.16(b) the VA can still consider unemployability below this threshold. Grouping matters too: set the body system on ratings that share a cause or a system.'));
+
+    out.replaceChildren(...parts);
+  }
+
+  document.getElementById('vac-add').addEventListener('click', () => {
+    addRow();
+    rows.lastElementChild.querySelector('select').focus();
+  });
+  document.getElementById('vac-clear').addEventListener('click', () => {
+    rows.replaceChildren();
+    addRow();
+    addRow();
+    render();
+  });
+
+  addRow(50);
+  addRow(30);
+  render();
+</script>
+
+<style is:global>
+  .vac { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .vac-h { font-size: var(--step-1); margin: 0 0 .2rem; }
+  .vac-hint { margin: 0 0 1rem; color: var(--ink-soft); font-size: var(--step--1); }
+  .vac-form { margin-top: 1.75rem; }
+  .vac-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+  .vac-row { display: flex; flex-wrap: wrap; align-items: end; gap: .6rem; padding: .7rem .8rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); }
+  .vac-field { display: grid; gap: .2rem; }
+  .vac-field-wide { flex: 1; min-width: 10rem; }
+  .vac-label { font-family: var(--font-ui); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  .vac-row select, .vac-row input[type=text] { font: inherit; font-family: var(--font-ui); font-size: var(--step--1); padding: .45rem .5rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--bg); color: var(--ink); width: 100%; }
+  .vac-check { display: flex; align-items: center; gap: .35rem; font-family: var(--font-ui); font-size: var(--step--1); white-space: nowrap; padding-bottom: .5rem; }
+  .vac-del { font-family: var(--font-ui); font-size: .72rem; background: none; border: 0; color: var(--ink-soft); cursor: pointer; text-decoration: underline; padding: .5rem .2rem; }
+  .vac-del:hover { color: var(--fjord); }
+  .vac-actions { display: flex; gap: .6rem; margin-top: .8rem; }
+  .btn-quiet { background: var(--surface); color: var(--ink); border: 1px solid var(--rule); cursor: pointer; }
+  .btn-quiet:hover { border-color: var(--fjord); color: var(--fjord); }
+
+  .vac-out { margin-top: 2.5rem; }
+  .vac-empty { color: var(--ink-soft); }
+  .vac-score { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+  .vac-num { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: var(--step-5); line-height: 1; color: var(--fjord); font-variant-numeric: tabular-nums; }
+  .vac-score h2 { margin: 0; font-size: var(--step-2); }
+  .vac-sub { margin: .2rem 0 0; color: var(--ink-soft); font-size: var(--step--1); max-width: 46ch; }
+  .vac-gap { margin-top: 1rem; font-weight: 600; }
+  .vac-out h3 { font-family: var(--font-ui); font-size: var(--step--1); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); margin: 2rem 0 .5rem; }
+  .vac-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; font-family: var(--font-ui); font-size: var(--step--1); max-width: var(--measure); }
+  .vac-steps li { display: flex; justify-content: space-between; gap: 1rem; padding: .35rem .5rem; border-bottom: 1px solid var(--rule); }
+  .vac-steps li.is-bilateral { border-left: 3px solid var(--fjord); }
+  .vac-step-math { font-variant-numeric: tabular-nums; color: var(--ink-soft); white-space: nowrap; }
+  .vac-note { margin-top: .9rem; padding: .7rem .9rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); font-size: var(--step--1); max-width: var(--measure); }
+  .vac-tdiu { max-width: var(--measure); }
+  .vac-tdiu.is-met { padding: .8rem 1rem; border-radius: var(--radius-s); background: var(--surface); border: 1px solid var(--fjord); }
+  .vac-about { margin-top: 3rem; }
+  @media (max-width: 560px) { .vac-field, .vac-field-wide { flex: 1 1 100%; } .vac-row { gap: .5rem; } }
+</style>
