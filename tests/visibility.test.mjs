@@ -401,3 +401,21 @@ test('a run on edited questions is personal: not cached, not shareable', async (
     globalThis.fetch = real;
   }
 });
+
+test('running the drafted questions unchanged still counts as the standard run', async () => {
+  const real = globalThis.fetch;
+  globalThis.fetch = world().fetchImpl;
+  try {
+    const { kv, m } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const drafted = Array.from({ length: RUN.questions }, (_, i) => `What is the best way to handle problem number ${i}?`);
+    const c = ctx({ url: 'acme.example.org', questions: drafted, edited: false }, env);
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out.at(-1).data.shareable, true, 'unchanged questions are shareable');
+    assert.ok([...m.keys()].some((k) => k.startsWith('vis:run:')), 'and cached');
+    assert.equal((await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).status, 200);
+  } finally {
+    globalThis.fetch = real;
+  }
+});

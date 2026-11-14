@@ -128,6 +128,7 @@ const schema = [
   const MAX = 10;
   let busy = false;
   let brand = '';
+  let drafted = []; // what the model wrote, to tell an edited run from a standard one
 
   const el = (tag, cls, text) => {
     const n = document.createElement(tag);
@@ -190,6 +191,7 @@ const schema = [
       if (!res.ok) fail(data.error || 'That did not work. Try again in a moment.');
       else {
         brand = data.brand;
+        drafted = data.questions.slice();
         qlist.replaceChildren();
         for (const q of data.questions) addQuestion(q);
         setup.hidden = false;
@@ -220,7 +222,8 @@ const schema = [
     progress.hidden = false;
     let current = null;
     try {
-      const res = await fetch('/api/visibility', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: input.value, questions, competitors: readRivals() }) });
+      const edited = questions.length !== drafted.length || questions.some((q, i) => q !== drafted[i]);
+      const res = await fetch('/api/visibility', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: input.value, questions, competitors: readRivals(), edited }) });
       const type = res.headers.get('content-type') || '';
       if (!type.includes('text/event-stream')) {
         const data = await res.json().catch(() => ({}));

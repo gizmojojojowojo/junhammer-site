@@ -151,7 +151,11 @@ export async function onRequestPost(context) {
   // who edited the questions is asking a different thing, so their run neither
   // reads from the cache nor overwrites it.
   const ownQuestions = cleanQuestions(body.questions, RUN.maxQuestions);
-  const custom = ownQuestions.length > 0;
+  // Running the drafted questions unchanged is the standard run for a domain,
+  // so it caches and gets a link. The page says which it is. That flag is the
+  // client's word, and the worst it can do is make one domain's cached result
+  // somebody's own question set for a week, at the cost of their own quota.
+  const custom = ownQuestions.length > 0 && body.edited !== false;
   const cacheKey = `vis:run:3:${brand}`;
   if (!custom && !body.fresh) {
     const cached = await kv.get(cacheKey);
