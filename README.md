@@ -132,6 +132,18 @@ An optimization loop over the Ask feature's system prompt, published at `/ask/pr
 - Nothing is adopted automatically. If the holdout supports the winner, paste its prompt into `SYSTEM` in `src/ask/answer.mjs` by hand and set `winner.adopted` to true.
 - Cost: roughly `(variants + 1) x generations x training questions` answer calls, plus the holdout. Start with `--generations 1` to see the scale.
 
+## Career agent (private, local only)
+
+`node scripts/career/run.mjs [--dry] [--limit 8]` reads public company job boards, keeps the postings worth reading, matches each one's requirements against evidence in this site's case studies and service pages, and writes a report to `private/`, which git ignores.
+
+It runs locally and is deliberately not in CI, because this repository is public and the report is not.
+
+- `scripts/career/sources.json`: which boards to read and how to filter. Edit this first. The slugs are a starting point; the script names any board that does not respond.
+- Filtering happens before any model call, so a run only pays for postings that could plausibly fit.
+- A requirement counts as a strong match only when it cites a real page from the site. A claim with no page behind it is downgraded, so the report cannot talk itself into a fit.
+- The useful output is the top section: requirements that keep coming up with nothing in the portfolio behind them, ranked by how many employers asked. That is the list of what to build next.
+- Every draft note is a starting point to edit, not something to send as it stands.
+
 ## Contact form
 
 The form appears when `formEndpoint` is set in *Site settings*. Free option: create an access key at web3forms.com, then set `formEndpoint` to `https://api.web3forms.com/submit` and `formAccessKey` to your key. Until then, the contact page shows email only.

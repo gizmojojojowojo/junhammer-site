@@ -6,3 +6,6 @@ dist/
 scripts/gsc/token.json
 scripts/gsc/client_secret.json
 scripts/gsc/*.csv
+
+# Private output from scripts/career/run.mjs. This repository is public.
+private/
