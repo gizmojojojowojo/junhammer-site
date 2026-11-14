@@ -124,6 +124,7 @@ export async function onRequestPost(context) {
       }
       if (!blocked) {
         reply = await callModel(key, { model, max_tokens: RULES.maxReplyTokens, system: guardPrompt(s.level, secret), messages: [...s.hist, { role: 'user', content: message }] });
+        if (!reply) throw new Error('empty_reply');
         if (cfg.filter && leaks(reply, secret, cfg.strict)) blocked = 'filter';
       }
     } catch (e) {
