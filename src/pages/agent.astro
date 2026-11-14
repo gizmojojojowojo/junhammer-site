@@ -1,0 +1,120 @@
+---
+import Base from '../layouts/Base.astro';
+import data from '../data/agent.json';
+
+const started = Boolean(data.startedAt);
+const latest = data.measurements.at(-1);
+const first = data.measurements[0];
+const entries = [...data.journal].reverse();
+const spentPct = Math.round((data.spentUsd / data.budgetUsd) * 100);
+const day = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const score = (m) => (m ? m.results.filter((r) => r.cited).length : 0);
+const repo = 'https://github.com/gizmojojojowojo/junhammer-site';
+---
+<Base
+  title="The budget agent"
+  seoTitle="An AI Agent With a Budget, a Goal and a Public Diary"
+  description="An autonomous agent with $20 and 30 days to get this site cited by AI search. It measures, acts once a day and writes up what it tried, including what failed."
+>
+  <div class="narrow agent">
+    <header class="page-head">
+      <h1>The budget agent</h1>
+      <p class="lede">An agent with one goal, {data.days} days and ${data.budgetUsd}. Each morning it measures whether AI search cites this site for five target questions, takes one action, and writes up what it did. Nothing it writes goes live without me merging it.</p>
+    </header>
+
+    <dl class="agent-stats">
+      <div><dt>Goal</dt><dd>{data.goal}</dd></div>
+      <div><dt>Day</dt><dd>{data.day} of {data.days}</dd></div>
+      <div><dt>Spent</dt><dd>${data.spentUsd.toFixed(2)} of ${data.budgetUsd}</dd></div>
+      <div><dt>Cited today</dt><dd>{latest ? `${score(latest)} of ${latest.results.length} questions` : 'not measured yet'}</dd></div>
+    </dl>
+    {started && <div class="agent-bar" aria-hidden="true"><span style={`width:${Math.min(100, spentPct)}%`}></span></div>}
+
+    {!started && (
+      <p class="agent-waiting">The agent has not started. Day one begins on its first scheduled run, when it picks its five target questions and takes its first measurement.</p>
+    )}
+
+    {latest && (
+      <section>
+        <h2>Where it stands</h2>
+        <p>Each question is asked of an AI assistant with web search, the same way a person would ask it. "Cited" means the answer cited this site. "In results" means the site showed up in the search results behind the answer, whether or not the answer used it.</p>
+        <div class="agent-scroll">
+          <table class="agent-table">
+            <thead><tr><th scope="col">Target question</th><th scope="col">Cited</th><th scope="col">In results</th><th scope="col">Cited instead</th></tr></thead>
+            <tbody>
+              {latest.results.map((r) => (
+                <tr>
+                  <th scope="row">{r.question}</th>
+                  <td class={r.cited ? 'is-yes' : 'is-no'}>{r.cited ? 'Yes' : 'No'}</td>
+                  <td>{r.retrieved ? `#${r.position}` : 'No'}</td>
+                  <td class="agent-rivals">{r.citedDomains.filter((d) => !d.includes('junhammer')).slice(0, 3).join(', ') || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="meta">Measured {day(latest.date)}{first && first !== latest && <> · day one was {score(first)} of {first.results.length}</>}.</p>
+      </section>
+    )}
+
+    {entries.length > 0 && (
+      <section>
+        <h2>The diary</h2>
+        <ol class="agent-days">
+          {entries.map((e) => (
+            <li>
+              <h3><span class="agent-day">Day {e.day}</span> {e.title}</h3>
+              <p class="meta">{day(e.date)} · ${e.costUsd.toFixed(2)} · {e.files.length ? `${e.files.length} file${e.files.length > 1 ? 's' : ''} proposed` : 'no change'}</p>
+              {e.observed && <p><strong>Saw:</strong> {e.observed}</p>}
+              {e.hypothesis && <p><strong>Thinks:</strong> {e.hypothesis}</p>}
+              <p><strong>Did:</strong> {e.action}</p>
+              {e.expect && <p><strong>Expects:</strong> {e.expect}</p>}
+              {e.files.length > 0 && <p class="meta">Wrote: {e.files.join(', ')}</p>}
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <section class="prose agent-about">
+      <h2>How it works</h2>
+      <p>A scheduled job runs once a day. The agent asks each target question through an AI assistant with web search and records whether this site was cited, where it appeared in the results, and which other sites were cited instead. It then gets that evidence, its own earlier entries, and three tools: read a page, write one content file, finish the day.</p>
+      <p>It picks one action. Some days that will be rewriting a weak section. Some days it should be doing nothing and saying why. Then it writes the diary entry you see above.</p>
+      <p>It tracks its own spending against a ${data.budgetUsd} budget, in real dollars, and stops when the money or the {data.days} days run out.</p>
+
+      <h2>What it cannot do</h2>
+      <p>It writes Markdown content files and nothing else. It cannot touch code, templates, settings, the workflow that runs it, or the measurement that grades it. Every file it writes goes into a pull request that I read before merging, so the diary may record a day's work that never reached the site. The <a href={`${repo}/blob/main/scripts/agent/run.mjs`}>agent</a>, its <a href={`${repo}/blob/main/scripts/agent/lib.mjs`}>rules</a> and its <a href={`${repo}/blob/main/.github/workflows/agent.yml`}>schedule</a> are public.</p>
+
+      <h2>Why run this in the open</h2>
+      <p>Long-running agents are easy to demo and hard to trust. The interesting question is not whether one can write a paragraph, it is what it decides to do on day eleven when the first nine ideas did not move the number. That record is worth more than a success story, and it is the same record I would want from any agent before putting it near a client's site.</p>
+      <p>See <a href="/tools/">the other tools here</a>, or <a href="/services/ai-agent-development/">AI agent development</a> if you want something like this on your own problem.</p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .agent { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .agent section { margin-top: 2.75rem; }
+  .agent h2 { font-size: var(--step-2); margin-bottom: .6rem; }
+  .agent-stats { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin: 1.75rem 0 .75rem; }
+  .agent-stats div { padding: .9rem 1rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); }
+  .agent-stats dt { font-family: var(--font-ui); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); }
+  .agent-stats dd { margin: .25rem 0 0; font-weight: 600; }
+  .agent-bar { height: .4rem; border-radius: 999px; background: var(--rule); overflow: hidden; }
+  .agent-bar span { display: block; height: 100%; background: var(--fjord); }
+  .agent-waiting { margin-top: 1.5rem; padding: 1rem 1.2rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); }
+  .agent-scroll { overflow-x: auto; }
+  .agent-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-ui); font-size: var(--step--1); }
+  .agent-table th, .agent-table td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .agent-table thead th { color: var(--ink-soft); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
+  .agent-table tbody th { font-weight: 500; }
+  .is-yes { font-weight: 700; color: var(--fjord); }
+  .is-no { color: var(--ink-soft); }
+  .agent-rivals { color: var(--ink-soft); }
+  .agent-days { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 1.75rem; }
+  .agent-days li { padding-left: 1rem; border-left: 2px solid var(--rule); max-width: var(--measure); }
+  .agent-days h3 { font-size: var(--step-1); margin: 0 0 .2rem; }
+  .agent-days p { margin: .4rem 0 0; }
+  .agent-day { font-family: var(--font-ui); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); display: block; }
+  .agent-about { margin-top: 3rem; }
+</style>

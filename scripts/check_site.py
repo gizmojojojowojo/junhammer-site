@@ -24,7 +24,7 @@ def load(p):
     except yaml.YAMLError as e:
         errors.append(f'{p}: bad YAML: {e}'); return {}, ''
 
-routes = {'/', '/blog/', '/services/', '/work/', '/contact/', '/ask/', '/ask/evals/', '/audit/', '/arcade/', '/tools/', '/rss.xml', '/llms.txt'}
+routes = {'/', '/blog/', '/services/', '/work/', '/contact/', '/ask/', '/ask/evals/', '/audit/', '/arcade/', '/tools/', '/agent/', '/rss.xml', '/llms.txt'}
 routes |= {f'/blog/topic/{t}/' for t in ('ai', 'aeo', 'seo', 'healthcare')}
 docs = []
 for coll in ('blog', 'services', 'work', 'pages'):
