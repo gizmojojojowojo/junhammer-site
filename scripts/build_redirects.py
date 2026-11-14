@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 rows = list(csv.DictReader(open(ROOT / 'data/url_inventory.csv')))
 # extra moves introduced by the rebuild (old path -> new path)
-EXTRA = {}
+EXTRA = {'/va-combined-rating-calculator/': '/va-rating-calculator/'}
 
 final = {}
 for r in rows:
