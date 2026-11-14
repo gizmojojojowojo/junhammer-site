@@ -11,7 +11,7 @@
 //   VA_ASK_MODEL       optional. Defaults to DEFAULT_MODEL below.
 //   ASK_KV             optional KV binding, shared. Makes the limits site-wide.
 //   VA_ASK_HOURLY_LIMIT  per visitor, default 10. VA_ASK_DAILY_LIMIT, site-wide, default 300.
-import { LIMITS, SYSTEM, buildMessages, checkAnswer, parseRequest, sourcesFor } from '../../src/va/answer.mjs';
+import { LIMITS, SYSTEM, buildMessages, checkAnswer, correction, parseRequest, sourcesFor } from '../../src/va/answer.mjs';
 import { sse } from '../../src/ask/answer.mjs';
 
 const DEFAULT_MODEL = 'claude-haiku-5-5';
@@ -75,24 +75,36 @@ export async function onRequestPost(context) {
   context.waitUntil(
     (async () => {
       try {
-        const res = await fetch(API, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-          body: JSON.stringify({ model: env.VA_ASK_MODEL || DEFAULT_MODEL, max_tokens: LIMITS.maxTokens, system: SYSTEM, messages: buildMessages(parsed.question, parsed.history) }),
-          signal: AbortSignal.timeout(30000),
-        });
-        if (!res.ok) {
-          console.error('va-ask: model call failed', res.status, (await res.text()).slice(0, 200));
-          throw new Error(`model_${res.status}`);
+        const model = env.VA_ASK_MODEL || DEFAULT_MODEL;
+        const messages = buildMessages(parsed.question, parsed.history);
+        const generate = async (msgs) => {
+          const res = await fetch(API, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+            body: JSON.stringify({ model, max_tokens: LIMITS.maxTokens, system: SYSTEM, messages: msgs }),
+            signal: AbortSignal.timeout(30000),
+          });
+          if (!res.ok) {
+            console.error('va-ask: model call failed', res.status, (await res.text()).slice(0, 200));
+            throw new Error(`model_${res.status}`);
+          }
+          const data = await res.json();
+          // A reply cut off at the token ceiling can end mid-sentence, which on
+          // this subject reads as a half-finished instruction. Refuse it.
+          if (data.stop_reason === 'max_tokens') throw new Error('truncated');
+          return { data, text: (data.content || []).map((b) => b.text || '').join('').trim() };
+        };
+        // Checked whole, before anything reaches the page. A first answer that
+        // fails gets one chance to be rewritten with the problem named, since
+        // refusing a good answer over a fixable slip helps nobody.
+        let { data, text } = await generate(messages);
+        let check = checkAnswer(text);
+        let retried = false;
+        if (text && !check.ok) {
+          retried = true;
+          ({ data, text } = await generate([...messages, { role: 'assistant', content: text }, { role: 'user', content: correction(check) }]));
+          check = checkAnswer(text);
         }
-        const data = await res.json();
-        const text = (data.content || []).map((b) => b.text || '').join('').trim();
-        // A reply cut off at the token ceiling can end mid-sentence, which on
-        // this subject reads as a half-finished instruction. Refuse it.
-        if (data.stop_reason === 'max_tokens') throw new Error('truncated');
-        // Checked whole, before anything reaches the page. Streaming token by
-        // token would mean showing text that the check might then reject.
-        const check = checkAnswer(text);
         if (!text || !check.ok) {
           console.error('va-ask: answer refused', JSON.stringify({ unknown: check.unknownCitations, decides: check.decidesForTheVeteran }));
           emit('refused', {
@@ -102,7 +114,7 @@ export async function onRequestPost(context) {
         } else {
           emit('answer', { text, sources: sourcesFor(text) });
         }
-        console.log(JSON.stringify({ vaAsk: 1, ok: check.ok, cited: check.cited.length, in: data.usage?.input_tokens, out: data.usage?.output_tokens, ms: Date.now() - started }));
+        console.log(JSON.stringify({ vaAsk: 1, ok: check.ok, retried, cited: check.cited.length, in: data.usage?.input_tokens, out: data.usage?.output_tokens, ms: Date.now() - started }));
       } catch (e) {
         console.error('va-ask: failed', String(e?.message || e).slice(0, 60));
         emit('error', { message: 'Something went wrong. Try again in a moment.' });

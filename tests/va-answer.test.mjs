@@ -1,7 +1,7 @@
 // Run: npm test
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CORPUS, LINKS, SUGGESTED, SYSTEM, buildMessages, checkAnswer, parseRequest, sourcesFor } from '../src/va/answer.mjs';
+import { CORPUS, LINKS, SUGGESTED, SYSTEM, buildMessages, checkAnswer, correction, parseRequest, resolveCite, sourcesFor } from '../src/va/answer.mjs';
 
 test('the corpus is complete and every passage is citable', () => {
   assert.ok(CORPUS.length >= 15);
@@ -212,4 +212,38 @@ test('a condition lookup finds the list and never more than that', () => {
   assert.deepEqual(findCondition('knee pain'), []);
   assert.deepEqual(findCondition('as'), [], 'too short to mean anything');
   assert.deepEqual(findCondition(null), []);
+});
+
+test('a deeper paragraph or the bare section of a known passage is a real citation', () => {
+  assert.equal(resolveCite('38 CFR 3.320(a)(2)').cite, '38 CFR 3.320(a)');
+  assert.equal(resolveCite('38 CFR 3.320').cite, '38 CFR 3.320(a)');
+  assert.equal(resolveCite('38 CFR 3.303(d)').cite, '38 CFR 3.303(d)');
+  assert.equal(resolveCite('38 CFR 9.999'), null);
+  assert.equal(resolveCite('38 CFR 3.32'), null, 'a prefix of a section number is not the section');
+  const ok = checkAnswer('Sinusitis is on the list [38 CFR 3.320(a)(2)] for qualifying service [38 CFR 3.320(a)(5)].');
+  assert.equal(ok.ok, true);
+  assert.deepEqual(sourcesFor('See [38 CFR 3.320(a)(2)] and [38 CFR 3.320(a)(5)].').map((x) => x.cite), ['38 CFR 3.320(a)'], 'both resolve to the one passage');
+});
+
+test('a failed first answer is rewritten once before anything is refused', async () => {
+  const real = globalThis.fetch;
+  const seen = [];
+  const replies = ['Good news, you qualify under [38 CFR 3.320(a)].', 'The regulation treats sinusitis as service connected for that service [38 CFR 3.320(a)].'];
+  globalThis.fetch = async (url, init) => {
+    seen.push(JSON.parse(init.body));
+    return Response.json({ content: [{ type: 'text', text: replies[seen.length - 1] }], usage: {} });
+  };
+  try {
+    const c = ctx({ question: 'Is my sinusitis presumptive?' }, { ANTHROPIC_API_KEY: 'k' });
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out[0].event, 'answer');
+    assert.match(out[0].data.text, /regulation treats/);
+    assert.equal(seen.length, 2);
+    assert.match(seen[1].messages.at(-1).content, /Only the VA decides that/);
+    assert.ok(!JSON.stringify(out).includes('you qualify'));
+  } finally {
+    globalThis.fetch = real;
+  }
+  assert.match(correction({ unknownCitations: ['38 CFR 9.999'], decidesForTheVeteran: false }), /38 CFR 9\.999/);
 });
