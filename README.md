@@ -99,6 +99,16 @@ Settings (same place as the Ask settings):
 
 `npm test` covers the URL guard, the HTML and robots.txt parsing, the loop limits and the endpoint with a scripted model (no network, no key).
 
+## Break my AI (arcade)
+
+`/arcade/` is a prompt injection game. An AI guard holds a secret word behind each of five doors, and each door adds a defense: instructions only, a briefing on common tricks, an output filter, an input screener (a second model call), then all of them plus the patch log.
+
+- `src/arcade/game.mjs`: the rules. Secret words are derived per player, door and life from a private salt, so they are not in this repository.
+- `src/arcade/patches.mjs`: the patch log. Door 5 is told about every entry. To patch a new attack, add an entry and a test.
+- `functions/api/arcade.js`: keeps each game on the server in `ASK_KV`, enforces limits and calls the model. Conversations that open door 4 or 5 are saved under `arcade:win:*` for 90 days for review.
+- Limits: `ARCADE_DAILY_LIMIT` (default 300 messages a day, whole site) and `ARCADE_GAMES_PER_DAY` (default 3 per visitor). Each message writes to KV twice, so the daily limit also keeps the game inside the KV free tier of 1,000 writes a day.
+- `/tools/` lists every tool on the site.
+
 ## Contact form
 
 The form appears when `formEndpoint` is set in *Site settings*. Free option: create an access key at web3forms.com, then set `formEndpoint` to `https://api.web3forms.com/submit` and `formAccessKey` to your key. Until then, the contact page shows email only.

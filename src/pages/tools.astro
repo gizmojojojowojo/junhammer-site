@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+
+const tools = [
+  { href: '/ask/', name: 'Smart Search', kind: 'Retrieval and grounded answers', text: 'Ask a question about my work or my writing. It finds the right passages on this site and answers with numbered citations.' },
+  { href: '/audit/', name: 'AEO Audit', kind: 'AI agent', text: 'Paste a URL. An agent inspects the page, scores how ready it is to be cited by AI search and lists what to fix first.' },
+  { href: '/arcade/', name: 'Break my AI', kind: 'AI security game', text: 'Five doors, five secret words. Talk the guard into giving each one up. Attacks that work become tests and patches.' },
+  { href: '/ask/evals/', name: 'Ask evals', kind: 'Automated testing', text: 'Live results from the 60-question test set that grades Smart Search, including the questions it gets wrong.' },
+];
+---
+<Base
+  title="Tools"
+  seoTitle="AI Tools Built by Joe Unhammer"
+  description="Working AI tools you can try on this site: grounded site search, an AEO audit agent, a prompt injection arcade game and live eval results."
+>
+  <div class="narrow tools">
+    <header class="page-head">
+      <h1>Tools</h1>
+      <p class="lede">Working AI systems you can try here. Each one runs on this site, and the code for all of them is in the <a href="https://github.com/gizmojojojowojo/junhammer-site">public repository</a>.</p>
+    </header>
+    <ul class="tools-list">
+      {tools.map((t) => (
+        <li>
+          <a href={t.href}>
+            <span class="tools-kind">{t.kind}</span>
+            <h2>{t.name}</h2>
+            <p>{t.text}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p>Want something like these on your site or inside your team? See <a href="/services/ai-engineering/">AI engineering</a> or <a href="/contact/">start a project</a>.</p>
+  </div>
+</Base>
+
+<style>
+  .tools { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .tools-list { list-style: none; margin: 2rem 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .tools-list a { display: block; height: 100%; padding: 1.25rem 1.35rem; border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--surface); color: var(--ink); text-decoration: none; }
+  .tools-list a:hover { border-color: var(--fjord); }
+  .tools-list h2 { font-size: var(--step-1); margin: .3rem 0 .4rem; color: var(--fjord); }
+  .tools-list p { margin: 0; color: var(--ink-soft); font-size: var(--step--1); }
+  .tools-kind { font-family: var(--font-ui); font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); }
+</style>
