@@ -43,18 +43,44 @@ const schema = [
   <div class="narrow vis">
     <header class="page-head">
       <h1>AI visibility checker</h1>
-      <p class="lede">Paste a domain. It works out the questions your buyers would ask before they know you exist, puts each one to an AI assistant with live web search, and reports how often you are cited, who is cited instead, and which of your pages are doing the work.</p>
+      <p class="lede">Paste a domain. It drafts the questions your buyers would ask before they know you exist, you edit them, then each one goes to an AI assistant with live web search. You get back how often you are cited, who is cited instead, and which of your pages are doing the work.</p>
     </header>
 
     <form id="vis-form" class="vis-form">
       <label class="vis-sr" for="vis-url">Your domain</label>
       <input id="vis-url" type="text" inputmode="url" maxlength="300" required autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" />
-      <button class="btn" type="submit">Check visibility</button>
+      <button class="btn" type="submit">Get my questions</button>
     </form>
     <p id="vis-error" class="vis-error" role="alert" hidden></p>
-    <p class="meta">One new domain per visitor per day. Every question costs a real web search, so runs are cached for a week and a domain someone has already checked is free to view.</p>
+    <p class="meta">Step one is free and costs nothing to run: it reads your site and drafts the questions. You edit them before anything is spent.</p>
 
-    <section id="vis-run" class="vis-run" hidden aria-labelledby="vis-run-h">
+    <section id="vis-setup" class="vis-setup" hidden aria-labelledby="vis-setup-h">
+      <h2 id="vis-setup-h">Your questions</h2>
+      <p class="vis-setup-lede">These are the questions a buyer might type before they know you exist. <strong>Change them.</strong> You know what your customers ask better than any model does. Delete the ones that miss, rewrite the rest, add your own.</p>
+      <ol id="vis-qlist" class="vis-qlist"></ol>
+      <div class="vis-actions">
+        <button type="button" id="vis-add" class="btn btn-quiet">Add a question</button>
+        <span id="vis-count" class="meta"></span>
+      </div>
+
+      <h3 class="vis-h3">Competitors (optional)</h3>
+      <p class="meta">Name up to three and they will appear in the results whether or not they get cited.</p>
+      <div class="vis-rivals">
+        <label class="vis-sr" for="vis-r1">Competitor one</label>
+        <input id="vis-r1" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="competitor.com" />
+        <label class="vis-sr" for="vis-r2">Competitor two</label>
+        <input id="vis-r2" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="another.com" />
+        <label class="vis-sr" for="vis-r3">Competitor three</label>
+        <input id="vis-r3" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="third.com" />
+      </div>
+
+      <p class="vis-go">
+        <button type="button" id="vis-run" class="btn">Run the check</button>
+        <span class="meta">This is the step that costs. One new domain per visitor per day.</span>
+      </p>
+    </section>
+
+    <section id="vis-run-progress" class="vis-run" hidden aria-labelledby="vis-run-h">
       <h2 id="vis-run-h">Running</h2>
       <ol id="vis-steps" class="vis-steps"></ol>
       <ul id="vis-questions" class="vis-qs"></ul>
@@ -70,6 +96,7 @@ const schema = [
         <li><strong>Cited</strong> means the answer actually leaned on it. This is the one that matters, because a reader only ever sees what was cited.</li>
       </ul>
       <p>A site can be retrieved on every question and cited on none. When that happens, the problem is not crawling, indexing or robots.txt. The pages are being found and passed over, which is a content problem: the page does not answer the question directly enough to be worth quoting. That distinction decides what you do next, so the report keeps the two apart instead of averaging them into a score.</p>
+      <p><strong>Six questions tells you whether you are in the game. It does not tell you whether you improved.</strong> With a handful of yes-or-no results, a site whose real citation rate is 30 percent can show up anywhere from 1 in 6 to 4 in 6 on any given run, and AI answers are not deterministic, so the same question can pull different sources an hour later. A zero is a clear signal. A move from 2 to 3 is noise. Tracking a trend needs a bigger question set run repeatedly, which is the paid version of this and not something a free page should pretend to do.</p>
       <p>What it cannot do: this is one model with one web search tool. It is not ChatGPT, not Google AI Overviews, not Perplexity, and it will not agree with them, or with itself next month. Those systems retrieve differently and change without notice. What this gives you is a consistent measurement, taken the same way every time, so two runs are comparable to each other. Anything sold to you as "your rank in AI" is overstating what can be known.</p>
 
       <h2>Why the questions matter more than the score</h2>
@@ -78,6 +105,7 @@ const schema = [
       <h2>What to do with a bad result</h2>
       <p>Run the <a href="/audit/">AEO audit</a> on the pages that should have been cited and were not. The checker tells you that a page is losing. The audit agent reads that page and tells you why: no direct answer under the heading, schema that does not match the content, no author or dates, crawlers blocked. Measurement then diagnosis, in that order.</p>
       <p>If you want this tracked over time across a real question set, with the fixes made and measured, that is <a href="/services/answer-engine-optimization/">the AEO work I do</a>. <a href="/contact/">Start there</a>.</p>
+      <p>If you want the questions tracked over time, with the fixes made and the movement measured, that is the paid version and it is <a href="/services/answer-engine-optimization/">the work I do</a>. This page is the free sample, and it is deliberately the size of a sample.</p>
       <p class="meta">The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/visibility/lib.mjs">scoring</a> and the <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/functions/api/visibility.js">run</a> are public, so you can check what is being counted rather than taking the number on trust.</p>
     </section>
     <noscript><p class="meta">This tool needs JavaScript.</p></noscript>
@@ -90,11 +118,16 @@ const schema = [
   const input = $('vis-url');
   const button = form.querySelector('button');
   const errorBox = $('vis-error');
-  const run = $('vis-run');
+  const setup = $('vis-setup');
+  const qlist = $('vis-qlist');
+  const progress = $('vis-run-progress');
   const steps = $('vis-steps');
   const qs = $('vis-questions');
   const report = $('vis-report');
+  const runBtn = $('vis-run');
+  const MAX = 10;
   let busy = false;
+  let brand = '';
 
   const el = (tag, cls, text) => {
     const n = document.createElement(tag);
@@ -106,108 +139,91 @@ const schema = [
     errorBox.textContent = m;
     errorBox.hidden = false;
   };
+  const clearError = () => {
+    errorBox.hidden = true;
+  };
 
-  function render(r) {
-    const parts = [];
-    const head = el('div', 'vis-score');
-    const num = el('p', 'vis-num', `${r.citedRate}%`);
-    head.append(num);
-    const side = el('div');
-    const h = el('h2', '', 'Cited in AI answers');
-    h.id = 'vis-report-h';
-    side.append(h, el('p', 'vis-sub', `${r.brandName} · ${r.brand} · ${r.questions} questions${r.cached ? ' · from a run in the last week' : ''}`));
-    head.append(side);
-    parts.push(head, el('p', 'vis-verdict', r.verdict));
+  // ---- step one: the questions ----
 
-    const stats = el('dl', 'vis-stats');
-    const stat = (label, value, note) => {
-      const d = el('div');
-      d.append(el('dt', '', label), el('dd', '', value));
-      if (note) d.append(el('p', 'meta', note));
-      stats.append(d);
-    };
-    stat('Cited', `${r.cited} of ${r.questions}`, 'The answer leaned on your site.');
-    stat('Found but passed over', String(r.retrievedNotCited), 'In the search results, left out of the answer.');
-    stat('Share of voice', `${r.shareOfVoice}%`, r.rankAmongDomains ? `Number ${r.rankAmongDomains} of the domains cited.` : 'Not among the domains cited.');
-    stat('Average position', r.averagePosition === null ? 'not found' : String(r.averagePosition), 'Where you appeared in the results behind the answers.');
-    if (r.uncontested?.length) stat('Nobody owns these', `${r.uncontested.length} of ${r.questions}`, 'The answer cited no source at all. The cheapest questions to win.');
-    parts.push(stats);
-
-    if (r.leaders.length) {
-      parts.push(el('h3', '', 'Who gets cited instead'));
-      const table = el('table', 'vis-table');
-      const thead = el('thead');
-      const hr = el('tr');
-      for (const t of ['Domain', 'Questions', 'Share']) hr.append(el('th', '', t));
-      thead.append(hr);
-      const tb = el('tbody');
-      for (const l of r.leaders) {
-        const tr = el('tr');
-        tr.append(el('th', '', l.domain), el('td', '', String(l.questions)), el('td', '', `${l.share}%`));
-        tb.append(tr);
-      }
-      table.append(thead, tb);
-      parts.push(table);
-    }
-
-    if (r.yourPages.length) {
-      parts.push(el('h3', '', 'Your pages that showed up'));
-      const ul = el('ul', 'vis-pages');
-      for (const p of r.yourPages) {
-        const li = el('li');
-        const a = el('a', '', p.path);
-        a.href = `https://${r.brand}${p.path}`;
-        li.append(a, el('span', 'meta', ` on ${p.questions} ${p.questions === 1 ? 'question' : 'questions'}`));
-        ul.append(li);
-      }
-      parts.push(ul);
-    }
-
-    if (r.misses.length) {
-      parts.push(el('h3', '', 'Questions you lost'));
-      const ul = el('ul', 'vis-misses');
-      for (const m of r.misses) {
-        const li = el('li');
-        li.append(el('span', 'vis-miss-q', m.question));
-        const found = m.retrieved ? 'Found in the results and passed over.' : 'Never surfaced.';
-        const who = m.uncontested ? 'The answer cited no source at all, so this one is open.' : `Cited instead: ${m.wonBy.join(', ')}.`;
-        li.append(el('span', 'meta', ` ${found} ${who}`));
-        if (m.uncontested) li.classList.add('is-open');
-        ul.append(li);
-      }
-      parts.push(ul);
-    }
-
-    const next = el('div', 'vis-next');
-    next.append(el('h3', '', 'Find out why'));
-    next.append(el('p', '', 'This tells you which pages are losing. The audit agent reads a page and tells you what is holding it back.'));
-    const cta = el('a', 'btn', 'Run the AEO audit');
-    cta.href = r.yourPages.length ? `/audit/?url=${encodeURIComponent(`https://${r.brand}${r.yourPages[0].path}`)}` : '/audit/';
-    next.append(cta);
-    parts.push(next);
-
-    report.replaceChildren(...parts);
-    report.hidden = false;
-    report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function addQuestion(text = '') {
+    if (qlist.children.length >= MAX) return;
+    const li = el('li', 'vis-q');
+    const field = el('input');
+    field.type = 'text';
+    field.maxLength = 160;
+    field.value = text;
+    field.placeholder = 'A question a buyer would type';
+    field.addEventListener('input', count);
+    const del = el('button', 'vis-del', 'Remove');
+    del.type = 'button';
+    del.setAttribute('aria-label', 'Remove this question');
+    del.addEventListener('click', () => {
+      li.remove();
+      count();
+    });
+    li.append(field, del);
+    qlist.append(li);
+    count();
+    return field;
   }
 
-  async function check(url) {
+  const readQuestions = () => [...qlist.querySelectorAll('input')].map((i) => i.value.trim()).filter((v) => v.length >= 8);
+  const readRivals = () => ['vis-r1', 'vis-r2', 'vis-r3'].map((id) => $(id).value.trim()).filter(Boolean);
+
+  function count() {
+    const n = readQuestions().length;
+    $('vis-count').textContent = `${n} of up to ${MAX}. Each one costs a search, so keep the ones that matter.`;
+    runBtn.disabled = busy || n < 3;
+    $('vis-add').disabled = qlist.children.length >= MAX;
+  }
+
+  async function getQuestions(url) {
     if (busy || !url.trim()) return;
     busy = true;
     button.disabled = true;
-    button.textContent = 'Checking…';
-    errorBox.hidden = true;
+    button.textContent = 'Reading your site…';
+    clearError();
+    report.hidden = true;
+    try {
+      const res = await fetch('/api/visibility', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url, action: 'questions' }) });
+      const data = await res.json();
+      if (!res.ok) fail(data.error || 'That did not work. Try again in a moment.');
+      else {
+        brand = data.brand;
+        qlist.replaceChildren();
+        for (const q of data.questions) addQuestion(q);
+        setup.hidden = false;
+        count();
+        setup.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } catch {
+      fail('Something went wrong. Try again in a moment.');
+    }
+    busy = false;
+    button.disabled = false;
+    button.textContent = 'Get my questions';
+  }
+
+  // ---- step two: the run ----
+
+  async function run() {
+    const questions = readQuestions();
+    if (busy || questions.length < 3) return;
+    busy = true;
+    runBtn.disabled = true;
+    runBtn.textContent = 'Running…';
+    clearError();
     report.hidden = true;
     steps.replaceChildren();
     qs.replaceChildren();
-    run.hidden = false;
+    progress.hidden = false;
     let current = null;
     try {
-      const res = await fetch('/api/visibility', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url }) });
+      const res = await fetch('/api/visibility', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: input.value, questions, competitors: readRivals() }) });
       const type = res.headers.get('content-type') || '';
       if (!type.includes('text/event-stream')) {
         const data = await res.json().catch(() => ({}));
-        run.hidden = true;
+        progress.hidden = true;
         if (data.brand) render(data);
         else fail(data.error || 'That did not work. Try again in a moment.');
       } else {
@@ -238,37 +254,161 @@ const schema = [
             } else if (ev[1] === 'progress') {
               if (current) current.textContent = `Asking ${data.total} questions with live web search (${data.done} of ${data.total})`;
             } else if (ev[1] === 'report') {
-              if (current) current.classList.remove('is-running');
               finished = true;
-              run.hidden = true;
+              progress.hidden = true;
+              setup.hidden = true;
               render(data);
             } else if (ev[1] === 'error') {
               finished = true;
-              run.hidden = true;
+              progress.hidden = true;
               fail(data.message);
             }
           }
         }
         if (!finished) {
-          run.hidden = true;
+          progress.hidden = true;
           fail('The run was cut off. Try again in a moment.');
         }
       }
     } catch {
-      run.hidden = true;
+      progress.hidden = true;
       fail('Something went wrong. Try again in a moment.');
     }
     busy = false;
-    button.disabled = false;
-    button.textContent = 'Check visibility';
+    runBtn.textContent = 'Run the check';
+    count();
+  }
+
+  // ---- the report ----
+
+  function render(r) {
+    const parts = [];
+    const head = el('div', 'vis-score');
+    head.append(el('p', 'vis-num', `${r.citedRate}%`));
+    const side = el('div');
+    const h = el('h2', '', 'Cited in AI answers');
+    h.id = 'vis-report-h';
+    side.append(h, el('p', 'vis-sub', `${r.brandName} · ${r.brand} · ${r.questions} questions${r.askedByVisitor ? ' you chose' : ''}${r.cached ? ' · from a run in the last week' : ''}`));
+    head.append(side);
+    parts.push(head, el('p', 'vis-verdict', r.verdict));
+
+    const stats = el('dl', 'vis-stats');
+    const stat = (label, value, note) => {
+      const d = el('div');
+      d.append(el('dt', '', label), el('dd', '', value));
+      if (note) d.append(el('p', 'meta', note));
+      stats.append(d);
+    };
+    stat('Cited', `${r.cited} of ${r.questions}`, 'The answer leaned on your site.');
+    stat('Found but passed over', String(r.retrievedNotCited), 'In the search results, left out of the answer.');
+    stat('Share of voice', `${r.shareOfVoice}%`, r.rankAmongDomains ? `Number ${r.rankAmongDomains} of the domains cited.` : 'Not among the domains cited.');
+    if (r.uncontested?.length) stat('Nobody owns these', `${r.uncontested.length} of ${r.questions}`, 'The answer cited no source at all. The cheapest questions to win.');
+    else stat('Average position', r.averagePosition === null ? 'not found' : String(r.averagePosition), 'Where you appeared in the results behind the answers.');
+    parts.push(stats);
+
+    const table = (title, rows, cols) => {
+      parts.push(el('h3', '', title));
+      const t = el('table', 'vis-table');
+      const thead = el('thead');
+      const hr = el('tr');
+      for (const c of cols) hr.append(el('th', '', c));
+      thead.append(hr);
+      const tb = el('tbody');
+      for (const row of rows) {
+        const tr = el('tr');
+        if (row.you) tr.className = 'is-you';
+        tr.append(el('th', '', row.label), el('td', '', String(row.a)), el('td', '', row.b));
+        tb.append(tr);
+      }
+      t.append(thead, tb);
+      parts.push(t);
+    };
+
+    if (r.rivals?.length) {
+      const rows = [{ label: `${r.brand} (you)`, a: r.cited, b: `${r.citedRate}%`, you: true }, ...r.rivals.map((v) => ({ label: v.domain, a: v.questions, b: `${v.share}%` }))].sort((x, y) => y.a - x.a);
+      table('You against the competitors you named', rows, ['Domain', 'Questions', 'Share']);
+      if (r.losesTo?.length) parts.push(el('p', 'vis-note', `Cited less often than ${r.losesTo.join(' and ')} on these questions.`));
+      else if (r.beats?.length) parts.push(el('p', 'vis-note', `Cited more often than ${r.beats.join(' and ')} on these questions.`));
+    }
+    if (r.leaders.length) table('Who else gets cited', r.leaders.map((l) => ({ label: l.domain, a: l.questions, b: `${l.share}%` })), ['Domain', 'Questions', 'Share']);
+
+    if (r.yourPages.length) {
+      parts.push(el('h3', '', 'Your pages that showed up'));
+      const ul = el('ul', 'vis-pages');
+      for (const p of r.yourPages) {
+        const li = el('li');
+        const a = el('a', '', p.path);
+        a.href = `https://${r.brand}${p.path}`;
+        li.append(a, el('span', 'meta', ` on ${p.questions} ${p.questions === 1 ? 'question' : 'questions'}`));
+        ul.append(li);
+      }
+      parts.push(ul);
+    }
+
+    if (r.misses.length) {
+      parts.push(el('h3', '', 'Questions you did not win'));
+      const ul = el('ul', 'vis-misses');
+      for (const m of r.misses) {
+        const li = el('li');
+        li.append(el('span', 'vis-miss-q', m.question));
+        const found = m.retrieved ? 'Found in the results and passed over.' : 'Never surfaced.';
+        const who = m.uncontested ? 'The answer cited no source at all, so this one is open.' : `Cited instead: ${m.wonBy.join(', ')}.`;
+        li.append(el('span', 'meta', ` ${found} ${who}`));
+        if (m.uncontested) li.classList.add('is-open');
+        ul.append(li);
+      }
+      parts.push(ul);
+    }
+
+    const share = el('p', 'vis-share');
+    const link = `${location.origin}${location.pathname}?d=${encodeURIComponent(r.brand)}`;
+    const copy = el('button', 'btn btn-quiet', 'Copy a link to this result');
+    copy.type = 'button';
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(link);
+        copy.textContent = 'Copied';
+      } catch {
+        copy.textContent = link;
+      }
+    });
+    share.append(copy);
+    parts.push(share);
+
+    const next = el('div', 'vis-next');
+    next.append(el('h3', '', 'Find out why'));
+    next.append(el('p', '', 'This tells you which pages are losing. The audit agent reads a page and tells you what is holding it back.'));
+    const cta = el('a', 'btn', 'Run the AEO audit');
+    cta.href = r.yourPages.length ? `/audit/?url=${encodeURIComponent(`https://${r.brand}${r.yourPages[0].path}`)}` : '/audit/';
+    next.append(cta);
+    parts.push(next);
+
+    report.replaceChildren(...parts);
+    report.hidden = false;
+    history.replaceState(null, '', link);
+    report.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    check(input.value);
+    getQuestions(input.value);
   });
-  const preset = new URLSearchParams(location.search).get('url');
-  if (preset) input.value = preset.slice(0, 300);
+  runBtn.addEventListener('click', run);
+  $('vis-add').addEventListener('click', () => addQuestion()?.focus());
+
+  // A shared link loads the cached run straight away.
+  (async () => {
+    const params = new URLSearchParams(location.search);
+    const d = params.get('d') || params.get('url');
+    if (!d) return;
+    input.value = d;
+    try {
+      const res = await fetch(`/api/visibility?d=${encodeURIComponent(d)}`);
+      if (res.ok) render(await res.json());
+    } catch {
+      /* the form still works */
+    }
+  })();
 </script>
 
 <style is:global>
@@ -308,6 +448,27 @@ const schema = [
   .vis-next { margin-top: 2.5rem; padding: 1.5rem; border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--surface); }
   .vis-next h3 { margin: 0 0 .4rem; font-family: var(--font-display); font-size: var(--step-1); text-transform: none; letter-spacing: 0; color: var(--ink); }
   .vis-next p { margin: 0 0 1rem; max-width: 52ch; }
+  .vis-setup { margin-top: 2.25rem; }
+  .vis-setup h2 { font-size: var(--step-2); margin-bottom: .4rem; }
+  .vis-setup-lede { max-width: var(--measure); }
+  .vis-h3 { font-size: var(--step-1); margin: 1.9rem 0 .2rem; }
+  .vis-qlist { list-style: none; margin: 1.1rem 0 0; padding: 0; display: grid; gap: .5rem; counter-reset: q; }
+  .vis-q { display: flex; gap: .5rem; align-items: center; }
+  .vis-q::before { counter-increment: q; content: counter(q); font-family: var(--font-ui); font-size: .75rem; color: var(--ink-soft); width: 1.2rem; text-align: right; flex: none; }
+  .vis-q input { flex: 1; min-width: 0; font: inherit; font-family: var(--font-ui); font-size: var(--step--1); padding: .55rem .7rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); color: var(--ink); }
+  .vis-del { font-family: var(--font-ui); font-size: .72rem; background: none; border: 0; color: var(--ink-soft); cursor: pointer; text-decoration: underline; padding: .4rem .2rem; flex: none; }
+  .vis-del:hover { color: var(--fjord); }
+  .vis-actions { display: flex; align-items: center; gap: .8rem; margin-top: .8rem; flex-wrap: wrap; }
+  .btn-quiet { background: var(--surface); color: var(--ink); border: 1px solid var(--rule); cursor: pointer; }
+  .btn-quiet:hover { border-color: var(--fjord); color: var(--fjord); }
+  .vis-rivals { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-top: .7rem; max-width: var(--measure); }
+  .vis-rivals input { font: inherit; font-family: var(--font-ui); font-size: var(--step--1); padding: .55rem .7rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); color: var(--ink); }
+  .vis-go { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin-top: 1.6rem; }
+  .vis-go .btn { cursor: pointer; }
+  .vis-go .btn:disabled { opacity: .5; cursor: default; }
+  .vis-table tbody tr.is-you th { color: var(--fjord); font-weight: 700; }
+  .vis-note { margin-top: .7rem; max-width: var(--measure); font-family: var(--font-ui); font-size: var(--step--1); }
+  .vis-share { margin-top: 2rem; }
   .vis-about { margin-top: 3rem; }
   @media (max-width: 520px) { .vis-form { flex-direction: column; } .vis-form .btn { justify-content: center; } }
 </style>
