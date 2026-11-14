@@ -174,5 +174,6 @@ export const LINKS = [
   { id: 'file', label: 'File a disability compensation claim', url: 'https://www.va.gov/disability/how-to-file-claim/', note: 'The VA\'s own instructions for filing.' },
   { id: 'itf', label: 'Start an intent to file', url: 'https://www.va.gov/disability/how-to-file-claim/', note: 'An intent to file sets the date your claim counts from, under 38 CFR 3.155(b).' },
   { id: 'records', label: 'Request your military records', url: 'https://www.archives.gov/veterans/military-service-records', note: 'Service treatment records and personnel records, from the National Archives.' },
+  { id: 'pact', label: 'The PACT Act and your benefits', url: 'https://www.va.gov/resources/the-pact-act-and-your-va-benefits/', note: 'Congress added presumptive conditions by statute. The VA keeps the current list here.' },
   { id: 'presumptive', label: 'Check the presumptive conditions', url: 'https://www.va.gov/disability/eligibility/hazardous-materials-exposure/', note: 'Some exposures and conditions are presumed service connected, which removes the need to prove the link.' },
 ];
