@@ -94,12 +94,64 @@ export const THRESHOLDS = [
   },
 ];
 
+/**
+ * Colorado programs that turn on a VA rating. These come from the state
+ * agencies' own pages, read on 2026-11-14, not from the Code of Federal
+ * Regulations. State rules change with each legislative session and are
+ * administered by counties and agencies, so every entry says who to confirm
+ * with. The summaries say what the cited page says and nothing more.
+ */
+export const COLORADO = [
+  {
+    id: 'co-plates',
+    at: 50,
+    label: 'Disabled Veteran license plates',
+    who: 'The veteran',
+    summary: 'A veteran with a service-connected disability of 50 percent or more can apply for Disabled Veteran plates. The first set of plates is issued without the plate fee. The DMV checklist asks for a letter stating the disability is permanent.',
+    confirm: 'Your county motor vehicle office, which also decides what registration fees and taxes apply.',
+    test: ({ rated }) => rated >= 50,
+    cite: { section: 'Colorado DMV, Military License Plates', url: 'https://dmv.colorado.gov/license-plates-military' },
+  },
+  {
+    id: 'co-license',
+    at: 50,
+    label: 'Free lifetime fishing and small game license',
+    who: 'The veteran',
+    summary: 'Colorado Parks and Wildlife offers resident veterans a free lifetime fishing and small game hunting combination license with proof of a service-connected disability of 50 percent or more.',
+    confirm: 'Colorado Parks and Wildlife.',
+    test: ({ rated }) => rated >= 50,
+    cite: { section: 'Colorado Parks and Wildlife, Hunters in the Military', url: 'https://cpw.state.co.us/activities/hunting/hunters-military' },
+  },
+  {
+    id: 'co-parks',
+    at: 10,
+    label: 'Independence Pass for state parks',
+    who: 'The veteran',
+    summary: 'The Independence Pass gives unlimited access to all Colorado state parks to resident veterans with service-connected disabilities. The page does not state a minimum rating here, so check the requirements before applying.',
+    confirm: 'Colorado Parks and Wildlife.',
+    test: ({ rated }) => rated >= 10,
+    cite: { section: 'Colorado Parks and Wildlife, Park Specialty Passes', url: 'https://cpw.state.co.us/park-specialty-passes' },
+  },
+  {
+    id: 'co-property-tax',
+    at: 100,
+    label: 'Property tax exemption on your home',
+    who: 'The veteran, and a surviving spouse',
+    summary: 'Half of the first $200,000 of the actual value of a primary residence is exempt from property tax for a veteran rated 100 percent permanent, or granted individual unemployability. The veteran must own and occupy the home as of January 1 of the year they apply.',
+    confirm: 'Your county assessor.',
+    // The state's test is the permanent 100 percent rating or unemployability
+    // actually in payment, not the percentage threshold being met on paper.
+    test: ({ permanentTotal, tdiu }) => permanentTotal === true || tdiu === true,
+    cite: { section: 'Colorado Division of Property Taxation, Veteran with a Disability Exemption', url: 'https://dpt.colorado.gov/veteran-with-a-disability-and-gold-star-exemptions' },
+  },
+];
+
 /** What this list does not yet cover, so nobody reads it as complete. */
 export const COVERAGE = {
   sourced: THRESHOLDS.length,
   missing: [
     'Special monthly compensation, which pays above the 100 percent rate for specific losses (38 CFR 3.350)',
-    'State programs, which vary by state and are not in the Code of Federal Regulations',
+    'State programs outside Colorado, and Colorado programs beyond the four listed, such as tuition',
     'Vocational rehabilitation, housing grants, and the automobile allowance',
     'Dependency and indemnity compensation for survivors',
   ],
@@ -115,19 +167,27 @@ const near = (threshold, rated) => threshold.at > rated && threshold.at - rated 
  * `permanentTotal` is a finding the VA makes and states, not something a
  * rating of 100 implies on its own.
  */
-export function thresholdsFor(facts = {}) {
+export function thresholdsFor(facts = {}, { state } = {}) {
   const rated = Math.max(0, Math.min(100, Math.round(Number(facts.rated) || 0)));
-  const state = { ...facts, rated };
+  const state_ = { ...facts, rated };
   const applies = [];
   const upcoming = [];
   for (const t of THRESHOLDS) {
     const { test, ...rest } = t;
-    if (test(state)) applies.push(rest);
+    if (test(state_)) applies.push(rest);
     else if (near(t, rated)) upcoming.push({ ...rest, pointsAway: t.at - rated });
+  }
+  const stateApplies = [];
+  if (state === 'CO') {
+    for (const t of COLORADO) {
+      const { test, ...rest } = t;
+      if (test(state_)) stateApplies.push(rest);
+    }
   }
   return {
     rated,
     applies,
+    state: state === 'CO' ? { name: 'Colorado', applies: stateApplies, checked: '2026-11-14' } : null,
     upcoming: upcoming.sort((a, b) => a.pointsAway - b.pointsAway),
     // A rating of 100 does not by itself mean permanent and total, and the two
     // family benefits above turn on that finding rather than on the number.

@@ -270,3 +270,31 @@ test('the list says what it does not cover', () => {
   assert.ok(c.missing.length >= 3);
   assert.ok(c.missing.some((m) => /state/i.test(m)), 'state programs are named as missing');
 });
+
+// ---- Colorado ----
+const { COLORADO } = await import('../src/va/thresholds.mjs');
+
+test('Colorado entries cite a state agency page and say who to confirm with', () => {
+  assert.equal(COLORADO.length, 4);
+  for (const c of COLORADO) {
+    assert.match(c.cite.url, /^https:\/\/(dmv|dpt)\.colorado\.gov\/|^https:\/\/cpw\.state\.co\.us\//, `${c.id} links to the agency`);
+    assert.ok(c.confirm && c.summary.length > 60, `${c.id} is complete`);
+  }
+});
+
+test('Colorado benefits appear only when asked for, and sort by rating', () => {
+  assert.equal(thresholdsFor({ rated: 70 }).state, null, 'no state section unless asked');
+  const at40 = thresholdsFor({ rated: 40 }, { state: 'CO' });
+  assert.deepEqual(at40.state.applies.map((t) => t.id), ['co-parks']);
+  const at50 = thresholdsFor({ rated: 50 }, { state: 'CO' });
+  assert.deepEqual(at50.state.applies.map((t) => t.id), ['co-plates', 'co-license', 'co-parks']);
+  assert.equal(at50.state.checked, '2026-11-14');
+});
+
+test('the Colorado property tax exemption follows the finding, not the number', () => {
+  const ids = (facts) => thresholdsFor(facts, { state: 'CO' }).state.applies.map((t) => t.id);
+  assert.ok(!ids({ rated: 100 }).includes('co-property-tax'), '100 percent alone is not 100 percent permanent');
+  assert.ok(ids({ rated: 100, permanentTotal: true }).includes('co-property-tax'));
+  assert.ok(ids({ rated: 70, tdiu: true }).includes('co-property-tax'), 'unemployability qualifies');
+  assert.ok(!ids({ rated: 70, tdiuThresholdMet: true }).includes('co-property-tax'), 'meeting the threshold on paper is not being granted it');
+});
