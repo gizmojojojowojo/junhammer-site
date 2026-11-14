@@ -1,7 +1,7 @@
 // Run: npm test
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cleanQuestions, forSite, hostOf, isSite, mentions, readCitations, readQuestion, scoreRun, verdict } from '../src/visibility/lib.mjs';
+import { cleanDomains, cleanQuestions, forSite, hostOf, isSite, mentions, readCitations, readQuestion, scoreRun, verdict } from '../src/visibility/lib.mjs';
 
 /** Builds a Messages API response the way the web search tool returns one. */
 const answer = ({ results = [], cites = [], text = 'Here is the answer.' }) => [
@@ -126,7 +126,7 @@ test('generated questions are cleaned before anything is spent on them', () => {
 });
 
 // ---- endpoint ----
-const { onRequestPost, RUN } = await import('../functions/api/visibility.js');
+const { onRequestGet: visGet, onRequestPost, RUN } = await import('../functions/api/visibility.js');
 
 const HOME = '<!doctype html><html lang="en"><head><title>Acme AEO | Answer engine optimization in Denver</title><meta name="description" content="We get brands cited in AI search."></head><body><main><h1>Answer engine optimization</h1><p>We help Denver businesses get cited by AI search assistants, with measurement rather than guesswork.</p><h2>What we do</h2><p>Audits, content, and tracking.</p></main></body></html>';
 
@@ -204,10 +204,11 @@ test('endpoint: a full run scores the brand and caches it', async () => {
     assert.equal(report.brand, 'acme.example.org');
     assert.equal(report.brandName, 'Acme AEO');
     assert.equal(report.questions, RUN.questions);
-    assert.equal(report.cited, 4, 'cited on every third question');
-    assert.equal(report.retrieved, RUN.questions, 'found every time, cited four times');
-    assert.equal(report.retrievedNotCited, 6);
-    assert.deepEqual(report.leaders[0], { domain: 'moz.com', questions: 6, share: 60, isBrand: false });
+    const cited = Math.ceil(RUN.questions / 3); // the fake world cites us on every third
+    assert.equal(report.cited, cited);
+    assert.equal(report.retrieved, RUN.questions, 'found every time, cited on some');
+    assert.equal(report.retrievedNotCited, RUN.questions - cited);
+    assert.deepEqual(report.leaders[0], { domain: 'moz.com', questions: RUN.questions - cited, share: Math.round((100 * (RUN.questions - cited)) / RUN.questions), isBrand: false });
     assert.match(report.verdict, /passed over/);
     assert.equal(w.calls.questions, 1);
     assert.equal(w.calls.answers, RUN.questions);
@@ -245,7 +246,7 @@ test('endpoint: one new domain per visitor, and a daily ceiling for the site', a
   globalThis.fetch = world().fetchImpl;
   try {
     const { kv } = store();
-    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv, VIS_DAILY_LIMIT: '2' };
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv, VIS_DAILY_LIMIT: '2', VIS_VISITOR_LIMIT: '1' };
     const first = ctx({ url: 'one-brand.org' }, env);
     await events((await onRequestPost(first)).body);
     await Promise.all(first.pending);
@@ -292,4 +293,129 @@ test('questions nobody has answered are separated from questions lost', () => {
   assert.deepEqual(s.misses.map((m) => [m.question, m.uncontested]), [['open one', true], ['lost one', false]]);
   assert.match(verdict(s), /nobody owns those yet/);
   assert.ok(!/nobody owns/.test(verdict(scoreRun([{ question: 'q', cited: true, retrieved: true, position: 1, mentioned: true, pages: [], others: [], citedCount: 2 }], 'example.com'))));
+});
+
+test('named rivals always appear, even on zero', () => {
+  const rows = [
+    { question: 'a', cited: true, retrieved: true, position: 1, mentioned: true, pages: [], others: ['moz.com'], citedCount: 2 },
+    { question: 'b', cited: false, retrieved: true, position: 2, mentioned: false, pages: [], others: ['moz.com', 'ahrefs.com'], citedCount: 2 },
+  ];
+  const s = scoreRun(rows, 'example.com', ['Ahrefs.com', 'https://www.quiet.com/pricing', 'quiet.com']);
+  assert.deepEqual(s.rivals, [{ domain: 'ahrefs.com', questions: 1, share: 50 }, { domain: 'quiet.com', questions: 0, share: 0 }]);
+  assert.deepEqual(s.beats, ['quiet.com'], 'cited once, beats the rival on zero');
+  assert.deepEqual(s.losesTo, []);
+  assert.deepEqual(s.leaders.map((l) => l.domain), ['moz.com'], 'named rivals are not repeated in the discovered list');
+  assert.deepEqual(scoreRun(rows, 'example.com').rivals, []);
+});
+
+test('typed domains are cleaned before they are used', () => {
+  assert.deepEqual(cleanDomains(['https://WWW.Moz.com/beginners-guide', ' ahrefs.com ', 'moz.com', 'not a domain', '', null]), ['moz.com', 'ahrefs.com']);
+  assert.equal(cleanDomains(['a.com', 'b.com', 'c.com', 'd.com']).length, 3);
+  assert.deepEqual(cleanDomains('nope'), []);
+});
+
+test('endpoint: questions are generated first, free, and can be replaced', async () => {
+  const real = globalThis.fetch;
+  const w = world();
+  globalThis.fetch = w.fetchImpl;
+  try {
+    const { kv } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const res = await onRequestPost(ctx({ url: 'acme.example.org', action: 'questions' }, env));
+    const data = await res.json();
+    assert.equal(res.status, 200);
+    assert.equal(data.brandName, 'Acme AEO');
+    assert.equal(data.questions.length, RUN.questions);
+    assert.equal(w.calls.answers, 0, 'no searches were bought to write questions');
+
+    // The visitor's own questions are used instead of the generated ones.
+    const mine = ['Who should I hire for AI search work in Denver?', 'Does answer engine optimization actually pay off?', 'What does an AEO audit involve from start to finish?'];
+    const c = ctx({ url: 'acme.example.org', questions: mine, competitors: ['moz.com', 'https://www.ahrefs.com/blog'] }, env);
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    const report = out.at(-1).data;
+    assert.equal(report.questions, 3);
+    assert.equal(report.askedByVisitor, true);
+    assert.deepEqual(out.find((e) => e.event === 'questions').data.questions, mine);
+    assert.deepEqual(report.rivals.map((r) => r.domain), ['moz.com', 'ahrefs.com'], 'named rivals appear, ahrefs on zero');
+    assert.equal(report.rivals[1].questions, 0);
+    assert.ok(!report.leaders.some((l) => l.domain === 'moz.com'), 'a named rival is not repeated as a discovery');
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test('endpoint: a cached run is readable by URL, so results are shareable', async () => {
+  const real = globalThis.fetch;
+  globalThis.fetch = world().fetchImpl;
+  try {
+    const { kv } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const miss = await visGet({ request: new Request('https://junhammer.com/api/visibility?d=never-checked.org'), env });
+    assert.equal(miss.status, 404);
+    assert.equal((await miss.json()).reason, 'not_run');
+    assert.equal((await visGet({ request: new Request('https://junhammer.com/api/visibility'), env })).status, 400);
+
+    const c = ctx({ url: 'acme.example.org' }, env);
+    await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    const hit = await visGet({ request: new Request('https://junhammer.com/api/visibility?d=https://WWW.acme.example.org/a'), env });
+    const data = await hit.json();
+    assert.equal(hit.status, 200);
+    assert.equal(data.brand, 'acme.example.org');
+    assert.equal(data.cached, true);
+    assert.match(hit.headers.get('cache-control'), /max-age/);
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test('a run on edited questions is personal: not cached, not shareable', async () => {
+  const real = globalThis.fetch;
+  const w = world();
+  globalThis.fetch = w.fetchImpl;
+  try {
+    const { kv, m } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const mine = ['Who should I hire for AI search work?', 'Does answer engine optimization pay off?', 'What does an AEO audit cover?'];
+    const c = ctx({ url: 'acme.example.org', questions: mine }, env);
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out.at(-1).data.shareable, false);
+    assert.ok(![...m.keys()].some((k) => k.startsWith('vis:run:')), 'a custom run does not become the domain result');
+    assert.equal((await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).status, 404);
+
+    // The standard run is cached and shareable, and a later custom run does
+    // not overwrite it.
+    const std = ctx({ url: 'acme.example.org' }, env, { 'cf-connecting-ip': '5.5.5.5' });
+    const stdOut = await events((await onRequestPost(std)).body);
+    await Promise.all(std.pending);
+    assert.equal(stdOut.at(-1).data.shareable, true);
+    assert.equal((await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).status, 200);
+    const again = ctx({ url: 'acme.example.org', questions: mine }, env, { 'cf-connecting-ip': '6.6.6.6' });
+    await events((await onRequestPost(again)).body);
+    await Promise.all(again.pending);
+    const still = await (await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).json();
+    assert.equal(still.questions, RUN.questions, 'the shared result is still the standard run');
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test('running the drafted questions unchanged still counts as the standard run', async () => {
+  const real = globalThis.fetch;
+  globalThis.fetch = world().fetchImpl;
+  try {
+    const { kv, m } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const drafted = Array.from({ length: RUN.questions }, (_, i) => `What is the best way to handle problem number ${i}?`);
+    const c = ctx({ url: 'acme.example.org', questions: drafted, edited: false }, env);
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out.at(-1).data.shareable, true, 'unchanged questions are shareable');
+    assert.ok([...m.keys()].some((k) => k.startsWith('vis:run:')), 'and cached');
+    assert.equal((await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).status, 200);
+  } finally {
+    globalThis.fetch = real;
+  }
 });

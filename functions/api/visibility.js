@@ -9,16 +9,21 @@
 //   ANTHROPIC_API_KEY   secret. Required.
 //   ASK_KV              KV binding, shared. Holds the cache and the counters.
 //   VIS_MODEL           optional. Defaults to DEFAULT_MODEL below.
-//   VIS_DAILY_LIMIT     new runs per day, whole site. Default 8.
+//   VIS_DAILY_LIMIT     new runs per day, whole site. Default 40.
+//   VIS_VISITOR_LIMIT   new runs per visitor per day. Default 3.
 //   VIS_CACHE_DAYS      how long a run is reused. Default 7.
 import { checkUrl, safeFetch } from '../../src/audit/guard.mjs';
 import { parsePage } from '../../src/audit/page.mjs';
-import { cleanQuestions, readQuestion, scoreRun, verdict } from '../../src/visibility/lib.mjs';
+import { cleanDomains, cleanQuestions, readQuestion, scoreRun, verdict } from '../../src/visibility/lib.mjs';
 import { sse } from '../../src/ask/answer.mjs';
 
 const DEFAULT_MODEL = 'claude-haiku-5-5';
 const API = 'https://api.anthropic.com/v1/messages';
-export const RUN = { questions: 10, concurrency: 3, searchesPerQuestion: 2, answerTokens: 700, timeoutMs: 40000 };
+// Six questions at one search each keeps a free run near six cents. The free
+// run is a sample: enough to tell a business whether it is in the game at all,
+// not enough to track a trend. Ten binary trials cannot measure a small
+// improvement, and pretending otherwise would be the dishonest part.
+export const RUN = { questions: 6, maxQuestions: 10, concurrency: 3, searchesPerQuestion: 1, answerTokens: 600, timeoutMs: 40000 };
 
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
@@ -94,6 +99,15 @@ async function pool(items, size, fn) {
   }));
 }
 
+/** GET /api/visibility?d=domain returns a cached run, so results are shareable. */
+export async function onRequestGet({ request, env }) {
+  const d = cleanDomains([new URL(request.url).searchParams.get('d') || ''], 1)[0];
+  if (!d) return json({ error: 'Pass ?d=domain.' }, 400);
+  const cached = await (env.ASK_KV || memoryKV).get(`vis:run:3:${d}`);
+  if (!cached) return json({ error: 'No run for that domain yet.', reason: 'not_run' }, 404);
+  return new Response(JSON.stringify({ ...JSON.parse(cached), cached: true }), { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=600' } });
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
   const started = Date.now();
@@ -115,22 +129,50 @@ export async function onRequestPost(context) {
   const kv = env.ASK_KV || memoryKV;
   const model = env.VIS_MODEL || DEFAULT_MODEL;
 
-  // A cached run is free and is served to anyone who asks for the same domain.
-  const cacheKey = `vis:run:2:${brand}`;
-  const cached = await kv.get(cacheKey);
-  if (cached && !body.fresh) {
-    const run = JSON.parse(cached);
-    return json({ ...run, cached: true });
+  // Step one is cheap: one model call, no searches. The visitor edits the
+  // questions before anything is spent on them, so a bad guess costs nothing.
+  if (body.action === 'questions') {
+    try {
+      const fetched = await safeFetch(checked.url);
+      if (!fetched.ok || fetched.status >= 400) return json({ error: 'That site could not be read. Check the address.' }, 400);
+      const page = parsePage(fetched.text, fetched.finalUrl);
+      const brandName = (page.title.split(/[|—\-–:]/)[0] || brand).trim().slice(0, 60);
+      const questions = await writeQuestions(key, model, page, RUN.questions);
+      if (questions.length < 3) return json({ error: 'Not enough could be read from that page to write questions. Add your own below.' }, 422);
+      return json({ brand, brandName, url: fetched.finalUrl, questions });
+    } catch (e) {
+      console.error('visibility: questions failed', String(e?.message || e).slice(0, 60));
+      return json({ error: 'That did not work. Try again in a moment.' }, 502);
+    }
+  }
+
+  // The cache holds the standard run for a domain: the generated questions,
+  // which is what makes it meaningful to share and safe to reuse. A visitor
+  // who edited the questions is asking a different thing, so their run neither
+  // reads from the cache nor overwrites it.
+  const ownQuestions = cleanQuestions(body.questions, RUN.maxQuestions);
+  // Running the drafted questions unchanged is the standard run for a domain,
+  // so it caches and gets a link. The page says which it is. That flag is the
+  // client's word, and the worst it can do is make one domain's cached result
+  // somebody's own question set for a week, at the cost of their own quota.
+  const custom = ownQuestions.length > 0 && body.edited !== false;
+  const cacheKey = `vis:run:3:${brand}`;
+  if (!custom && !body.fresh) {
+    const cached = await kv.get(cacheKey);
+    if (cached) return json({ ...JSON.parse(cached), cached: true });
   }
 
   const day = new Date().toISOString().slice(0, 10);
   const dayKey = `vis:day:${day}`;
   const ipKey = `vis:ip:${request.headers.get('cf-connecting-ip') || 'unknown'}:${day}`;
   const [d, i] = await Promise.all([kv.get(dayKey), kv.get(ipKey)]);
-  if ((Number(d) || 0) >= Number(env.VIS_DAILY_LIMIT || 8)) return json({ error: 'The checker has done its runs for today. Each one costs a real search budget. Try a domain someone has already checked, or come back tomorrow.', reason: 'closed' }, 429);
-  if ((Number(i) || 0) >= 1) return json({ error: 'One new domain per visitor per day. Domains that have already been checked are still free to view.', reason: 'limited' }, 429);
-  await Promise.all([kv.put(dayKey, String((Number(d) || 0) + 1), { expirationTtl: 2 * 86400 }), kv.put(ipKey, '1', { expirationTtl: 2 * 86400 })]);
+  if ((Number(d) || 0) >= Number(env.VIS_DAILY_LIMIT || 40)) return json({ error: 'The checker has done its runs for today. Each one costs a real search budget. A domain someone has already checked is still free to view, or come back tomorrow.', reason: 'closed' }, 429);
+  const mine = Number(i) || 0;
+  const perVisitor = Number(env.VIS_VISITOR_LIMIT || 3);
+  if (mine >= perVisitor) return json({ error: `That is ${perVisitor} runs today, which is the limit per visitor. Any domain someone has already checked is still free to view.`, reason: 'limited' }, 429);
+  await Promise.all([kv.put(dayKey, String((Number(d) || 0) + 1), { expirationTtl: 2 * 86400 }), kv.put(ipKey, String(mine + 1), { expirationTtl: 2 * 86400 })]);
 
+  const rivals = cleanDomains(body.competitors, 3);
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
   const emit = (event, data) => writer.write(sse(event, data)).catch(() => {});
@@ -145,8 +187,11 @@ export async function onRequestPost(context) {
         const page = parsePage(fetched.text, fetched.finalUrl);
         const brandName = (page.title.split(/[|—\-–:]/)[0] || brand).trim().slice(0, 60);
 
-        emit('step', { label: 'Writing the questions a buyer would ask' });
-        const questions = await writeQuestions(key, model, page, RUN.questions);
+        let questions = ownQuestions;
+        if (!questions.length) {
+          emit('step', { label: 'Writing the questions a buyer would ask' });
+          questions = await writeQuestions(key, model, page, RUN.questions);
+        }
         if (questions.length < 3) throw new Error('no_questions');
         emit('questions', { questions, brandName });
 
@@ -165,7 +210,7 @@ export async function onRequestPost(context) {
 
         const usable = rows.filter(Boolean);
         if (!usable.length) throw new Error('no_answers');
-        const score = scoreRun(usable, brand);
+        const score = scoreRun(usable, brand, rivals);
         const run = {
           brand,
           brandName,
@@ -174,9 +219,11 @@ export async function onRequestPost(context) {
           model,
           failedQuestions: rows.length - usable.length,
           ...score,
+          askedByVisitor: custom,
+          shareable: !custom,
           verdict: verdict(score),
         };
-        await kv.put(cacheKey, JSON.stringify(run), { expirationTtl: Number(env.VIS_CACHE_DAYS || 7) * 86400 });
+        if (!custom) await kv.put(cacheKey, JSON.stringify(run), { expirationTtl: Number(env.VIS_CACHE_DAYS || 7) * 86400 });
         emit('report', run);
         console.log(JSON.stringify({ visibility: 1, brand, citedRate: score.citedRate, searches, ms: Date.now() - started }));
       } catch (e) {

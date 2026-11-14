@@ -105,7 +105,7 @@ const pct = (n, d) => (d ? Math.round((100 * n) / d) : 0);
  * once per question, because an answer citing the same site three times is one
  * endorsement, not three.
  */
-export function scoreRun(rows = [], brand = '') {
+export function scoreRun(rows = [], brand = '', competitors = []) {
   const n = rows.length;
   const citedRows = rows.filter((r) => r.cited);
   const voice = new Map();
@@ -122,6 +122,14 @@ export function scoreRun(rows = [], brand = '') {
   const pages = new Map();
   for (const row of rows) for (const p of row.pages) pages.set(p, (pages.get(p) || 0) + 1);
 
+  // Named rivals always appear, including on zero, because "we were cited
+  // nowhere and neither were they" is a different story from being beaten.
+  const named = cleanDomains(competitors, 6);
+  const rivals = named.map((domain) => {
+    const questions = rows.filter((r) => r.others.some((h) => isSite(h, domain))).length;
+    return { domain, questions, share: pct(questions, n) };
+  }).sort((a, b) => b.questions - a.questions || a.domain.localeCompare(b.domain));
+
   return {
     questions: n,
     cited: citedRows.length,
@@ -134,7 +142,11 @@ export function scoreRun(rows = [], brand = '') {
     averagePosition: positions.length ? +(positions.reduce((a, b) => a + b, 0) / positions.length).toFixed(1) : null,
     shareOfVoice: ranking.find((r) => r.isBrand)?.share ?? 0,
     rankAmongDomains: brandRank >= 0 ? brandRank + 1 : null,
-    leaders: ranking.filter((r) => !r.isBrand).slice(0, 8),
+    leaders: ranking.filter((r) => !r.isBrand && !named.some((d) => isSite(r.domain, d))).slice(0, 8),
+    rivals,
+    // Where the brand stands against the named rivals alone.
+    beats: rivals.filter((r) => r.questions < citedRows.length).map((r) => r.domain),
+    losesTo: rivals.filter((r) => r.questions > citedRows.length).map((r) => r.domain),
     yourPages: [...pages.entries()].sort((a, b) => b[1] - a[1]).map(([path, questions]) => ({ path, questions })).slice(0, 8),
     // Questions where the answer cited nothing at all. Nobody owns these, so
     // they are the cheapest ones to win and are worth separating from losses.
@@ -153,6 +165,15 @@ export function verdict(score) {
   if (retrievedNotCited > score.cited) return `Cited on ${score.cited} of ${questions}, and found but passed over on ${retrievedNotCited} more. Being retrieved is not the constraint. Being the clearest answer on the page is.${open}`;
   if (citedRate >= 60) return `Cited on ${score.cited} of ${questions}, with ${shareOfVoice} percent share of voice. Strong, and worth watching rather than fixing.`;
   return `Cited on ${score.cited} of ${questions}, ${shareOfVoice} percent share of voice.${open}`;
+}
+
+/** Domains a visitor typed. Anything that is not a plausible host is dropped. */
+export function cleanDomains(input, max = 3) {
+  return (Array.isArray(input) ? input : [])
+    .map((d) => String(d || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].split('?')[0])
+    .filter((d) => /^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/.test(d) && d.length <= 100)
+    .filter((d, i, all) => all.indexOf(d) === i)
+    .slice(0, max);
 }
 
 export function cleanQuestions(input, max = 10) {
