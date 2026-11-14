@@ -139,3 +139,74 @@ test('what it would take to reach the next ten', () => {
   assert.equal(nextStep([{ rating: 100 }]), null);
   assert.ok(nextStep([{ rating: 10 }]).reaches >= 20);
 });
+
+// ---- 38 CFR 4.16(a), the unemployability threshold ----
+const { tdiuThreshold, groupValues } = await import('../src/va/tdiu.mjs');
+
+test('4.16(a): a single disability needs 60 percent', () => {
+  const yes = tdiuThreshold([{ rating: 60 }]);
+  assert.equal(yes.meetsSchedularThreshold, true);
+  assert.equal(yes.route, 'single-60');
+  const no = tdiuThreshold([{ rating: 50 }]);
+  assert.equal(no.meetsSchedularThreshold, false);
+  assert.match(no.reads, /60 percent or more/);
+  assert.equal(no.extraschedularPossible, true, '4.16(b) referral is still open');
+});
+
+test('4.16(a): two or more need one at 40 and a combined 70', () => {
+  // 40 and 50 combine to 70. One is at least 40, so the threshold is met.
+  const met = tdiuThreshold([{ rating: 50 }, { rating: 40 }]);
+  assert.equal(met.combined, 70);
+  assert.deepEqual([met.meetsSchedularThreshold, met.route], [true, 'combination-40-70']);
+  // 30 and 30 and 30 reach 70 combined but nothing is at 40.
+  const noAnchor = tdiuThreshold([{ rating: 30 }, { rating: 30 }, { rating: 30 }]);
+  assert.equal(noAnchor.combined, 70);
+  assert.equal(noAnchor.meetsSchedularThreshold, false);
+  assert.match(noAnchor.reads, /40 percent or more/);
+  // 40 and 20 is a 40 anchor but only 50 combined.
+  const short = tdiuThreshold([{ rating: 40 }, { rating: 20 }]);
+  assert.deepEqual([short.combined, short.meetsSchedularThreshold], [50, false]);
+  assert.match(short.reads, /combined rating has to reach 70/);
+});
+
+test('4.16(a): disabilities counted as one can supply the 40 percent anchor', () => {
+  // Three 30s combine to 70, so the combined test passes, but nothing is
+  // ratable at 40 on its own and the threshold fails.
+  const apart = tdiuThreshold([{ rating: 30 }, { rating: 30 }, { rating: 30 }]);
+  assert.equal(apart.combined, 70);
+  assert.equal(apart.highestSingle, 30);
+  assert.equal(apart.meetsSchedularThreshold, false);
+
+  // Two of them share a body system, so they count as one disability. They
+  // combine to 51, which anchors the 40 percent test, and nothing else moves.
+  const grouped = tdiuThreshold([
+    { rating: 30, group: 'orthopedic' },
+    { rating: 30, group: 'orthopedic' },
+    { rating: 30 },
+  ]);
+  assert.equal(grouped.groups[0].value, 51, '30 and 30 combine to 51 as one disability');
+  assert.equal(grouped.combined, 70, 'the combined rating is unchanged');
+  assert.equal(grouped.meetsSchedularThreshold, true);
+  assert.match(grouped.reads, /51 percent/);
+});
+
+test('4.16(a)(1): a paired-limb group carries its bilateral factor', () => {
+  const g = groupValues([
+    { rating: 30, bilateral: true, group: 'legs' },
+    { rating: 20, bilateral: true, group: 'legs' },
+    { rating: 10 },
+  ]);
+  // 30 and 20 combine to 44, plus 4.4, is 48.4, rounded to 48.
+  assert.equal(g[0].value, 48, 'the factor is included, per 4.16(a)(1)');
+  assert.equal(g[0].members.length, 2);
+  assert.equal(g[1].value, 10);
+  assert.deepEqual(groupValues([]), []);
+  assert.equal(groupValues([{ rating: 0 }]).length, 0);
+});
+
+test('the threshold is never reported as qualifying for TDIU', () => {
+  const r = tdiuThreshold([{ rating: 70 }]);
+  const text = JSON.stringify(r).toLowerCase();
+  assert.ok(!/eligible|qualif|you will|entitled/.test(text), 'no eligibility language anywhere in the result');
+  assert.ok('meetsSchedularThreshold' in r && !('eligible' in r));
+});
