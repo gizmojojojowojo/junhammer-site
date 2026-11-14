@@ -361,8 +361,12 @@ const schema = [
       parts.push(ul);
     }
 
-    const share = el('p', 'vis-share');
+    // Only a standard run has a URL worth sharing: a run on edited questions
+    // is personal, so it is not cached and the link would show something else.
     const link = `${location.origin}${location.pathname}?d=${encodeURIComponent(r.brand)}`;
+    const shareable = r.shareable || r.cached;
+    const share = el('p', 'vis-share');
+    if (!shareable) share.append(el('span', 'meta', 'You edited the questions, so this run is yours alone. It is not saved and has no link. Run the drafted questions unchanged to get a shareable result.'));
     const copy = el('button', 'btn btn-quiet', 'Copy a link to this result');
     copy.type = 'button';
     copy.addEventListener('click', async () => {
@@ -373,7 +377,7 @@ const schema = [
         copy.textContent = link;
       }
     });
-    share.append(copy);
+    if (shareable) share.append(copy);
     parts.push(share);
 
     const next = el('div', 'vis-next');
@@ -386,7 +390,7 @@ const schema = [
 
     report.replaceChildren(...parts);
     report.hidden = false;
-    history.replaceState(null, '', link);
+    if (shareable) history.replaceState(null, '', link);
     report.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 

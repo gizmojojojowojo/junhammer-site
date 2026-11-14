@@ -145,12 +145,16 @@ export async function onRequestPost(context) {
     }
   }
 
-  // A cached run is free and is served to anyone who asks for the same domain.
+  // The cache holds the standard run for a domain: the generated questions,
+  // which is what makes it meaningful to share and safe to reuse. A visitor
+  // who edited the questions is asking a different thing, so their run neither
+  // reads from the cache nor overwrites it.
+  const ownQuestions = cleanQuestions(body.questions, RUN.maxQuestions);
+  const custom = ownQuestions.length > 0;
   const cacheKey = `vis:run:3:${brand}`;
-  const cached = await kv.get(cacheKey);
-  if (cached && !body.fresh) {
-    const run = JSON.parse(cached);
-    return json({ ...run, cached: true });
+  if (!custom && !body.fresh) {
+    const cached = await kv.get(cacheKey);
+    if (cached) return json({ ...JSON.parse(cached), cached: true });
   }
 
   const day = new Date().toISOString().slice(0, 10);
@@ -176,8 +180,7 @@ export async function onRequestPost(context) {
         const page = parsePage(fetched.text, fetched.finalUrl);
         const brandName = (page.title.split(/[|—\-–:]/)[0] || brand).trim().slice(0, 60);
 
-        // Questions the visitor approved win over anything generated here.
-        let questions = cleanQuestions(body.questions, RUN.maxQuestions);
+        let questions = ownQuestions;
         if (!questions.length) {
           emit('step', { label: 'Writing the questions a buyer would ask' });
           questions = await writeQuestions(key, model, page, RUN.questions);
@@ -209,10 +212,11 @@ export async function onRequestPost(context) {
           model,
           failedQuestions: rows.length - usable.length,
           ...score,
-          askedByVisitor: cleanQuestions(body.questions, RUN.maxQuestions).length > 0,
+          askedByVisitor: custom,
+          shareable: !custom,
           verdict: verdict(score),
         };
-        await kv.put(cacheKey, JSON.stringify(run), { expirationTtl: Number(env.VIS_CACHE_DAYS || 7) * 86400 });
+        if (!custom) await kv.put(cacheKey, JSON.stringify(run), { expirationTtl: Number(env.VIS_CACHE_DAYS || 7) * 86400 });
         emit('report', run);
         console.log(JSON.stringify({ visibility: 1, brand, citedRate: score.citedRate, searches, ms: Date.now() - started }));
       } catch (e) {

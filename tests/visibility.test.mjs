@@ -369,3 +369,35 @@ test('endpoint: a cached run is readable by URL, so results are shareable', asyn
     globalThis.fetch = real;
   }
 });
+
+test('a run on edited questions is personal: not cached, not shareable', async () => {
+  const real = globalThis.fetch;
+  const w = world();
+  globalThis.fetch = w.fetchImpl;
+  try {
+    const { kv, m } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const mine = ['Who should I hire for AI search work?', 'Does answer engine optimization pay off?', 'What does an AEO audit cover?'];
+    const c = ctx({ url: 'acme.example.org', questions: mine }, env);
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out.at(-1).data.shareable, false);
+    assert.ok(![...m.keys()].some((k) => k.startsWith('vis:run:')), 'a custom run does not become the domain result');
+    assert.equal((await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).status, 404);
+
+    // The standard run is cached and shareable, and a later custom run does
+    // not overwrite it.
+    const std = ctx({ url: 'acme.example.org' }, env, { 'cf-connecting-ip': '5.5.5.5' });
+    const stdOut = await events((await onRequestPost(std)).body);
+    await Promise.all(std.pending);
+    assert.equal(stdOut.at(-1).data.shareable, true);
+    assert.equal((await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).status, 200);
+    const again = ctx({ url: 'acme.example.org', questions: mine }, env, { 'cf-connecting-ip': '6.6.6.6' });
+    await events((await onRequestPost(again)).body);
+    await Promise.all(again.pending);
+    const still = await (await visGet({ request: new Request('https://junhammer.com/api/visibility?d=acme.example.org'), env })).json();
+    assert.equal(still.questions, RUN.questions, 'the shared result is still the standard run');
+  } finally {
+    globalThis.fetch = real;
+  }
+});
