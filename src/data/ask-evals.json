@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-14T18:25:26.291Z",
-  "commit": "c5145fd",
+  "ranAt": "2026-11-14T18:32:00.211Z",
+  "commit": "d9ba4b1",
   "retrieval": {
     "questions": 60,
     "passages": 732,
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 53,
+    "passedAll": 50,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 60
+        "passed": 59
       },
       {
         "id": "citesInRange",
@@ -35,7 +35,7 @@
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 55
+        "passed": 53
       },
       {
         "id": "short",
@@ -44,11 +44,11 @@
       }
     ],
     "offTopicReachedModel": 4,
-    "offTopicDeclined": 1,
+    "offTopicDeclined": 2,
     "avgTokensIn": 2366,
-    "avgTokensOut": 290,
-    "ranAt": "2026-11-14T18:25:26.291Z",
-    "commit": "c5145fd"
+    "avgTokensOut": 312,
+    "ranAt": "2026-11-14T18:32:00.211Z",
+    "commit": "d9ba4b1"
   },
   "questions": [
     {
@@ -72,14 +72,20 @@
     {
       "q": "How long until SEO shows results?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "For established businesses with existing domain authority and content libraries, this site's timeline guide expects significant improvements in 3-6 months [1]. Faster results are more likely in that case because existing authority helps new content perform sooner, and technical fixes often show quick results [1]. The sources don't give a general timeline for newer or smaller sites, so you can read the full [timeline guide](/blog/how-long-does-it-take-for-seo-to-work/) for more context. For questions about working with Joe on a specific site, see the [contact page](/contact/)."
     },
     {
       "q": "Why isn't my content appearing in ChatGPT?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "The site's article on this exact problem says the causes tend to cluster around a handful of issues, and most don't require a technical background to fix [2]. It notes that AI search engines build a single answer and pull from sources they trust, rather than ranking pages, so the question is whether your content says something usable [3][4]. Common blockers include thin content, outdated information, missing structured data, and paywalls or registration walls [6]. For a detailed walkthrough, see [Why Your Content Isn't Showing Up in ChatGPT Answers](/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/). If you want help with your own site, the [contact page](/contact/) is the place to "
     },
     {
       "q": "How do AI search engines pick which sites to cite?",
@@ -96,17 +102,17 @@
     {
       "q": "How should I write paragraphs so AI tools quote them?",
       "rank": 0,
-      "pass": true,
-      "failed": []
-    },
-    {
-      "q": "How do I get featured in Google AI Overviews?",
-      "rank": 0,
       "pass": false,
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "This site suggests a few things to focus on:\n\n- **Answer specific questions thoroughly.** Joe recommends covering the core question and related subtopics in depth, offering insights not easily found elsewhere, and keeping content updated [5].\n- **Expect a few months.** There is no guaranteed timeframe, but websites typically need 2-3 months of consistent optimization before appearing in AI Overviews [1].\n- **Structure content and technical signals.** Joe's AEO work covers content restructuring for answer extraction, entity and schema work, and an llms.txt and AI crawler access review [8].\n- **Apply stricter standards for health content.** Healthcare content falls under YMYL guidelines, so AI"
+      "answer": "Based on this site's article on the 40-word rule, Joe recommends starting each section with a heading phrased as a natural question users ask, then writing a direct answer block of 40 to 60 words right after it, with no preamble and starting with the subject and a verb [2]. Expand with supporting evidence, examples, or data afterward, since that part can be longer while the answer block cannot [2]. The article also notes that expert-attributed statistics help content perform well in AI retrieval [2]. For help applying this to your own content, see the [contact page](/contact/)."
+    },
+    {
+      "q": "How do I get featured in Google AI Overviews?",
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is semantic search?",
@@ -123,8 +129,11 @@
     {
       "q": "What is E-E-A-T and how do I show it to AI systems?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "E-E-A-T stands for Experience, Expertise, Authoritativeness and Trustworthiness. Traditional SEO treats it as reputation signals for human quality raters, but AI search engines evaluate it computationally [1][2].\n\nTo show it to AI systems, the site suggests:\n- **Structured data:** Schema markup that formats author information, professional qualifications and organizational affiliations, since credentials in flowing prose may not register as clearly [1].\n- **Citations:** Citing authoritative sources and earning references from authoritative sites, since AI systems analyze citation patterns in both directions [1][3].\n- **Entity connections:** Presenting authors as established entities tied to "
     },
     {
       "q": "Which schema markup matters for medical pages?",
@@ -135,11 +144,8 @@
     {
       "q": "How can a small regional hospital compete in AI search?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "A small regional hospital has a real path in AI search for local care questions, service-line searches, physician expertise, and appointment-focused queries, though it is harder to win broad medical definitions [1]. The competitive edge comes from good workflows, local detail, clinical review, and trust signals rather than expensive tools, and AI can help with audits and drafts [2].\n\nJoe's suggested steps include:\n\n- **Mark up physician credentials:** AI systems look for explicit, machine-readable credentials, so author pages should use Person schema with job title, credentials, education, and affiliations [6][8].\n- **Use hyperlocal keywords:** Target neighborhood names, local landmarks such"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do pharma companies optimize content for Perplexity?",
@@ -200,9 +206,9 @@
       "rank": 0,
       "pass": false,
       "failed": [
+        "Cites a source",
         "Cites a page that holds the answer"
-      ],
-      "answer": "The AEO program on this site, described on [the service page](/services/answer-engine-optimization/), includes five parts:\n\n- **Visibility baseline:** Joe picks the questions your buyers or patients ask and checks which brands each AI assistant cites today [3].\n- **Content structure:** Pages are rebuilt around direct, self-contained answers, question-based headings, and the 40-word paragraph rule [3].\n- **Ent"
+      ]
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -255,11 +261,8 @@
     {
       "q": "Where does Joe work?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Joe Unhammer is based in Colorado. The site says he is based in Denver and works with teams anywhere in the US [8]. He also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, which he describes as Colorado's south metro [5]. If you want to work with him, you can reach out via the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What AI tools has Joe built?",
@@ -312,8 +315,11 @@
     {
       "q": "Can you automate our marketing reports?",
       "rank": 2,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes, this site describes automating marketing reports. Joe's AI automation service pulls GA4 and Search Console data, then summarizes and formats it into the deliverable your clients or leadership expect [3]. His Claude and MCP work also includes MCP connections to Search Console, GA4 and reporting data [8]. For a sense of how it works, a monthly report would pull the data, summarize changes and format the client report, with the same steps repeated each month [6]. For pricing or to discuss your setup, see [the contact page](/contact/)."
     },
     {
       "q": "Do you offer AI strategy consulting?",
@@ -322,7 +328,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, the rules, and how you will measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. For a discussion about your situation, see the [contact page](/contact/)."
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. If you want to discuss a project, you can reach out via the [contact page](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -357,18 +363,20 @@
     {
       "q": "how does it take for seo to work?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Joe's SEO service page says most sites see early movement in three to six months and compounding results in six to twelve months. The timing depends on competition, site health, and how much content needs to be built, and new sites in competitive fields take longer [6]. Joe sets quarterly milestones so progress is visible before rankings fully arrive [6]. You can read more on the [SEO service page](/services/seo/)."
     },
     {
       "q": "seo how long",
       "rank": 4,
       "pass": false,
       "failed": [
-        "Cites a page that holds the answer",
-        "Uses only links found in the sources"
+        "Cites a page that holds the answer"
       ],
-      "answer": "Joe's FAQ says SEO is a long-term investment, but timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth usually appears between three and six months, and substantial compounding results are often visible at six to twelve months [1]. Visibility in AI systems can shift faster, since those platforms update their knowledge bases [1]. For details on working with Joe, see the [contact page](/contact/)."
+      "answer": "Based on this site's FAQ, SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results often show at six to twelve months [1]. AI visibility (AEO and GEO) can shift faster because those platforms update their knowledge bases [1]. Joe sets realistic expectations up front and gives ongoing progress updates [1]. For a timeline specific to your situation, see the contact page at /contact/."
     },
     {
       "q": "aeo vs geo",
@@ -421,17 +429,17 @@
     {
       "q": "what do you charge",
       "rank": 5,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "This site does not list Joe's rates. The [FAQ page](/faq/) covers pricing among its topics [6], but the excerpts I have don't include the figures. For a quote, use the [contact page](/contact/).\n\nIf you're comparing providers, one useful approach is to ask each one to price the same initial brief against an agreed scope [2]."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "keyword research",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Keyword research has shifted from targeting exact-match terms toward understanding user intent and conversational queries. Joe recommends focusing on the specific problems your audience wants to solve, using tools such as SEMrush's Keyword Magic Tool and Ahrefs to find intent and competitor keywords [4]. Intent patterns can be spotted by looking at search volume, SERP features, related keyword clusters, and seasonal shifts [3]. This site also notes that traditional ranking tracking gives an incomplete picture, so success should be measured more broadly [2]. For a deeper walkthrough, see the [keyword research in 2025 guide](/blog/keyword-research-in-2025-beyond-traditional-seo/). If you want "
     }
   ],
   "semantic": {
