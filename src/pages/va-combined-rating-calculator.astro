@@ -47,6 +47,8 @@ const schema = [
       <p class="lede">VA disability ratings do not add up. 50 percent and 30 percent pay as 70, not 80. This works the combination the way <a href={`${CFR}/section-4.25`}>38 CFR 4.25</a> and <a href={`${CFR}/section-4.26`}>38 CFR 4.26</a> require and shows every step, so you can check it against your decision letter.</p>
     </header>
 
+    <p class="vac-jump">Wondering if you qualify for disability? <a href="#eligibility">Can I get disability at all?</a></p>
+
     <form id="vac-form" class="vac-form">
       <h2 class="vac-h">Your ratings</h2>
       <p class="vac-hint">Enter each service-connected rating from your decision letter separately. Do not add them together.</p>
@@ -64,7 +66,7 @@ const schema = [
 
     <section id="vac-out" class="vac-out" aria-live="polite"></section>
 
-    <section class="vac-qa" aria-labelledby="vac-qa-h">
+    <section id="eligibility" class="vac-qa" aria-labelledby="vac-qa-h">
       <h2 id="vac-qa-h">Can I get disability at all?</h2>
       <p class="vac-qa-lede">The rating arithmetic above only matters once something is service connected. Most people are stuck a step earlier, on whether they can claim at all. Ask about eligibility or the process and you get an answer from the text of Title 38, with the section cited so you can read it yourself.</p>
 
@@ -479,6 +481,9 @@ const schema = [
   .vac-unlocks p { margin: .2rem 0 0; }
   .vac-unlock-label { font-family: var(--font-ui); font-weight: 600; }
   .vac-unlock-who { font-family: var(--font-ui); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-left: .5rem; }
+  .vac-jump { margin-top: 1.25rem; font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); }
+  .vac-jump a { font-weight: 600; color: var(--fjord); }
+  #eligibility { scroll-margin-top: 5rem; }
   .vac-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .vac-about { margin-top: 3rem; }
   .vac-about > h2, .vac-qa h2, .vac-next h2 { font-size: var(--step-2); margin-bottom: .5rem; }
