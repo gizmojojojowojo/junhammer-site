@@ -61,6 +61,14 @@ const schema = [
         <input type="checkbox" id="vac-pt" />
         <span>My decision letter says permanent and total</span>
       </label>
+      <label class="vac-check vac-pt">
+        <input type="checkbox" id="vac-tdiu" />
+        <span>I am paid for individual unemployability</span>
+      </label>
+      <label class="vac-check vac-pt">
+        <input type="checkbox" id="vac-co" />
+        <span>I live in Colorado</span>
+      </label>
       <p class="vac-hint">Permanent and total is a separate finding the VA states in the letter. A rating of 100 percent does not mean it on its own, and it can be held below 100 percent. Two family benefits turn on it.</p>
     </form>
 
@@ -262,7 +270,10 @@ const schema = [
       : 'Under 38 CFR 4.16(b) the VA can still consider unemployability below this threshold. Grouping matters too: set the body system on ratings that share a cause or a system.'));
 
     // What the rating changes, each line sourced to the regulation behind it.
-    const unlocks = thresholdsFor({ rated: r.rated, tdiuThresholdMet: t.meetsSchedularThreshold, permanentTotal: document.getElementById('vac-pt').checked || undefined });
+    const unlocks = thresholdsFor(
+      { rated: r.rated, tdiuThresholdMet: t.meetsSchedularThreshold, tdiu: document.getElementById('vac-tdiu').checked, permanentTotal: document.getElementById('vac-pt').checked || undefined },
+      { state: document.getElementById('vac-co').checked ? 'CO' : undefined },
+    );
     parts.push(el('h3', '', 'What this rating changes'));
     if (unlocks.applies.length) {
       const list = el('ul', 'vac-unlocks');
@@ -283,6 +294,26 @@ const schema = [
 
     if (unlocks.permanentTotalUnknown) parts.push(el('p', 'vac-note', 'At 100 percent, tick the permanent and total box above if your decision letter says so. CHAMPVA and Chapter 35 for your family turn on that finding, not on the rating.'));
 
+    if (unlocks.state) {
+      parts.push(el('h3', '', 'In Colorado'));
+      if (unlocks.state.applies.length) {
+        const list = el('ul', 'vac-unlocks');
+        for (const u of unlocks.state.applies) {
+          const li = el('li');
+          li.append(el('span', 'vac-unlock-label', u.label), el('span', 'vac-unlock-who', u.who));
+          li.append(el('p', '', u.summary));
+          const cite = el('p', 'meta');
+          const a = el('a', '', u.cite.section);
+          a.href = u.cite.url;
+          cite.append(a, document.createTextNode(`. Confirm with: ${u.confirm}`));
+          li.append(cite);
+          list.append(li);
+        }
+        parts.push(list);
+      } else parts.push(el('p', '', 'None of the four Colorado programs listed here applies at this rating.'));
+      parts.push(el('p', 'meta', `Colorado programs come from the state agencies' own pages, read on ${unlocks.state.checked}. State rules change, and counties administer some of them, so confirm before relying on any of this.`));
+    }
+
     if (unlocks.upcoming.length) {
       const soon = el('p', 'meta', `Within reach: ${unlocks.upcoming.map((u) => `${u.label} at ${u.pointsAway} more points`).join('; ')}.`);
       parts.push(soon);
@@ -292,7 +323,7 @@ const schema = [
     out.replaceChildren(...parts);
   }
 
-  document.getElementById('vac-pt').addEventListener('input', render);
+  for (const id of ['vac-pt', 'vac-tdiu', 'vac-co']) document.getElementById(id).addEventListener('input', render);
   document.getElementById('vac-add').addEventListener('click', () => {
     addRow();
     rows.lastElementChild.querySelector('select').focus();
@@ -343,6 +374,7 @@ const schema = [
   .vac-tdiu { max-width: var(--measure); }
   .vac-tdiu.is-met { padding: .8rem 1rem; border-radius: var(--radius-s); background: var(--surface); border: 1px solid var(--fjord); }
   .vac-pt { margin-top: 1.1rem; padding-bottom: 0; }
+  .vac-pt + .vac-pt { margin-top: .45rem; }
   .vac-unlocks { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; max-width: var(--measure); }
   .vac-unlocks li { padding-left: .9rem; border-left: 2px solid var(--rule); }
   .vac-unlocks p { margin: .2rem 0 0; }
