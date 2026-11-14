@@ -136,19 +136,23 @@ export function scoreRun(rows = [], brand = '') {
     rankAmongDomains: brandRank >= 0 ? brandRank + 1 : null,
     leaders: ranking.filter((r) => !r.isBrand).slice(0, 8),
     yourPages: [...pages.entries()].sort((a, b) => b[1] - a[1]).map(([path, questions]) => ({ path, questions })).slice(0, 8),
-    misses: rows.filter((r) => !r.cited).map((r) => ({ question: r.question, retrieved: r.retrieved, wonBy: r.others.slice(0, 3) })),
+    // Questions where the answer cited nothing at all. Nobody owns these, so
+    // they are the cheapest ones to win and are worth separating from losses.
+    uncontested: rows.filter((r) => r.citedCount === 0).map((r) => r.question),
+    misses: rows.filter((r) => !r.cited).map((r) => ({ question: r.question, retrieved: r.retrieved, wonBy: r.others.slice(0, 3), uncontested: r.citedCount === 0 })),
   };
 }
 
 /** A short, plain reading of the result. No score inflation. */
 export function verdict(score) {
   const { citedRate, retrievedNotCited, questions, shareOfVoice } = score;
+  const open = score.uncontested?.length ? ` On ${score.uncontested.length} of them the answer cited no source at all, so nobody owns those yet.` : '';
   if (!questions) return 'Nothing was measured.';
-  if (citedRate === 0 && score.retrieved === 0) return 'Not cited on any question, and never even surfaced in the searches behind the answers. The gap here is being findable at all, not being chosen.';
-  if (citedRate === 0) return `Not cited on any question, but found by the search on ${score.retrieved} of ${questions}. The pages are reachable and are being passed over, which is a content problem rather than a crawling one.`;
-  if (retrievedNotCited > score.cited) return `Cited on ${score.cited} of ${questions}, and found but passed over on ${retrievedNotCited} more. Being retrieved is not the constraint. Being the clearest answer on the page is.`;
+  if (citedRate === 0 && score.retrieved === 0) return `Not cited on any question, and never surfaced in the searches behind the answers. The gap is being findable at all, not being chosen.${open}`;
+  if (citedRate === 0) return `Not cited on any question, but found by the search on ${score.retrieved} of ${questions}. The pages are reachable and are being passed over, which is a content problem rather than a crawling one.${open}`;
+  if (retrievedNotCited > score.cited) return `Cited on ${score.cited} of ${questions}, and found but passed over on ${retrievedNotCited} more. Being retrieved is not the constraint. Being the clearest answer on the page is.${open}`;
   if (citedRate >= 60) return `Cited on ${score.cited} of ${questions}, with ${shareOfVoice} percent share of voice. Strong, and worth watching rather than fixing.`;
-  return `Cited on ${score.cited} of ${questions}, ${shareOfVoice} percent share of voice.`;
+  return `Cited on ${score.cited} of ${questions}, ${shareOfVoice} percent share of voice.${open}`;
 }
 
 export function cleanQuestions(input, max = 10) {

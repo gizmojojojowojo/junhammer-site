@@ -92,7 +92,7 @@ test('share of voice counts one endorsement per question, per domain', () => {
 });
 
 test('the verdict names the actual problem rather than a grade', () => {
-  assert.match(verdict(scoreRun([{ cited: false, retrieved: false, position: null, mentioned: false, pages: [], others: [] }], 'x.com')), /never even surfaced/);
+  assert.match(verdict(scoreRun([{ cited: false, retrieved: false, position: null, mentioned: false, pages: [], others: [] }], 'x.com')), /never surfaced in the searches/);
   const passedOver = scoreRun([
     { question: 'a', cited: false, retrieved: true, position: 2, mentioned: false, pages: [], others: [] },
     { question: 'b', cited: false, retrieved: true, position: 3, mentioned: false, pages: [], others: [] },
@@ -280,4 +280,16 @@ test('endpoint: an unreadable site fails before any question is bought', async (
   } finally {
     globalThis.fetch = real;
   }
+});
+
+test('questions nobody has answered are separated from questions lost', () => {
+  const s = scoreRun([
+    { question: 'open one', cited: false, retrieved: false, position: null, mentioned: false, pages: [], others: [], citedCount: 0 },
+    { question: 'lost one', cited: false, retrieved: true, position: 2, mentioned: false, pages: [], others: ['moz.com'], citedCount: 3 },
+    { question: 'won one', cited: true, retrieved: true, position: 1, mentioned: true, pages: ['/a/'], others: [], citedCount: 1 },
+  ], 'example.com');
+  assert.deepEqual(s.uncontested, ['open one']);
+  assert.deepEqual(s.misses.map((m) => [m.question, m.uncontested]), [['open one', true], ['lost one', false]]);
+  assert.match(verdict(s), /nobody owns those yet/);
+  assert.ok(!/nobody owns/.test(verdict(scoreRun([{ question: 'q', cited: true, retrieved: true, position: 1, mentioned: true, pages: [], others: [], citedCount: 2 }], 'example.com'))));
 });

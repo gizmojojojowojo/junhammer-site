@@ -130,6 +130,7 @@ const schema = [
     stat('Found but passed over', String(r.retrievedNotCited), 'In the search results, left out of the answer.');
     stat('Share of voice', `${r.shareOfVoice}%`, r.rankAmongDomains ? `Number ${r.rankAmongDomains} of the domains cited.` : 'Not among the domains cited.');
     stat('Average position', r.averagePosition === null ? 'not found' : String(r.averagePosition), 'Where you appeared in the results behind the answers.');
+    if (r.uncontested?.length) stat('Nobody owns these', `${r.uncontested.length} of ${r.questions}`, 'The answer cited no source at all. The cheapest questions to win.');
     parts.push(stats);
 
     if (r.leaders.length) {
@@ -168,7 +169,10 @@ const schema = [
       for (const m of r.misses) {
         const li = el('li');
         li.append(el('span', 'vis-miss-q', m.question));
-        li.append(el('span', 'meta', m.retrieved ? ` Found in the results and passed over. Cited instead: ${m.wonBy.join(', ') || 'nobody'}.` : ` Never surfaced. Cited instead: ${m.wonBy.join(', ') || 'nobody'}.`));
+        const found = m.retrieved ? 'Found in the results and passed over.' : 'Never surfaced.';
+        const who = m.uncontested ? 'The answer cited no source at all, so this one is open.' : `Cited instead: ${m.wonBy.join(', ')}.`;
+        li.append(el('span', 'meta', ` ${found} ${who}`));
+        if (m.uncontested) li.classList.add('is-open');
         ul.append(li);
       }
       parts.push(ul);
@@ -300,6 +304,7 @@ const schema = [
   .vis-table td { font-variant-numeric: tabular-nums; }
   .vis-pages, .vis-misses { margin: 0; padding-left: 1.3rem; display: grid; gap: .5rem; max-width: var(--measure); font-size: var(--step--1); }
   .vis-miss-q { font-weight: 600; }
+  .vis-misses li.is-open { border-left: 3px solid var(--fjord); padding-left: .6rem; margin-left: -.9rem; list-style: none; }
   .vis-next { margin-top: 2.5rem; padding: 1.5rem; border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--surface); }
   .vis-next h3 { margin: 0 0 .4rem; font-family: var(--font-display); font-size: var(--step-1); text-transform: none; letter-spacing: 0; color: var(--ink); }
   .vis-next p { margin: 0 0 1rem; max-width: 52ch; }
