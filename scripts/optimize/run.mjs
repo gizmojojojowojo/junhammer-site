@@ -14,6 +14,7 @@ import { buildIndex, search } from '../../src/ask/retrieve.mjs';
 import { LIMITS, SYSTEM, answerable, buildMessages } from '../../src/ask/answer.mjs';
 import { CHECKS, declined, grade } from '../../src/ask/grade.mjs';
 import { CONFIG, scoreCandidate, select, splitQuestions, summarizeFailures, verdict } from './lib.mjs';
+import { callForTool } from '../lib/tool-call.mjs';
 
 const root = new URL('../../', import.meta.url);
 const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'));
@@ -113,10 +114,10 @@ Rules for your rewrites:
 Call write_variants once with all ${CONFIG.variantsPerGeneration}.`;
 
 async function mutate(parents, failures, generation) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
+  const { input } = await callForTool({
+    key,
+    toolName: 'write_variants',
+    payload: {
       model: writerModel,
       max_tokens: 8000,
       system: WRITER_SYSTEM,
@@ -136,7 +137,6 @@ async function mutate(parents, failures, generation) {
           },
         },
       ],
-      tool_choice: { type: 'tool', name: 'write_variants' },
       messages: [
         {
           role: 'user',
@@ -149,12 +149,10 @@ async function mutate(parents, failures, generation) {
           ].join('\n'),
         },
       ],
-    }),
+    },
   });
-  if (!res.ok) throw new Error(`writer ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const data = await res.json();
-  const out = data.content.find((b) => b.type === 'tool_use')?.input?.variants || [];
-  return out.filter((v) => typeof v.prompt === 'string' && v.prompt.length > 200 && v.prompt.length <= CONFIG.maxPromptChars).slice(0, CONFIG.variantsPerGeneration);
+  const out = Array.isArray(input?.variants) ? input.variants : [];
+  return out.filter((v) => typeof v?.prompt === 'string' && v.prompt.length > 200 && v.prompt.length <= CONFIG.maxPromptChars).slice(0, CONFIG.variantsPerGeneration);
 }
 
 // ---- the loop ----

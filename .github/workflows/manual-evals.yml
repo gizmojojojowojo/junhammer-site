@@ -2,6 +2,7 @@
 # neither runs on every push: this fires when this file changes and when
 # started by hand from the Actions tab. Results are committed to main and
 # appear on /ask/prompt-evolution/ and /audit/.
+# Rerun 2: fixtures now pass the URL guard, and no call forces a tool choice.
 name: Optimizer and audit grading
 
 on:
