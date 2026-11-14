@@ -55,8 +55,22 @@
       "href": "/about/"
     },
     {
-      "label": "AEO Audit",
-      "href": "/audit/"
+      "label": "Resources",
+      "href": "/tools/",
+      "children": [
+        {
+          "label": "AEO Audit",
+          "href": "/audit/"
+        },
+        {
+          "label": "VA Disability Calculator",
+          "href": "/va-combined-rating-calculator/"
+        },
+        {
+          "label": "Break my AI",
+          "href": "/arcade/"
+        }
+      ]
     }
   ],
   "cta": {
