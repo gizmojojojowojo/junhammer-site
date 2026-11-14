@@ -59,7 +59,7 @@ async function callModel(key, payload) {
     throw new Error(`model_${res.status}`);
   }
   const data = await res.json();
-  return (data.content || []).map((b) => b.text || '').join('').trim();
+  return { text: (data.content || []).map((b) => b.text || '').join('').trim(), stop: data.stop_reason || '' };
 }
 
 export async function onRequestGet({ env }) {
@@ -117,24 +117,27 @@ export async function onRequestPost(context) {
     const model = env.ARCADE_MODEL || DEFAULT_MODEL;
     let reply;
     let blocked = null;
+    let stop = '';
     try {
       if (cfg.screen) {
-        const verdict = await callModel(key, { model, max_tokens: 5, system: SCREEN_PROMPT, messages: [{ role: 'user', content: `<message>\n${message}\n</message>` }] });
+        const { text: verdict } = await callModel(key, { model, max_tokens: 5, system: SCREEN_PROMPT, messages: [{ role: 'user', content: `<message>\n${message}\n</message>` }] });
         if (/attack/i.test(verdict)) blocked = 'screen';
       }
       if (!blocked) {
-        reply = await callModel(key, { model, max_tokens: RULES.maxReplyTokens, system: guardPrompt(s.level, secret), messages: [...s.hist, { role: 'user', content: message }] });
-        if (!reply) throw new Error('empty_reply');
+        const out = await callModel(key, { model, max_tokens: RULES.maxReplyTokens, system: guardPrompt(s.level, secret), messages: [...s.hist, { role: 'user', content: message }] });
+        reply = out.text;
+        stop = out.stop;
+        if (!reply) throw new Error(`empty_reply_${stop}`);
         if (cfg.filter && leaks(reply, secret, cfg.strict)) blocked = 'filter';
       }
     } catch (e) {
-      return json({ error: 'The guard did not answer. Try again.', reason: String(e?.message || e).slice(0, 20), ...view(id, s) }, 502);
+      return json({ error: 'The guard did not answer. Try again.', reason: String(e?.message || e).slice(0, 40), ...view(id, s) }, 502);
     }
     if (blocked) reply = BLOCKED[blocked];
     addTurn(s, message, reply || '...');
     await save(id, s);
-    console.log(JSON.stringify({ arcade: 'say', level: s.level, blocked }));
-    return json({ reply: reply || '...', blocked, ...view(id, s) });
+    console.log(JSON.stringify({ arcade: 'say', level: s.level, blocked, stop }));
+    return json({ reply: reply || '...', blocked, stop, ...view(id, s) });
   }
 
   if (body.action === 'guess' || body.action === 'forfeit') {
