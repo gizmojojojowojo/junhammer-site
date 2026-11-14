@@ -47,7 +47,7 @@ const repo = 'https://github.com/gizmojojojowojo/junhammer-site';
                   <th scope="row">{r.question}</th>
                   <td class={r.cited ? 'is-yes' : 'is-no'}>{r.cited ? 'Yes' : 'No'}</td>
                   <td>{r.retrieved ? `#${r.position}` : 'No'}</td>
-                  <td class="agent-rivals">{r.citedDomains.filter((d) => !d.includes('junhammer')).slice(0, 3).join(', ') || '—'}</td>
+                  <td class="agent-rivals">{r.citedDomains.filter((d) => !d.includes('junhammer')).slice(0, 3).join(', ') || 'none'}</td>
                 </tr>
               ))}
             </tbody>
@@ -79,7 +79,7 @@ const repo = 'https://github.com/gizmojojojowojo/junhammer-site';
     <section class="prose agent-about">
       <h2>How it works</h2>
       <p>A scheduled job runs once a day. The agent asks each target question through an AI assistant with web search and records whether this site was cited, where it appeared in the results, and which other sites were cited instead. It then gets that evidence, its own earlier entries, and three tools: read a page, write one content file, finish the day.</p>
-      <p>It picks one action. Some days that will be rewriting a weak section. Some days it should be doing nothing and saying why. Then it writes the diary entry you see above.</p>
+      <p>It picks one action. Some days that will be rewriting a weak section. Some days it should be doing nothing and saying why. Then it writes its diary entry.</p>
       <p>It tracks its own spending against a ${data.budgetUsd} budget, in real dollars, and stops when the money or the {data.days} days run out.</p>
 
       <h2>What it cannot do</h2>
