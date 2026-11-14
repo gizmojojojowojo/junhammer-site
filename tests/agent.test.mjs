@@ -7,7 +7,7 @@ const fresh = () => ({ budgetUsd: 20, days: 30, startedAt: null, day: 0, spentUs
 
 test('cost: tokens plus searches', () => {
   const usage = { input_tokens: 1_000_000, output_tokens: 100_000, server_tool_use: { web_search_requests: 3 } };
-  assert.equal(+costOf('claude-haiku-5-5', usage).toFixed(4), 0.1 + 0.05 + 0.03);
+  assert.equal(+costOf('claude-haiku-5-5', usage).toFixed(4), 0.18);
   assert.equal(+costOf('claude-sonnet-5-5', { input_tokens: 10_000, output_tokens: 1_000 }).toFixed(4), 0.03);
   assert.throws(() => costOf('unknown-model', {}), /No price/);
 });
