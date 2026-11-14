@@ -210,3 +210,63 @@ test('the threshold is never reported as qualifying for TDIU', () => {
   assert.ok(!/eligible|qualif|you will|entitled/.test(text), 'no eligibility language anywhere in the result');
   assert.ok('meetsSchedularThreshold' in r && !('eligible' in r));
 });
+
+// ---- what changes at each rating ----
+const { THRESHOLDS, thresholdsFor } = await import('../src/va/thresholds.mjs');
+
+test('every threshold cites the section it came from', () => {
+  for (const t of THRESHOLDS) {
+    assert.match(t.cite.section, /^38 (CFR|U\.S\.C\.)/, `${t.id} cites a regulation`);
+    assert.match(t.cite.url, /^https:\/\/www\.ecfr\.gov\//, `${t.id} links to the text`);
+    assert.ok(t.cite.note && t.cite.note.length > 30, `${t.id} records what the section says`);
+    assert.ok(t.summary && t.who && t.label, `${t.id} is complete`);
+  }
+  assert.equal(new Set(THRESHOLDS.map((t) => t.id)).size, THRESHOLDS.length, 'ids are unique');
+});
+
+test('thresholds sort correctly against a rating', () => {
+  const at20 = thresholdsFor({ rated: 20 });
+  assert.deepEqual(at20.applies.map((t) => t.id), ['compensation', 'healthcare-3']);
+  assert.ok(at20.upcoming.some((t) => t.id === 'dependents' && t.pointsAway === 10));
+
+  const at30 = thresholdsFor({ rated: 30 });
+  assert.ok(at30.applies.some((t) => t.id === 'dependents'));
+  assert.ok(!at30.applies.some((t) => t.id === 'healthcare-3'), 'priority group 3 is replaced by 2');
+  assert.ok(at30.applies.some((t) => t.id === 'healthcare-2'));
+
+  const at50 = thresholdsFor({ rated: 50 });
+  assert.ok(at50.applies.some((t) => t.id === 'healthcare-1'));
+  assert.ok(!at50.applies.some((t) => t.id === 'healthcare-2'));
+
+  assert.deepEqual(thresholdsFor({ rated: 0 }).applies, []);
+  assert.equal(thresholdsFor().rated, 0);
+  assert.equal(thresholdsFor({ rated: 999 }).rated, 100);
+});
+
+test('unemployability reaches priority group 1 at a lower rating', () => {
+  const schedular70 = thresholdsFor({ rated: 70 });
+  assert.ok(!schedular70.applies.some((t) => t.id === 'healthcare-1') === false, '70 is already over 50');
+  // The rule that matters: unemployability qualifies on its own.
+  const low = thresholdsFor({ rated: 40, tdiu: true });
+  assert.ok(low.applies.some((t) => t.id === 'healthcare-1'), '38 CFR 17.36(b)(1) names unemployability');
+  assert.ok(!thresholdsFor({ rated: 40 }).applies.some((t) => t.id === 'healthcare-1'));
+});
+
+test('family benefits turn on permanent and total, not on the number 100', () => {
+  const hundred = thresholdsFor({ rated: 100 });
+  assert.ok(!hundred.applies.some((t) => t.id === 'champva'), 'a 100 rating does not imply permanent and total');
+  assert.equal(hundred.permanentTotalUnknown, true, 'flagged so the page can ask');
+  const pt = thresholdsFor({ rated: 100, permanentTotal: true });
+  assert.deepEqual(pt.applies.filter((t) => ['champva', 'chapter-35'].includes(t.id)).map((t) => t.id), ['champva', 'chapter-35']);
+  assert.equal(pt.permanentTotalUnknown, false);
+  // Permanent and total can be held below 100 as well, and the rule follows
+  // the finding rather than the rating.
+  assert.ok(thresholdsFor({ rated: 70, permanentTotal: true }).applies.some((t) => t.id === 'champva'));
+});
+
+test('the list says what it does not cover', () => {
+  const c = thresholdsFor({ rated: 50 }).coverage;
+  assert.equal(c.sourced, THRESHOLDS.length);
+  assert.ok(c.missing.length >= 3);
+  assert.ok(c.missing.some((m) => /state/i.test(m)), 'state programs are named as missing');
+});

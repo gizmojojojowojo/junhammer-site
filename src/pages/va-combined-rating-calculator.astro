@@ -55,6 +55,11 @@ const schema = [
         <button type="button" id="vac-add" class="btn btn-quiet">Add a rating</button>
         <button type="button" id="vac-clear" class="btn btn-quiet">Clear</button>
       </div>
+      <label class="vac-check vac-pt">
+        <input type="checkbox" id="vac-pt" />
+        <span>My decision letter says permanent and total</span>
+      </label>
+      <p class="vac-hint">Permanent and total is a separate finding the VA states in the letter. A rating of 100 percent does not mean it on its own, and it can be held below 100 percent. Two family benefits turn on it.</p>
     </form>
 
     <section id="vac-out" class="vac-out" aria-live="polite"></section>
@@ -89,6 +94,7 @@ const schema = [
 <script>
   import { combinedRating, naiveGap, nextStep } from '../va/rating.mjs';
   import { tdiuThreshold } from '../va/tdiu.mjs';
+  import { thresholdsFor } from '../va/thresholds.mjs';
 
   const rows = document.getElementById('vac-rows');
   const out = document.getElementById('vac-out');
@@ -224,9 +230,38 @@ const schema = [
       ? 'This is arithmetic only. Unemployability also requires the VA to find that your service-connected disabilities prevent substantially gainful employment. An accredited representative can tell you whether it is worth pursuing.'
       : 'Under 38 CFR 4.16(b) the VA can still consider unemployability below this threshold. Grouping matters too: set the body system on ratings that share a cause or a system.'));
 
+    // What the rating changes, each line sourced to the regulation behind it.
+    const unlocks = thresholdsFor({ rated: r.rated, tdiuThresholdMet: t.meetsSchedularThreshold, permanentTotal: document.getElementById('vac-pt').checked || undefined });
+    parts.push(el('h3', '', 'What this rating changes'));
+    if (unlocks.applies.length) {
+      const list = el('ul', 'vac-unlocks');
+      for (const u of unlocks.applies) {
+        const li = el('li');
+        li.append(el('span', 'vac-unlock-label', u.label), el('span', 'vac-unlock-who', u.who));
+        li.append(el('p', '', u.summary));
+        const cite = el('p', 'meta');
+        const a = el('a', '', u.cite.section);
+        a.href = u.cite.url;
+        cite.append(a);
+        if (u.cite.authority) cite.append(document.createTextNode(`, under ${u.cite.authority}`));
+        li.append(cite);
+        list.append(li);
+      }
+      parts.push(list);
+    } else parts.push(el('p', '', 'Nothing on the sourced list applies at this rating. A 0 percent rating still establishes service connection, which matters if a condition worsens later.'));
+
+    if (unlocks.permanentTotalUnknown) parts.push(el('p', 'vac-note', 'At 100 percent, tick the permanent and total box above if your decision letter says so. CHAMPVA and Chapter 35 for your family turn on that finding, not on the rating.'));
+
+    if (unlocks.upcoming.length) {
+      const soon = el('p', 'meta', `Within reach: ${unlocks.upcoming.map((u) => `${u.label} at ${u.pointsAway} more points`).join('; ')}.`);
+      parts.push(soon);
+    }
+    parts.push(el('p', 'meta', `This list is partial and every line is sourced. Not covered: ${unlocks.coverage.missing.join('; ')}.`));
+
     out.replaceChildren(...parts);
   }
 
+  document.getElementById('vac-pt').addEventListener('input', render);
   document.getElementById('vac-add').addEventListener('click', () => {
     addRow();
     rows.lastElementChild.querySelector('select').focus();
@@ -276,6 +311,12 @@ const schema = [
   .vac-note { margin-top: .9rem; padding: .7rem .9rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); font-size: var(--step--1); max-width: var(--measure); }
   .vac-tdiu { max-width: var(--measure); }
   .vac-tdiu.is-met { padding: .8rem 1rem; border-radius: var(--radius-s); background: var(--surface); border: 1px solid var(--fjord); }
+  .vac-pt { margin-top: 1.1rem; padding-bottom: 0; }
+  .vac-unlocks { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; max-width: var(--measure); }
+  .vac-unlocks li { padding-left: .9rem; border-left: 2px solid var(--rule); }
+  .vac-unlocks p { margin: .2rem 0 0; }
+  .vac-unlock-label { font-family: var(--font-ui); font-weight: 600; }
+  .vac-unlock-who { font-family: var(--font-ui); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-left: .5rem; }
   .vac-about { margin-top: 3rem; }
   @media (max-width: 560px) { .vac-field, .vac-field-wide { flex: 1 1 100%; } .vac-row { gap: .5rem; } }
 </style>
