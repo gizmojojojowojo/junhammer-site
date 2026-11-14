@@ -246,7 +246,7 @@ test('endpoint: one new domain per visitor, and a daily ceiling for the site', a
   globalThis.fetch = world().fetchImpl;
   try {
     const { kv } = store();
-    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv, VIS_DAILY_LIMIT: '2' };
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv, VIS_DAILY_LIMIT: '2', VIS_VISITOR_LIMIT: '1' };
     const first = ctx({ url: 'one-brand.org' }, env);
     await events((await onRequestPost(first)).body);
     await Promise.all(first.pending);

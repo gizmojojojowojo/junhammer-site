@@ -9,7 +9,8 @@
 //   ANTHROPIC_API_KEY   secret. Required.
 //   ASK_KV              KV binding, shared. Holds the cache and the counters.
 //   VIS_MODEL           optional. Defaults to DEFAULT_MODEL below.
-//   VIS_DAILY_LIMIT     new runs per day, whole site. Default 8.
+//   VIS_DAILY_LIMIT     new runs per day, whole site. Default 40.
+//   VIS_VISITOR_LIMIT   new runs per visitor per day. Default 3.
 //   VIS_CACHE_DAYS      how long a run is reused. Default 7.
 import { checkUrl, safeFetch } from '../../src/audit/guard.mjs';
 import { parsePage } from '../../src/audit/page.mjs';
@@ -162,8 +163,10 @@ export async function onRequestPost(context) {
   const ipKey = `vis:ip:${request.headers.get('cf-connecting-ip') || 'unknown'}:${day}`;
   const [d, i] = await Promise.all([kv.get(dayKey), kv.get(ipKey)]);
   if ((Number(d) || 0) >= Number(env.VIS_DAILY_LIMIT || 40)) return json({ error: 'The checker has done its runs for today. Each one costs a real search budget. A domain someone has already checked is still free to view, or come back tomorrow.', reason: 'closed' }, 429);
-  if ((Number(i) || 0) >= 1) return json({ error: 'One new domain per visitor per day. Domains that have already been checked are still free to view.', reason: 'limited' }, 429);
-  await Promise.all([kv.put(dayKey, String((Number(d) || 0) + 1), { expirationTtl: 2 * 86400 }), kv.put(ipKey, '1', { expirationTtl: 2 * 86400 })]);
+  const mine = Number(i) || 0;
+  const perVisitor = Number(env.VIS_VISITOR_LIMIT || 3);
+  if (mine >= perVisitor) return json({ error: `That is ${perVisitor} runs today, which is the limit per visitor. Any domain someone has already checked is still free to view.`, reason: 'limited' }, 429);
+  await Promise.all([kv.put(dayKey, String((Number(d) || 0) + 1), { expirationTtl: 2 * 86400 }), kv.put(ipKey, String(mine + 1), { expirationTtl: 2 * 86400 })]);
 
   const rivals = cleanDomains(body.competitors, 3);
   const stream = new TransformStream();

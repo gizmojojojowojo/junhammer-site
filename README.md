@@ -159,7 +159,7 @@ It runs locally and is deliberately not in CI, because this repository is public
 
 **Two phases.** `POST {url, action:'questions'}` reads the site and drafts the questions with one model call and no searches, so a bad guess costs nothing. The visitor edits them, then `POST {url, questions, competitors}` spends. A run on edited questions is personal: it is neither read from nor written to the cache, because the cached entry is the standard run for that domain and is what `GET /api/visibility?d=domain` serves to anyone with the link.
 
-**Cost.** This is the most expensive thing on the site per run: six questions at one web search each, billed per search, plus tokens, so roughly six cents. Three guards: `VIS_DAILY_LIMIT` (default 40 new runs a day site-wide), one new domain per visitor per day, and a `VIS_CACHE_DAYS` cache (default 7) keyed on the domain, so a domain somebody has already checked is served free to everyone. Raise the limits only with the API spend cap set accordingly.
+**Cost.** This is the most expensive thing on the site per run: six questions at one web search each, billed per search, plus tokens, so roughly six cents. Three guards: `VIS_DAILY_LIMIT` (default 40 new runs a day site-wide), `VIS_VISITOR_LIMIT` (default 3 runs per visitor per day), and a `VIS_CACHE_DAYS` cache (default 7) keyed on the domain, so a domain somebody has already checked is served free to everyone. Raise the limits only with the API spend cap set accordingly.
 
 The citation reading is shared with the budget agent, which imports it from `src/visibility/lib.mjs`.
 
