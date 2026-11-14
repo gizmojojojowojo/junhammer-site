@@ -146,6 +146,21 @@ It runs locally and is deliberately not in CI, because this repository is public
 - The useful output is the top section: requirements that keep coming up with nothing in the portfolio behind them, ranked by how many employers asked. That is the list of what to build next.
 - Every draft note is a starting point to edit, not something to send as it stands.
 
+## AI visibility checker
+
+`/ai-visibility-checker/` measures whether AI answers cite a domain.
+
+1. Reads the home page to learn what the business does.
+2. Writes ten questions a buyer would ask before knowing the brand exists. The brand name is deliberately excluded: asking "who is Acme" guarantees a citation and measures nothing.
+3. Puts each question to the model with the live web search tool and reads the response: `web_search_tool_result` blocks give what the model saw, `web_search_result_location` citations give what the answer used.
+4. Scores the run in `src/visibility/lib.mjs`: cited rate, retrieved rate, the gap between them, share of voice against the domains cited instead, and the pages that showed up.
+
+**Retrieved and cited are kept apart on purpose.** A site found on every question and cited on none has a content problem, not a crawling one, and collapsing the two into one score hides that.
+
+**Cost.** This is the most expensive thing on the site per run: ten questions at up to two web searches each, billed per search, plus tokens. Three guards: `VIS_DAILY_LIMIT` (default 8 new runs a day site-wide), one new domain per visitor per day, and a `VIS_CACHE_DAYS` cache (default 7) keyed on the domain, so a domain somebody has already checked is served free to everyone. Raise the limits only with the API spend cap set accordingly.
+
+The citation reading is shared with the budget agent, which imports it from `src/visibility/lib.mjs`.
+
 ## Contact form
 
 The form appears when `formEndpoint` is set in *Site settings*. Free option: create an access key at web3forms.com, then set `formEndpoint` to `https://api.web3forms.com/submit` and `formAccessKey` to your key. Until then, the contact page shows email only.
