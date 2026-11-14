@@ -1,0 +1,308 @@
+---
+import Base from '../layouts/Base.astro';
+
+const schema = [
+  {
+    '@type': 'WebApplication',
+    name: 'AI Visibility Checker',
+    url: 'https://junhammer.com/ai-visibility-checker/',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Any',
+    description: 'Measures whether AI answers cite your site. Generates the questions your buyers ask, runs them through a model with live web search, and reports your citation rate and share of voice against the sites cited instead.',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    creator: { '@id': 'https://junhammer.com/#person' },
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is AI visibility?',
+        acceptedAnswer: { '@type': 'Answer', text: 'AI visibility is how often an AI assistant cites your site when it answers questions in your category. It differs from search ranking because the assistant reads a handful of sources and names only some of them. A page can be retrieved by the search behind the answer and still never be cited, so the reader never sees it.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'How is AI visibility measured?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Put a set of category questions to a model with live web search and record two things for each answer: whether your domain appeared in the search results the model saw, and whether the answer actually cited it. The second is what matters, because readers only see what is cited. Comparing the two shows whether the problem is being findable or being chosen.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is being cited by AI the same as ranking in Google?',
+        acceptedAnswer: { '@type': 'Answer', text: 'No. Ranking is a position in a list the user scans themselves. A citation is a source an assistant chose to lean on while writing one answer. Different retrieval systems, different selection, and no stable position to hold. Results vary between assistants and over time, so a single measurement is a direction rather than a rank.' },
+      },
+    ],
+  },
+];
+---
+<Base
+  title="AI visibility checker"
+  seoTitle="AI Visibility Checker: Is Your Site Cited by AI Search?"
+  description="Measure whether AI answers cite your site. It writes the questions your buyers ask, runs them through live web search, and shows your citation rate, share of voice, and who gets cited instead."
+  schema={schema}
+>
+  <div class="narrow vis">
+    <header class="page-head">
+      <h1>AI visibility checker</h1>
+      <p class="lede">Paste a domain. It works out the questions your buyers would ask before they know you exist, puts each one to an AI assistant with live web search, and reports how often you are cited, who is cited instead, and which of your pages are doing the work.</p>
+    </header>
+
+    <form id="vis-form" class="vis-form">
+      <label class="vis-sr" for="vis-url">Your domain</label>
+      <input id="vis-url" type="text" inputmode="url" maxlength="300" required autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" />
+      <button class="btn" type="submit">Check visibility</button>
+    </form>
+    <p id="vis-error" class="vis-error" role="alert" hidden></p>
+    <p class="meta">One new domain per visitor per day. Every question costs a real web search, so runs are cached for a week and a domain someone has already checked is free to view.</p>
+
+    <section id="vis-run" class="vis-run" hidden aria-labelledby="vis-run-h">
+      <h2 id="vis-run-h">Running</h2>
+      <ol id="vis-steps" class="vis-steps"></ol>
+      <ul id="vis-questions" class="vis-qs"></ul>
+    </section>
+
+    <section id="vis-report" class="vis-report" hidden aria-labelledby="vis-report-h"></section>
+
+    <section class="prose vis-about">
+      <h2>What this measures, and what it cannot</h2>
+      <p>Two different things get counted for every question, and confusing them is how most reporting on this goes wrong.</p>
+      <ul>
+        <li><strong>Retrieved</strong> means your domain turned up in the search results the assistant saw while writing the answer.</li>
+        <li><strong>Cited</strong> means the answer actually leaned on it. This is the one that matters, because a reader only ever sees what was cited.</li>
+      </ul>
+      <p>A site can be retrieved on every question and cited on none. When that happens, the problem is not crawling, indexing or robots.txt. The pages are being found and passed over, which is a content problem: the page does not answer the question directly enough to be worth quoting. That distinction decides what you do next, so the report keeps the two apart instead of averaging them into a score.</p>
+      <p>What it cannot do: this is one model with one web search tool. It is not ChatGPT, not Google AI Overviews, not Perplexity, and it will not agree with them, or with itself next month. Those systems retrieve differently and change without notice. What this gives you is a consistent measurement, taken the same way every time, so two runs are comparable to each other. Anything sold to you as "your rank in AI" is overstating what can be known.</p>
+
+      <h2>Why the questions matter more than the score</h2>
+      <p>The questions are generated from your own site, and never contain your brand name. Asking an assistant "who is Acme" tells you nothing, because Acme's own site is obviously cited. The useful question is whether you appear when somebody describes their problem and has never heard of you. That is where the category is actually won.</p>
+
+      <h2>What to do with a bad result</h2>
+      <p>Run the <a href="/audit/">AEO audit</a> on the pages that should have been cited and were not. The checker tells you that a page is losing. The audit agent reads that page and tells you why: no direct answer under the heading, schema that does not match the content, no author or dates, crawlers blocked. Measurement then diagnosis, in that order.</p>
+      <p>If you want this tracked over time across a real question set, with the fixes made and measured, that is <a href="/services/answer-engine-optimization/">the AEO work I do</a>. <a href="/contact/">Start there</a>.</p>
+      <p class="meta">The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/visibility/lib.mjs">scoring</a> and the <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/functions/api/visibility.js">run</a> are public, so you can check what is being counted rather than taking the number on trust.</p>
+    </section>
+    <noscript><p class="meta">This tool needs JavaScript.</p></noscript>
+  </div>
+</Base>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const form = $('vis-form');
+  const input = $('vis-url');
+  const button = form.querySelector('button');
+  const errorBox = $('vis-error');
+  const run = $('vis-run');
+  const steps = $('vis-steps');
+  const qs = $('vis-questions');
+  const report = $('vis-report');
+  let busy = false;
+
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  };
+  const fail = (m) => {
+    errorBox.textContent = m;
+    errorBox.hidden = false;
+  };
+
+  function render(r) {
+    const parts = [];
+    const head = el('div', 'vis-score');
+    const num = el('p', 'vis-num', `${r.citedRate}%`);
+    head.append(num);
+    const side = el('div');
+    const h = el('h2', '', 'Cited in AI answers');
+    h.id = 'vis-report-h';
+    side.append(h, el('p', 'vis-sub', `${r.brandName} · ${r.brand} · ${r.questions} questions${r.cached ? ' · from a run in the last week' : ''}`));
+    head.append(side);
+    parts.push(head, el('p', 'vis-verdict', r.verdict));
+
+    const stats = el('dl', 'vis-stats');
+    const stat = (label, value, note) => {
+      const d = el('div');
+      d.append(el('dt', '', label), el('dd', '', value));
+      if (note) d.append(el('p', 'meta', note));
+      stats.append(d);
+    };
+    stat('Cited', `${r.cited} of ${r.questions}`, 'The answer leaned on your site.');
+    stat('Found but passed over', String(r.retrievedNotCited), 'In the search results, left out of the answer.');
+    stat('Share of voice', `${r.shareOfVoice}%`, r.rankAmongDomains ? `Number ${r.rankAmongDomains} of the domains cited.` : 'Not among the domains cited.');
+    stat('Average position', r.averagePosition === null ? 'not found' : String(r.averagePosition), 'Where you appeared in the results behind the answers.');
+    parts.push(stats);
+
+    if (r.leaders.length) {
+      parts.push(el('h3', '', 'Who gets cited instead'));
+      const table = el('table', 'vis-table');
+      const thead = el('thead');
+      const hr = el('tr');
+      for (const t of ['Domain', 'Questions', 'Share']) hr.append(el('th', '', t));
+      thead.append(hr);
+      const tb = el('tbody');
+      for (const l of r.leaders) {
+        const tr = el('tr');
+        tr.append(el('th', '', l.domain), el('td', '', String(l.questions)), el('td', '', `${l.share}%`));
+        tb.append(tr);
+      }
+      table.append(thead, tb);
+      parts.push(table);
+    }
+
+    if (r.yourPages.length) {
+      parts.push(el('h3', '', 'Your pages that showed up'));
+      const ul = el('ul', 'vis-pages');
+      for (const p of r.yourPages) {
+        const li = el('li');
+        const a = el('a', '', p.path);
+        a.href = `https://${r.brand}${p.path}`;
+        li.append(a, el('span', 'meta', ` on ${p.questions} ${p.questions === 1 ? 'question' : 'questions'}`));
+        ul.append(li);
+      }
+      parts.push(ul);
+    }
+
+    if (r.misses.length) {
+      parts.push(el('h3', '', 'Questions you lost'));
+      const ul = el('ul', 'vis-misses');
+      for (const m of r.misses) {
+        const li = el('li');
+        li.append(el('span', 'vis-miss-q', m.question));
+        li.append(el('span', 'meta', m.retrieved ? ` Found in the results and passed over. Cited instead: ${m.wonBy.join(', ') || 'nobody'}.` : ` Never surfaced. Cited instead: ${m.wonBy.join(', ') || 'nobody'}.`));
+        ul.append(li);
+      }
+      parts.push(ul);
+    }
+
+    const next = el('div', 'vis-next');
+    next.append(el('h3', '', 'Find out why'));
+    next.append(el('p', '', 'This tells you which pages are losing. The audit agent reads a page and tells you what is holding it back.'));
+    const cta = el('a', 'btn', 'Run the AEO audit');
+    cta.href = r.yourPages.length ? `/audit/?url=${encodeURIComponent(`https://${r.brand}${r.yourPages[0].path}`)}` : '/audit/';
+    next.append(cta);
+    parts.push(next);
+
+    report.replaceChildren(...parts);
+    report.hidden = false;
+    report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function check(url) {
+    if (busy || !url.trim()) return;
+    busy = true;
+    button.disabled = true;
+    button.textContent = 'Checking…';
+    errorBox.hidden = true;
+    report.hidden = true;
+    steps.replaceChildren();
+    qs.replaceChildren();
+    run.hidden = false;
+    let current = null;
+    try {
+      const res = await fetch('/api/visibility', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url }) });
+      const type = res.headers.get('content-type') || '';
+      if (!type.includes('text/event-stream')) {
+        const data = await res.json().catch(() => ({}));
+        run.hidden = true;
+        if (data.brand) render(data);
+        else fail(data.error || 'That did not work. Try again in a moment.');
+      } else {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let finished = false;
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const blocks = buffer.split('\n\n');
+          buffer = blocks.pop();
+          for (const block of blocks) {
+            const ev = block.match(/^event: (.+)$/m);
+            const da = block.match(/^data: (.+)$/m);
+            if (!ev || !da) continue;
+            const data = JSON.parse(da[1]);
+            if (ev[1] === 'step') {
+              if (current) current.classList.remove('is-running');
+              current = el('li', 'is-running', data.label);
+              steps.append(current);
+            } else if (ev[1] === 'questions') {
+              if (current) current.classList.remove('is-running');
+              current = el('li', 'is-running', `Asking ${data.questions.length} questions with live web search`);
+              steps.append(current);
+              for (const q of data.questions) qs.append(el('li', '', q));
+            } else if (ev[1] === 'progress') {
+              if (current) current.textContent = `Asking ${data.total} questions with live web search (${data.done} of ${data.total})`;
+            } else if (ev[1] === 'report') {
+              if (current) current.classList.remove('is-running');
+              finished = true;
+              run.hidden = true;
+              render(data);
+            } else if (ev[1] === 'error') {
+              finished = true;
+              run.hidden = true;
+              fail(data.message);
+            }
+          }
+        }
+        if (!finished) {
+          run.hidden = true;
+          fail('The run was cut off. Try again in a moment.');
+        }
+      }
+    } catch {
+      run.hidden = true;
+      fail('Something went wrong. Try again in a moment.');
+    }
+    busy = false;
+    button.disabled = false;
+    button.textContent = 'Check visibility';
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    check(input.value);
+  });
+  const preset = new URLSearchParams(location.search).get('url');
+  if (preset) input.value = preset.slice(0, 300);
+</script>
+
+<style is:global>
+  .vis { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .vis-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .vis-form { display: flex; gap: .6rem; margin-top: 1.25rem; }
+  .vis-form input { flex: 1; min-width: 0; font: inherit; font-family: var(--font-ui); padding: .8rem .9rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); color: var(--ink); }
+  .vis-form .btn { cursor: pointer; white-space: nowrap; }
+  .vis-form button:disabled { opacity: .55; cursor: default; }
+  .vis-error { margin-top: .9rem; padding: .7rem .9rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); font-family: var(--font-ui); font-size: var(--step--1); }
+  .vis-run { margin-top: 2rem; }
+  .vis-run h2 { font-family: var(--font-ui); font-size: var(--step--1); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); margin-bottom: .6rem; }
+  .vis-steps { margin: 0; padding-left: 1.4rem; display: grid; gap: .3rem; font-family: var(--font-ui); font-size: var(--step--1); }
+  .vis-steps li.is-running { color: var(--fjord); font-weight: 600; }
+  .vis-steps li.is-running::after { content: ' …'; }
+  .vis-qs { margin: .9rem 0 0; padding-left: 1.4rem; display: grid; gap: .2rem; font-size: var(--step--1); color: var(--ink-soft); max-width: var(--measure); }
+  .vis-report { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--rule); scroll-margin-top: 5rem; }
+  .vis-report h3 { font-family: var(--font-ui); font-size: var(--step--1); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); margin: 2.2rem 0 .5rem; }
+  .vis-score { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .vis-num { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: var(--step-5); line-height: 1; color: var(--fjord); font-variant-numeric: tabular-nums; }
+  .vis-score h2 { margin: 0; font-size: var(--step-2); }
+  .vis-sub { margin: .25rem 0 0; color: var(--ink-soft); font-size: var(--step--1); overflow-wrap: anywhere; }
+  .vis-verdict { margin-top: 1.2rem; max-width: var(--measure); font-size: var(--step-0); }
+  .vis-stats { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin: 1.75rem 0 0; }
+  .vis-stats div { padding: .9rem 1rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); }
+  .vis-stats dt { font-family: var(--font-ui); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); }
+  .vis-stats dd { margin: .2rem 0 0; font-weight: 700; font-size: var(--step-1); font-variant-numeric: tabular-nums; }
+  .vis-stats .meta { margin: .25rem 0 0; }
+  .vis-table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: var(--step--1); }
+  .vis-table th, .vis-table td { text-align: left; padding: .5rem .55rem; border-bottom: 1px solid var(--rule); }
+  .vis-table thead th { color: var(--ink-soft); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; }
+  .vis-table tbody th { font-weight: 500; }
+  .vis-table td { font-variant-numeric: tabular-nums; }
+  .vis-pages, .vis-misses { margin: 0; padding-left: 1.3rem; display: grid; gap: .5rem; max-width: var(--measure); font-size: var(--step--1); }
+  .vis-miss-q { font-weight: 600; }
+  .vis-next { margin-top: 2.5rem; padding: 1.5rem; border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--surface); }
+  .vis-next h3 { margin: 0 0 .4rem; font-family: var(--font-display); font-size: var(--step-1); text-transform: none; letter-spacing: 0; color: var(--ink); }
+  .vis-next p { margin: 0 0 1rem; max-width: 52ch; }
+  .vis-about { margin-top: 3rem; }
+  @media (max-width: 520px) { .vis-form { flex-direction: column; } .vis-form .btn { justify-content: center; } }
+</style>

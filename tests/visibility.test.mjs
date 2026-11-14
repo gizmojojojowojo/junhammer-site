@@ -124,3 +124,160 @@ test('generated questions are cleaned before anything is spent on them', () => {
   assert.equal(cleanQuestions(Array.from({ length: 50 }, (_, i) => `A long enough question number ${i}?`)).length, 10);
   assert.deepEqual(cleanQuestions('not a list'), []);
 });
+
+// ---- endpoint ----
+const { onRequestPost, RUN } = await import('../functions/api/visibility.js');
+
+const HOME = '<!doctype html><html lang="en"><head><title>Acme AEO | Answer engine optimization in Denver</title><meta name="description" content="We get brands cited in AI search."></head><body><main><h1>Answer engine optimization</h1><p>We help Denver businesses get cited by AI search assistants, with measurement rather than guesswork.</p><h2>What we do</h2><p>Audits, content, and tracking.</p></main></body></html>';
+
+function store() {
+  const m = new Map();
+  return { m, kv: { get: async (k) => m.get(k) ?? null, put: async (k, v) => void m.set(k, v) } };
+}
+function ctx(body, env = {}, headers = {}) {
+  const pending = [];
+  return {
+    request: new Request('https://junhammer.com/api/visibility', { method: 'POST', headers: { 'content-type': 'application/json', origin: 'https://junhammer.com', ...headers }, body: typeof body === 'string' ? body : JSON.stringify(body) }),
+    env,
+    waitUntil: (p) => pending.push(p),
+    pending,
+  };
+}
+const events = async (stream) => (await new Response(stream).text()).split('\n\n').filter(Boolean).map((b) => ({ event: b.match(/^event: (.+)$/m)[1], data: JSON.parse(b.match(/^data: (.+)$/m)[1]) }));
+
+/** A fake world: the site, the question writer, and a search that cites acme on every third question. */
+function world({ citeEvery = 3 } = {}) {
+  let asked = 0;
+  const calls = { questions: 0, answers: 0 };
+  return {
+    calls,
+    fetchImpl: async (url, init) => {
+      if (url === 'https://api.anthropic.com/v1/messages') {
+        const payload = JSON.parse(init.body);
+        if (payload.tools?.[0]?.name === 'set_questions') {
+          calls.questions++;
+          return Response.json({ content: [{ type: 'tool_use', name: 'set_questions', input: { questions: Array.from({ length: RUN.questions }, (_, i) => `What is the best way to handle problem number ${i}?`) } }], usage: {} });
+        }
+        calls.answers++;
+        const n = asked++;
+        const mine = n % citeEvery === 0;
+        return Response.json({
+          content: [
+            { type: 'web_search_tool_result', content: [{ type: 'web_search_result', url: 'https://moz.com/a' }, { type: 'web_search_result', url: 'https://acme.example.org/p' }] },
+            { type: 'text', text: 'Some answer.', citations: mine ? [{ type: 'web_search_result_location', url: 'https://acme.example.org/p' }] : [{ type: 'web_search_result_location', url: 'https://moz.com/a' }] },
+          ],
+          usage: { server_tool_use: { web_search_requests: 2 } },
+        });
+      }
+      return new Response(HOME, { headers: { 'content-type': 'text/html' } });
+    },
+  };
+}
+
+test('endpoint: validates before spending a single search', async () => {
+  const real = globalThis.fetch;
+  globalThis.fetch = async () => assert.fail('nothing should be called');
+  try {
+    assert.equal((await onRequestPost(ctx({ url: 'https://acme.example.org' }, { ANTHROPIC_API_KEY: 'k' }, { origin: 'https://evil.test' }))).status, 403);
+    assert.equal((await onRequestPost(ctx('nope', { ANTHROPIC_API_KEY: 'k' }))).status, 400);
+    assert.equal((await onRequestPost(ctx({ url: 'http://127.0.0.1/' }, { ANTHROPIC_API_KEY: 'k' }))).status, 400);
+    assert.equal((await onRequestPost(ctx({ url: 'https://acme.example.org' }))).status, 503);
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test('endpoint: a full run scores the brand and caches it', async () => {
+  const real = globalThis.fetch;
+  const w = world();
+  globalThis.fetch = w.fetchImpl;
+  try {
+    const { kv, m } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const c = ctx({ url: 'acme.example.org' }, env);
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    const kinds = out.map((e) => e.event);
+    assert.deepEqual(kinds.slice(0, 3), ['step', 'step', 'questions']);
+    assert.equal(kinds.at(-1), 'report');
+    const report = out.at(-1).data;
+    assert.equal(report.brand, 'acme.example.org');
+    assert.equal(report.brandName, 'Acme AEO');
+    assert.equal(report.questions, RUN.questions);
+    assert.equal(report.cited, 4, 'cited on every third question');
+    assert.equal(report.retrieved, RUN.questions, 'found every time, cited four times');
+    assert.equal(report.retrievedNotCited, 6);
+    assert.deepEqual(report.leaders[0], { domain: 'moz.com', questions: 6, share: 60, isBrand: false });
+    assert.match(report.verdict, /passed over/);
+    assert.equal(w.calls.questions, 1);
+    assert.equal(w.calls.answers, RUN.questions);
+    assert.ok([...m.keys()].some((k) => k.startsWith('vis:run:')), 'the run is cached');
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test('endpoint: a cached domain costs nothing and is free to anyone', async () => {
+  const real = globalThis.fetch;
+  const w = world();
+  globalThis.fetch = w.fetchImpl;
+  try {
+    const { kv } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv };
+    const first = ctx({ url: 'acme.example.org' }, env);
+    await events((await onRequestPost(first)).body);
+    await Promise.all(first.pending);
+    const before = w.calls.answers;
+    // A different visitor, already at their own limit, still gets the result.
+    const res = await onRequestPost(ctx({ url: 'https://www.acme.example.org/some/page' }, env, { 'cf-connecting-ip': '9.9.9.9' }));
+    const data = await res.json();
+    assert.equal(res.status, 200);
+    assert.equal(data.cached, true);
+    assert.equal(data.brand, 'acme.example.org', 'the cache is keyed on the domain, not the path');
+    assert.equal(w.calls.answers, before, 'no further searches were bought');
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test('endpoint: one new domain per visitor, and a daily ceiling for the site', async () => {
+  const real = globalThis.fetch;
+  globalThis.fetch = world().fetchImpl;
+  try {
+    const { kv } = store();
+    const env = { ANTHROPIC_API_KEY: 'k', ASK_KV: kv, VIS_DAILY_LIMIT: '2' };
+    const first = ctx({ url: 'one-brand.org' }, env);
+    await events((await onRequestPost(first)).body);
+    await Promise.all(first.pending);
+    const second = await onRequestPost(ctx({ url: 'two-brand.org' }, env));
+    assert.equal(second.status, 429);
+    assert.equal((await second.json()).reason, 'limited', 'same visitor, new domain');
+    const other = ctx({ url: 'two-brand.org' }, env, { 'cf-connecting-ip': '2.2.2.2' });
+    await events((await onRequestPost(other)).body);
+    await Promise.all(other.pending);
+    const third = await onRequestPost(ctx({ url: 'three-brand.org' }, env, { 'cf-connecting-ip': '3.3.3.3' }));
+    assert.equal((await third.json()).reason, 'closed', 'the site budget is spent');
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test('endpoint: an unreadable site fails before any question is bought', async () => {
+  const real = globalThis.fetch;
+  let answers = 0;
+  globalThis.fetch = async (url) => {
+    if (url.includes('anthropic')) answers++;
+    return new Response('gone', { status: 404, headers: { 'content-type': 'text/plain' } });
+  };
+  try {
+    const { kv } = store();
+    const c = ctx({ url: 'nothing-here.org' }, { ANTHROPIC_API_KEY: 'k', ASK_KV: kv });
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out.at(-1).event, 'error');
+    assert.equal(out.at(-1).data.reason, 'unreachable');
+    assert.equal(answers, 0, 'nothing was spent');
+  } finally {
+    globalThis.fetch = real;
+  }
+});

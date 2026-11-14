@@ -59,6 +59,10 @@
       "href": "/tools/",
       "children": [
         {
+          "label": "AI Visibility Checker",
+          "href": "/ai-visibility-checker/"
+        },
+        {
           "label": "AEO Audit",
           "href": "/audit/"
         },
