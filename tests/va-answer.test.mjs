@@ -169,3 +169,17 @@ test('endpoint: the per-visitor limit holds and points somewhere useful', async 
     globalThis.fetch = real;
   }
 });
+
+test('endpoint: a reply cut off at the token ceiling is not shown', async () => {
+  const real = globalThis.fetch;
+  globalThis.fetch = async () => Response.json({ content: [{ type: 'text', text: 'The steps are to file an intent to file, which sets the date your claim counts fr' }], stop_reason: 'max_tokens', usage: { input_tokens: 10, output_tokens: 1200 } });
+  try {
+    const c = ctx({ question: 'what are the steps?' }, { ANTHROPIC_API_KEY: 'k' });
+    const out = await events((await onRequestPost(c)).body);
+    await Promise.all(c.pending);
+    assert.equal(out[0].event, 'error', 'half a sentence about a claim is worse than none');
+    assert.ok(!JSON.stringify(out).includes('counts fr'));
+  } finally {
+    globalThis.fetch = real;
+  }
+});

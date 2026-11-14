@@ -87,6 +87,9 @@ export async function onRequestPost(context) {
         }
         const data = await res.json();
         const text = (data.content || []).map((b) => b.text || '').join('').trim();
+        // A reply cut off at the token ceiling can end mid-sentence, which on
+        // this subject reads as a half-finished instruction. Refuse it.
+        if (data.stop_reason === 'max_tokens') throw new Error('truncated');
         // Checked whole, before anything reaches the page. Streaming token by
         // token would mean showing text that the check might then reject.
         const check = checkAnswer(text);

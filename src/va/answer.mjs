@@ -12,7 +12,7 @@
 // veteran's behalf in a way that no website can.
 import { CORPUS, LINKS } from './corpus.mjs';
 
-export const LIMITS = { question: 400, maxTokens: 700, historyTurns: 4, historyChars: 1200 };
+export const LIMITS = { question: 400, maxTokens: 1200, historyTurns: 4, historyChars: 1200 };
 
 export const SYSTEM = `You answer questions about VA disability compensation on junhammer.com, using only the sections of Title 38 given to you below. The people asking are usually veterans trying to work out whether to file at all.
 
@@ -29,7 +29,7 @@ What you must never do:
 - If the passages do not cover it, say so and point to an accredited representative. Do not answer from general knowledge, ever, even if you are confident.
 
 How to answer:
-- Lead with the answer. Two to five sentences, or a short list for steps.
+- Lead with the answer. Keep the whole reply under 160 words: two to five sentences, or a short list for steps. Finish your last sentence.
 - Plain language, no jargon you have not explained, no em dashes, no hype.
 - Speak about "the regulation" and "the VA". Do not mention "the passages", "the sources" or "the context you were given".
 - Where a question is about the person's own situation, answer the general rule and then say that an accredited representative can apply it to their records. Representatives are free.
