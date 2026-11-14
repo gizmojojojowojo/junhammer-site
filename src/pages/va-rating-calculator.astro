@@ -357,7 +357,7 @@ const schema = [
   // ---- the decision letter reader ----
   const letterText = document.getElementById('vac-letter-text');
   const letterOut = document.getElementById('vac-letter-out');
-  const SYSTEM_GUESS = [[/ptsd|depress|anxiety|mental|adjustment disorder|mood/i, 'neuropsychiatric'], [/knee|ankle|hip|shoulder|elbow|wrist|back|lumbar|cervical|spine|strain|arthritis|foot|feet|plantar|pes planus/i, 'orthopedic'], [/asthma|sinus|rhinitis|apnea|respiratory|bronch/i, 'respiratory'], [/hypertension|heart|kidney|renal|cardiac/i, 'cardiovascular-renal'], [/gerd|reflux|ibs|bowel|digest|gastr/i, 'digestive']];
+  const SYSTEM_GUESS = [[/ptsd|post-?traumatic|stress disorder|depress|anxiety|mental|adjustment disorder|mood|migraine|headache|traumatic brain/i, 'neuropsychiatric'], [/knee|ankle|hip|shoulder|elbow|wrist|back|lumbar|cervical|spine|strain|arthritis|foot|feet|plantar|pes planus/i, 'orthopedic'], [/asthma|sinus|rhinitis|apnea|respiratory|bronch/i, 'respiratory'], [/hypertension|heart|kidney|renal|cardiac/i, 'cardiovascular-renal'], [/gerd|reflux|ibs|bowel|digest|gastr/i, 'digestive']];
 
   function showLetter({ items, denied }, viaModel) {
     const parts = [];
