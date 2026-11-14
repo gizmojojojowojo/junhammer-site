@@ -9,6 +9,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { CONFIG, forModel, gapReport, normalizeMatch, parseGreenhouse, parseLever, rank, renderReport } from './lib.mjs';
+import { callForTool } from '../lib/tool-call.mjs';
 
 const root = new URL('../../', import.meta.url);
 const key = (process.env.ANTHROPIC_API_KEY || '').trim();
@@ -103,22 +104,19 @@ const TOOL = {
 
 let spent = 0;
 async function match(posting) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
+  const { input, usage } = await callForTool({
+    key,
+    toolName: 'report',
+    payload: {
       model: process.env.CAREER_MODEL || CONFIG.model,
       max_tokens: 4000,
       system: SYSTEM,
       tools: [TOOL],
-      tool_choice: { type: 'tool', name: 'report' },
       messages: [{ role: 'user', content: `The posting:\n${JSON.stringify(forModel(posting), null, 1)}\n\nThe portfolio, page by page:\n${JSON.stringify(pages)}\n\nThe case studies and service pages in full:\n${JSON.stringify(evidence)}` }],
-    }),
+    },
   });
-  if (!res.ok) throw new Error(`${posting.company}: ${res.status} ${(await res.text()).slice(0, 200)}`);
-  const data = await res.json();
-  spent += (data.usage.input_tokens * 2 + data.usage.output_tokens * 10) / 1e6; // Sonnet rates
-  return normalizeMatch(data.content.find((b) => b.type === 'tool_use')?.input, posting, pages);
+  spent += (usage.input_tokens * 2 + usage.output_tokens * 10) / 1e6; // Sonnet rates
+  return normalizeMatch(input, posting, pages);
 }
 
 const matches = [];

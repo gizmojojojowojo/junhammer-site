@@ -60,3 +60,32 @@ test('targets must point at real pages', () => {
   assert.deepEqual(t[0], { question: 'What is GEO?', page: '/blog/geo/', why: 'w' });
   assert.ok(t.every((x) => x.page !== '/made-up/'));
 });
+
+// ---- asking for a structured answer without forcing a tool choice ----
+const { callForTool } = await import('../scripts/lib/tool-call.mjs');
+
+test('a tool answer is requested without a forced tool choice, and prose gets one retry', async () => {
+  const seen = [];
+  const replies = [
+    { content: [{ type: 'text', text: 'Here are my thoughts in prose.' }], usage: { input_tokens: 10, output_tokens: 5 } },
+    { content: [{ type: 'tool_use', id: 't1', name: 'report', input: { ok: true } }], usage: { input_tokens: 12, output_tokens: 6 } },
+  ];
+  const fetchImpl = async (url, init) => {
+    seen.push(JSON.parse(init.body));
+    return Response.json(replies[seen.length - 1]);
+  };
+  const out = await callForTool({ key: 'k', toolName: 'report', fetchImpl, payload: { model: 'm', max_tokens: 100, system: 'Be exact.', tools: [{ name: 'report', input_schema: { type: 'object' } }], messages: [{ role: 'user', content: 'go' }] } });
+  assert.deepEqual(out.input, { ok: true });
+  assert.deepEqual(out.usage, { input_tokens: 22, output_tokens: 11 });
+  assert.ok(seen.every((b) => b.tool_choice.type === 'auto'), 'some models reject a forced tool choice');
+  assert.match(seen[0].system, /Answer by calling the report tool/);
+  assert.equal(seen[1].messages.length, 3, 'the retry carries the prose reply and a nudge');
+  assert.match(seen[1].messages.at(-1).content, /Call the report tool now/);
+});
+
+test('a model that never calls the tool, or an API error, fails loudly', async () => {
+  const prose = async () => Response.json({ content: [{ type: 'text', text: 'no' }], usage: {} });
+  await assert.rejects(callForTool({ key: 'k', toolName: 'report', fetchImpl: prose, payload: { model: 'm', messages: [{ role: 'user', content: 'go' }] } }), /did not call the tool/);
+  const bad = async () => new Response('{"type":"error"}', { status: 400 });
+  await assert.rejects(callForTool({ key: 'k', toolName: 'report', fetchImpl: bad, payload: { model: 'm', messages: [] } }), /report: 400/);
+});

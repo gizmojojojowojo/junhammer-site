@@ -54,7 +54,7 @@ async function chooseTargets() {
     {
       model: CONFIG.decideModel,
       max_tokens: 2000,
-      system: TARGET_SYSTEM,
+      system: `${TARGET_SYSTEM}\n\nAnswer by calling the set_targets tool. Do not answer in prose.`,
       tools: [
         {
           name: 'set_targets',
@@ -75,7 +75,6 @@ async function chooseTargets() {
           },
         },
       ],
-      tool_choice: { type: 'tool', name: 'set_targets' },
       messages: [{ role: 'user', content: `Here are the pages on ${SITE}:\n\n${JSON.stringify(pageList)}\n\nPick the five target questions.` }],
     },
     'choose targets',
@@ -174,10 +173,11 @@ async function decide(results) {
 
   for (let turn = 0; turn < CONFIG.turns; turn++) {
     const last = turn === CONFIG.turns - 1;
-    const data = await model({ model: CONFIG.decideModel, max_tokens: 8000, system: DECIDE_SYSTEM, tools: DECIDE_TOOLS, tool_choice: last ? { type: 'tool', name: 'finish_day' } : { type: 'auto' }, messages }, `decide turn ${turn + 1}`);
+    const data = await model({ model: CONFIG.decideModel, max_tokens: 8000, system: DECIDE_SYSTEM, tools: DECIDE_TOOLS, messages }, `decide turn ${turn + 1}`);
     const calls = data.content.filter((b) => b.type === 'tool_use');
     const done = calls.find((c) => c.name === 'finish_day');
     if (done) return { entry: done.input, written };
+    if (last) throw new Error('no journal entry');
     if (!calls.length) {
       messages.push({ role: 'assistant', content: data.content.length ? data.content : [{ type: 'text', text: '...' }] }, { role: 'user', content: 'Take an action or call finish_day.' });
       continue;

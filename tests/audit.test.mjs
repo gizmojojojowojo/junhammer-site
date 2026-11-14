@@ -267,7 +267,7 @@ test('endpoint: a model failure ends with an error event', async () => {
 
 // ---- the eval harness itself ----
 
-const report = (over = {}) => normalizeReport({ summary: 'ok', categories: [{ id: 'crawler_access', score: 30, note: 'robots.txt blocks GPTBot.' }], findings: [{ category: 'crawler_access', severity: 'high', title: 'AI crawlers blocked', evidence: 'robots.txt disallows GPTBot and ClaudeBot.', fix: 'Allow them.' }], ...over }, new URL('https://blocked.test/guide/'));
+const report = (over = {}) => normalizeReport({ summary: 'ok', categories: [{ id: 'crawler_access', score: 30, note: 'robots.txt blocks GPTBot.' }], findings: [{ category: 'crawler_access', severity: 'high', title: 'AI crawlers blocked', evidence: 'robots.txt disallows GPTBot and ClaudeBot.', fix: 'Allow them.' }], ...over }, new URL('https://blocked.fixture-site.org/guide/'));
 
 test('grading an audit: a defect counts only when the report names it', () => {
   const expect = { defect: 'AI crawlers are blocked', words: ['robots', 'gptbot', 'claudebot', 'disallow'], need: 2, category: 'crawler_access' };
@@ -313,4 +313,21 @@ test('the agent runs end to end against a fixture with no network', async () => 
   const out = await runAudit({ target: new URL(f.url), callModel, fetchImpl: fixtureFetch(f), model: 'm' });
   const g = gradeAudit(out.report, f);
   assert.deepEqual([g.found, g.planted, g.missed], [1, 1, []]);
+});
+
+test('every fixture is fetched through the real tools, not refused by the URL guard', async () => {
+  // The first grading run was invalid because the fixture hosts were refused
+  // before any page was read. This runs each fixture through fetch_page and
+  // the robots check for real and asserts both succeeded.
+  for (const f of FIXTURES) {
+    const { callModel, seen } = scripted([
+      [{ name: 'fetch_page', input: { url: f.url } }, { name: 'check_ai_crawler_access' }],
+      [{ name: 'submit_report', input: { summary: 's', categories: [], findings: [] } }],
+    ]);
+    await runAudit({ target: new URL(f.url), callModel, fetchImpl: fixtureFetch(f), model: 'm' });
+    const results = seen[1].messages.at(-1).content.filter((b) => b.type === 'tool_result');
+    assert.ok(!results[0].is_error, `${f.id}: fetch_page succeeded`);
+    assert.equal(JSON.parse(results[0].content).status, 200, `${f.id}: the page was read`);
+    assert.equal(JSON.parse(results[1].content).robots_txt, 'found', `${f.id}: robots.txt was read`);
+  }
 });
