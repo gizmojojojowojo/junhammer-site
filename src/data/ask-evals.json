@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-14T18:20:10.032Z",
-  "commit": "9fab96c",
+  "ranAt": "2026-11-14T18:25:26.291Z",
+  "commit": "c5145fd",
   "retrieval": {
     "questions": 60,
     "passages": 732,
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 47,
+    "passedAll": 53,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 59
+        "passed": 60
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 55
+        "passed": 57
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 51
+        "passed": 55
       },
       {
         "id": "short",
@@ -44,11 +44,11 @@
       }
     ],
     "offTopicReachedModel": 4,
-    "offTopicDeclined": 3,
+    "offTopicDeclined": 1,
     "avgTokensIn": 2366,
-    "avgTokensOut": 304,
-    "ranAt": "2026-11-14T18:20:10.031Z",
-    "commit": "9fab96c"
+    "avgTokensOut": 290,
+    "ranAt": "2026-11-14T18:25:26.291Z",
+    "commit": "c5145fd"
   },
   "questions": [
     {
@@ -102,8 +102,11 @@
     {
       "q": "How do I get featured in Google AI Overviews?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "This site suggests a few things to focus on:\n\n- **Answer specific questions thoroughly.** Joe recommends covering the core question and related subtopics in depth, offering insights not easily found elsewhere, and keeping content updated [5].\n- **Expect a few months.** There is no guaranteed timeframe, but websites typically need 2-3 months of consistent optimization before appearing in AI Overviews [1].\n- **Structure content and technical signals.** Joe's AEO work covers content restructuring for answer extraction, entity and schema work, and an llms.txt and AI crawler access review [8].\n- **Apply stricter standards for health content.** Healthcare content falls under YMYL guidelines, so AI"
     },
     {
       "q": "What is semantic search?",
@@ -132,8 +135,11 @@
     {
       "q": "How can a small regional hospital compete in AI search?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "A small regional hospital has a real path in AI search for local care questions, service-line searches, physician expertise, and appointment-focused queries, though it is harder to win broad medical definitions [1]. The competitive edge comes from good workflows, local detail, clinical review, and trust signals rather than expensive tools, and AI can help with audits and drafts [2].\n\nJoe's suggested steps include:\n\n- **Mark up physician credentials:** AI systems look for explicit, machine-readable credentials, so author pages should use Person schema with job title, credentials, education, and affiliations [6][8].\n- **Use hyperlocal keywords:** Target neighborhood names, local landmarks such"
     },
     {
       "q": "How do pharma companies optimize content for Perplexity?",
@@ -150,11 +156,8 @@
     {
       "q": "Why is healthcare AEO different from other industries?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Healthcare content needs different AEO tactics because the same tactics that make e-commerce appear in AI responses can hurt medical sites [1]. General AEO favors clear answers placed early, but healthcare content has to balance that clarity with context and caveats, since symptoms, treatments and medications often need nuance [2]. AI systems may leave out healthcare content that oversimplifies, so the approach is to lead with the direct answer and then add qualifications or a recommendation to see a professional [2]. Joe's healthcare work covers clinician authorship, source citation, provider and condition schema, and answering patient questions without overstepping [4]. For details on work"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is the difference between an AI agent and an AI workflow?",
@@ -171,11 +174,8 @@
     {
       "q": "What are AI integration services?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "AI integration services go beyond a single automation. They cover the assessment, policy, tool selection, training, and measurement that make AI work across a business, with AI workflow automation being one part of them [1]. The cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, and a scoped proposal after an initial conversation is the most reliable way to get a number [2]. To ask about this work with Joe, visit the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Is SEO dead?",
@@ -198,8 +198,11 @@
     {
       "q": "What am I actually paying for with AEO services?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "The AEO program on this site, described on [the service page](/services/answer-engine-optimization/), includes five parts:\n\n- **Visibility baseline:** Joe picks the questions your buyers or patients ask and checks which brands each AI assistant cites today [3].\n- **Content structure:** Pages are rebuilt around direct, self-contained answers, question-based headings, and the 40-word paragraph rule [3].\n- **Ent"
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -216,11 +219,8 @@
     {
       "q": "What technical SEO does a GEO strategy need?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "A GEO strategy needs technical SEO as its base. Without it, AI systems may not be able to crawl your content, may not index it for retrieval, and may not parse it efficiently [2]. The essentials include making sure AI crawlers can reach your pages, that important content renders in the HTML, and that pages are indexed [3]. Joe's AEO program also covers AI crawler rules, server-rendered content, llms.txt, and page speed [4]. Fast loading, mobile optimization, proper schema markup, and clean site architecture are also treated as GEO essentials [7]. For more on working with Joe, see [the contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do I do keyword research now?",
@@ -259,16 +259,13 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. His contact page says he is based in Denver and works with teams anywhere in the US [8]. His Parker page says he works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US, and describes him as based in Colorado's south metro [5]. To discuss a project, see the [contact page](/contact/)."
+      "answer": "Joe Unhammer is based in Colorado. The site says he is based in Denver and works with teams anywhere in the US [8]. He also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, which he describes as Colorado's south metro [5]. If you want to work with him, you can reach out via the [contact page](/contact/)."
     },
     {
       "q": "What AI tools has Joe built?",
       "rank": 3,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Joe has built LandmAIn, an AI land intelligence platform for data center and energy site selection in Colorado, where every finding ties to a dated, inspectable source [2][5]. He has also designed AI chat functions for hospital systems to help patients find services and care information [7]. On the engineering side, his builds include AI chat functions for websites and internal teams, agentic workflows, Claude skills, MCP connectors, plugins, browser extensions, and automated GA4 and Search Console reporting [4]. For AI agents, automations, and Claude integrations, see [AI engineering](/services/ai-engineering/) or the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is LandmAIn?",
@@ -303,11 +300,8 @@
     {
       "q": "Can Joe build an MCP server for Claude?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Yes. Joe's Claude and MCP service describes MCP servers as the way to connect Claude to your systems, such as letting Claude query Search Console, read a reporting database or call an internal API, within limits you set [1]. His AI engineering work also includes MCP connectors alongside Claude skills [6], and his AI agent work lists MCP servers that package your process [3]. For a project, you can reach Joe through the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What does an AI agent project involve?",
@@ -328,7 +322,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. For a conversation about your situation, you can reach out via the [contact page](/contact/)."
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, the rules, and how you will measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. For a discussion about your situation, see the [contact page](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -339,11 +333,8 @@
     {
       "q": "How do I get in touch about a project?",
       "rank": 1,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "You can email Joe at brubeckunhammer@gmail.com, or reach him on [LinkedIn](https://www.linkedin.com/in/junhammer/) [2]. To start a project, send what you need, your timeline, and your site or product URL, and expect a reply within two business days [2]. The [contact page](/contact/) has the same details and is the place to start [2]."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Does Joe work with companies in Denver?",
@@ -366,20 +357,18 @@
     {
       "q": "how does it take for seo to work?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "This site says most sites see early movement from SEO in three to six months and compounding results in six to twelve. The timing depends on competition, site health, and how much content needs to be built. New sites in competitive fields take longer. [6] Joe sets milestones for each quarter so progress is visible before rankings fully arrive. [6] You can read more on the [SEO service page](/services/seo/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "seo how long",
       "rank": 4,
       "pass": false,
       "failed": [
-        "Cites a page that holds the answer"
+        "Cites a page that holds the answer",
+        "Uses only links found in the sources"
       ],
-      "answer": "Based on this site's FAQ, meaningful organic traffic growth typically emerges between three and six months, with substantial, compounding results often visible at the six-to-twelve month mark. Technical improvements and quick wins can show impact within weeks, and visibility in AI systems can shift faster [1]. Timelines depend on your starting point, competition, and objectives [1]. You can read more on the [FAQ page](/faq/)."
+      "answer": "Joe's FAQ says SEO is a long-term investment, but timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth usually appears between three and six months, and substantial compounding results are often visible at six to twelve months [1]. Visibility in AI systems can shift faster, since those platforms update their knowledge bases [1]. For details on working with Joe, see the [contact page](/contact/)."
     },
     {
       "q": "aeo vs geo",
@@ -390,11 +379,8 @@
     {
       "q": "chatgpt not showing my site",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ]
+      "pass": true,
+      "failed": []
     },
     {
       "q": "joe army",
@@ -429,27 +415,23 @@
     {
       "q": "ai overviews for hospitals",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "This site covers the challenge hospitals and other healthcare marketers face in getting content featured in AI-generated responses [5]. To track progress, it suggests regularly testing relevant healthcare queries, documenting which sources appear, and monitoring featured snippet capture as a proxy, since content that earns snippets often performs well in AI Overviews [3]. Joe offers healthcare AEO built on E-E-A-T and YMYL standards and has led AEO and technical SEO for enterprise hospital systems [4]. Typically, websites need 2-3 months of consistent optimization before appearing in AI Overviews, though there is no guaranteed timeframe [1]. To discuss a project, see the [Answer Engine Optim"
-    },
-    {
-      "q": "what do you charge",
-      "rank": 5,
       "pass": true,
       "failed": []
     },
     {
-      "q": "keyword research",
-      "rank": 0,
+      "q": "what do you charge",
+      "rank": 5,
       "pass": false,
       "failed": [
-        "Cites a page that holds the answer",
         "Uses only links found in the sources"
       ],
-      "answer": "Keyword research is still foundational to SEO, but the approach has shifted toward user intent and conversational queries rather than exact-match terms [4]. Joe recommends identifying the specific problems your audience wants to solve, using intent-classification tools that look at search volume patterns, SERP features, related keyword clusters, and seasonal shifts [3][4]. Keyword research should also cover how your audience searches on other platforms, such as Reddit or TikTok, and include competitor analysis to find content gaps [4]. For a deeper walkthrough, see [Keyword Research in 2025: Beyond Traditional SEO](/blog/keyword-research-in-2025-beyond-traditional-seo/). If you want Joe to h"
+      "answer": "This site does not list Joe's rates. The [FAQ page](/faq/) covers pricing among its topics [6], but the excerpts I have don't include the figures. For a quote, use the [contact page](/contact/).\n\nIf you're comparing providers, one useful approach is to ask each one to price the same initial brief against an agreed scope [2]."
+    },
+    {
+      "q": "keyword research",
+      "rank": 0,
+      "pass": true,
+      "failed": []
     }
   ],
   "semantic": {
