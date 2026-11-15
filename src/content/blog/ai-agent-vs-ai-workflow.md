@@ -93,7 +93,7 @@ The practical test: if a workflow gets you 90% of the value at a fraction of the
 
 I build both. For a nonprofit digital agency I build [agentic tools, Claude skills and plugins](/work/agency-ai-tools/) that turn research, content QA and reporting into one-click workflows. I also designed and built [AI chat functions for hospital systems](/work/hospital-ai-chat/).
 
-Every project starts with scoping: which tasks need an agent, which need a workflow, and how we will test both. See [AI agent development](/services/ai-agent-development/), [AI automation](/services/ai-automation/) and [Claude and MCP implementation](/services/claude-mcp-implementation/), or [start a project](/contact/).
+Every project starts with scoping: which tasks need an agent, which need a workflow, and how we will test both. See [AI agent development](/services/ai-agent-development/) and [AI automation](/services/ai-automation/), or [start a project](/contact/).
 
 ## Frequently asked questions
 

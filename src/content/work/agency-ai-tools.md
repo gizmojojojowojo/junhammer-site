@@ -7,7 +7,7 @@ year: "2026–present"
 summary: "Plugins, browser extensions, Claude skills, chat functions and reporting automations that package an agency's SEO and AEO processes into one-click workflows."
 description: "Agentic AI tools for a nonprofit digital agency: Claude skills, plugins, browser extensions, chat functions and automated GA4 and Search Console reporting."
 order: 1
-services: ["ai-engineering", "ai-consulting", "answer-engine-optimization"]
+services: ["ai-automation", "ai-consulting", "answer-engine-optimization"]
 results:
   - { value: "1-click", label: "SEO and AEO workflows packaged as reusable tools" }
   - { value: "GA4 + GSC", label: "client reports generated automatically" }
@@ -30,4 +30,4 @@ As AI Search Strategist at a digital agency for nonprofit and social-impact orga
 
 I also lead AEO strategy for the agency's nonprofit clients, structuring content and schema so AI answer engines cite those organizations. Building the tools and running the strategy in the same role means the automation reflects how the work is actually done.
 
-See [AI engineering](/services/ai-engineering/) and [AI consulting](/services/ai-consulting/) for how this applies to your team.
+See [AI automation](/services/ai-automation/) and [AI consulting](/services/ai-consulting/) for how this applies to your team.

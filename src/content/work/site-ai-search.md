@@ -8,7 +8,7 @@ link: "https://junhammer.com/ask/"
 summary: "A question box that answers from this site's pages, cites every source, and declines when the site has no answer. Built on Cloudflare and Claude, with a test set that measures it."
 description: "How I built AI search for junhammer.com: BM25 retrieval, streamed answers from Claude with citations, guardrails against invented links, and evals."
 order: 7
-services: ["ai-engineering", "ai-agent-development"]
+services: ["ai-engineering"]
 results:
   - { value: "60 of 60", label: "test questions get the right page in front of the model" }
   - { value: "93%", label: "of test questions rank the right page first, up from 85% with keywords alone" }

@@ -1,48 +1,62 @@
 ---
-title: "AI Automation Consulting"
+title: "AI Automation"
 navLabel: "AI automation"
-seoTitle: "AI Automation Consultant for Marketing and Ops Teams"
-description: "AI workflow automation from Joe Unhammer: find the repeat work worth automating, build reliable AI workflows for reporting, QA and research, and hand them off."
-summary: "I find the repeat work that eats your team's week and turn it into reliable AI workflows, starting with reporting, research and content QA."
-order: 8
+seoTitle: "AI Automation for CRM, Lead Intake and Reporting"
+description: "AI automation from Joe Unhammer: lead intake into your CRM, follow-up drafts, reporting and admin work, connected to the tools you already pay for."
+summary: "I automate the routine work that runs a business: leads filed in your CRM with a drafted reply, tasks created for your team, and reports that write themselves. I use the tools you already have wherever I can."
+order: 7
 topic: "AI"
 offers:
-  - "Automation audit: where your team's hours go and what is worth automating"
-  - "Automated GA4 and Search Console reporting"
-  - "Research, summarization and content QA workflows"
-  - "Lead intake, routing and follow-up drafting with human review"
-  - "Integrations with the tools you already use"
-  - "Documentation and training so the team owns it"
+  - "Lead intake: web forms, emails and voicemails read, sorted and filed in your CRM"
+  - "Follow-up drafts and tasks for your team, with a person approving what goes out"
+  - "Automated reporting from your CRM, GA4 and Search Console"
+  - "Connections between your CRM, project tools and accounting software"
+  - "Claude skills and MCP servers that give AI controlled access to your systems"
+  - "Documentation and training so your team owns it"
 proof:
+  - "Built a lead intake system that sorted 40 test leads by category and caught every emergency"
   - "Automates GA4 and Search Console reporting into ready-to-send client deliverables"
-  - "Builds agentic tools that handle research, content QA and reporting for an agency"
-  - "Ten years running SEO programs, so automations reflect how the work is done"
-work: ["agency-ai-tools"]
+  - "Builds Claude skills and plugins that package an agency's processes into one-click workflows"
+work: ["roofing-lead-intake", "agency-ai-tools"]
 faqs:
-  - q: "What does an AI automation consultant do?"
-    a: "An AI automation consultant finds tasks your team repeats, decides which ones AI can handle reliably, builds the workflows and hands them off with documentation. The goal is fewer hours on routine work without lowering quality."
-  - q: "Which tasks are good candidates for AI automation?"
-    a: "Tasks that repeat often, follow a describable process and have output someone can check: monthly reporting, research summaries, content QA against a checklist, data cleanup and first drafts of routine messages."
-  - q: "What is the difference between AI automation and an AI agent?"
-    a: "Most AI automation runs as a workflow: a fixed sequence of steps where an AI model handles some of them. An agent decides its own steps. Workflows are more predictable, so I use them by default and reach for agents only when a task needs that flexibility."
+  - q: "What can AI automation do for a small business?"
+    a: "It handles routine work that follows a pattern: reading new leads and filing them in your CRM, drafting follow-up replies, creating tasks for your team, cleaning up data and writing regular reports. The goal is fewer hours on admin and faster responses to customers."
+  - q: "Do I need new software?"
+    a: "Usually not. I connect the tools you already pay for, such as HubSpot, Asana, Google Workspace or QuickBooks, and add AI only at the steps where plain automation breaks down, like reading a messy voicemail or a free-text form."
+  - q: "What is MCP?"
+    a: "The Model Context Protocol (MCP) is an open standard that lets an AI application such as Claude connect to outside tools and data through a server. An MCP server can let Claude read from a database, query an analytics account or take an action in another system."
+  - q: "Is it safe to connect AI to company data?"
+    a: "It can be, with the right design. I limit each connection to the data and actions the job needs, prefer read-only access where possible, keep a person approving anything sent to customers, and document exactly what each connection can reach."
   - q: "Will automation replace my team?"
-    a: "That is not how I scope projects. I automate the routine parts of skilled work so people spend more time on judgment, strategy and client relationships, and I keep humans reviewing anything that goes out the door."
+    a: "That is not how I scope projects. I automate the routine parts of the work so people spend more time with customers and on jobs that need judgment, and I keep a person reviewing anything that goes out the door."
   - q: "Do you work with small businesses?"
     a: "Yes. Small teams often get the most from automation because a few saved hours a week matter more. I am based in the Denver metro area and work with teams across the US."
 ---
 ## Start with where the hours go
 
-Before building anything, I look at how your team spends its week. The best automation candidates repeat often, follow a process someone could write down and produce output a person can check. Monthly reporting is the classic example. Research summaries and content QA are close behind.
+Before building anything, I look at how your team spends its week. The best candidates repeat often, follow a process someone could write down and produce output a person can check. Lead intake, follow-up and monthly reporting are the usual first picks.
 
 ## What I automate
 
-**Reporting.** GA4 and Search Console data pulled, summarized and formatted into the deliverable your clients or leadership expect. I [build these for an agency today](/work/agency-ai-tools/).
+**Lead intake.** New leads arrive as web forms, emails and voicemails, often incomplete. An AI model reads each one, drops spam and vendor pitches, pulls out the contact details and urgency, and files a contact and deal in your CRM with a drafted reply. A repeat message from the same person attaches to the existing deal. I built and tested this for a [roofing company scenario](/work/roofing-lead-intake/).
 
-**Research.** Workflows that gather sources on a topic or competitor, summarize them and cite where each point came from.
+**Tasks and follow-up.** The right person gets a task with a due date set by urgency. Emergencies go to the top of the list.
 
-**Content QA.** Drafts checked against your style guide, accuracy rules and SEO requirements before a person reviews them.
+**Reporting.** CRM, GA4 and Search Console data pulled, summarized and formatted into the report your team or clients expect. I [build these for an agency today](/work/agency-ai-tools/).
 
-**Intake and follow-up.** Inquiries sorted, routed and answered with a draft that a person approves.
+**Admin between tools.** Data moved between your CRM, project board and accounting software so nobody retypes it.
+
+## Use what you already have
+
+Plain automation tools such as Zapier handle most of the wiring between apps, and I use them when they fit. AI earns its place at the steps those tools cannot do alone: reading free text, judging urgency, or drafting a reply. Custom software comes last, when nothing off the shelf fits. Keeping that order keeps costs down and leaves less to maintain.
+
+## How AI connects to your systems
+
+Two tools let an AI model work with your business data safely.
+
+**Claude skills** package a process. A skill holds the instructions, examples and scripts for one task, so anyone on the team can run it and get consistent output.
+
+**MCP servers** connect AI to your systems. The [Model Context Protocol](https://modelcontextprotocol.io/) is an open standard for connecting AI applications to outside tools and data. With an MCP server, Claude can read your CRM or reporting data inside limits you set, usually read-only to start.
 
 ## Workflow first, agent when needed
 
@@ -50,7 +64,7 @@ Most automation works best as a fixed workflow: the same steps in the same order
 
 ## How an engagement runs
 
-1. **Audit.** A short look at your team's recurring tasks and the tools involved.
+1. **Audit.** A short look at your recurring tasks and the tools involved.
 2. **Pick one.** We start with the task that has the clearest payoff and the lowest risk.
-3. **Build and measure.** A working workflow on your real data, compared against how long the task took before.
+3. **Build and measure.** A working automation tested against real or realistic examples, compared with how long the task took before.
 4. **Hand off and expand.** Documentation, training, then the next task on the list.

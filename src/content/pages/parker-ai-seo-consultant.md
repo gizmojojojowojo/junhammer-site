@@ -30,7 +30,7 @@ My work sits where AI and search meet. I build [AI agents](/services/ai-agent-de
 
 **Invisible in AI answers?** Start with an AEO audit. I check which assistants mention you for the questions your customers ask, and what it takes to get included.
 
-**Know exactly what you want built?** Go straight to [AI agent development](/services/ai-agent-development/) or [Claude and MCP implementation](/services/claude-mcp-implementation/).
+**Know exactly what you want built?** Go straight to [AI automation](/services/ai-automation/) or [AI agent development](/services/ai-agent-development/).
 
 ## Also serving Denver
 

@@ -17,16 +17,15 @@ faqs:
 ---
 I'm Joe Unhammer, an AI engineer and AEO/SEO consultant in the Denver metro area. I help Colorado businesses do two things: put AI to work inside the business, and get found when customers ask AI tools for answers.
 
-I work on both sides. I build [AI agents](/services/ai-agent-development/), [automations](/services/ai-automation/) and [Claude integrations](/services/claude-mcp-implementation/), and I run [answer engine optimization](/services/answer-engine-optimization/) and [SEO](/services/seo/) programs. Doing both means the tools I build are findable, and the search work is informed by how AI systems actually read and cite content.
+I work on both sides. I build [AI agents](/services/ai-agent-development/), [automations](/services/ai-automation/) and [custom AI software](/services/ai-engineering/), and I run [answer engine optimization](/services/answer-engine-optimization/) and [SEO](/services/seo/) programs. Doing both means the tools I build are findable, and the search work is informed by how AI systems actually read and cite content.
 
 ## What I help Denver businesses with
 
 | You need | What I do | Start here |
 | --- | --- | --- |
 | A plan for AI | Find the workflows worth automating, pick tools, set guardrails | [AI consulting](/services/ai-consulting/) |
-| Repeat work handled | Build AI workflows for reporting, research and QA | [AI automation](/services/ai-automation/) |
+| Repeat work handled | Leads filed in your CRM, follow-up drafted, reports automated | [AI automation](/services/ai-automation/) |
 | A custom AI tool | Build agents and assistants that do one job well | [AI agent development](/services/ai-agent-development/) |
-| Claude working with your data | Claude skills and MCP servers for your systems | [Claude and MCP](/services/claude-mcp-implementation/) |
 | To show up in AI answers | Audit and fix how ChatGPT, Perplexity and AI Overviews see you | [AEO](/services/answer-engine-optimization/) |
 | Rankings and traffic | SEO strategy, content and technical fixes | [SEO](/services/seo/) |
 

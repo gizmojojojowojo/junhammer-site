@@ -256,7 +256,7 @@
     {
       "q": "Can Joe build an MCP server for Claude?",
       "expect": [
-        "/services/claude-mcp-implementation/"
+        "/services/ai-automation/"
       ]
     },
     {
@@ -346,7 +346,7 @@
     {
       "q": "mcp server",
       "expect": [
-        "/services/claude-mcp-implementation/"
+        "/services/ai-automation/"
       ]
     },
     {
@@ -386,8 +386,7 @@
         "/services/ai-engineering/",
         "/services/ai-agent-development/",
         "/services/ai-automation/",
-        "/services/technical-seo/",
-        "/services/claude-mcp-implementation/"
+        "/services/technical-seo/"
       ]
     },
     {
