@@ -1,13 +1,13 @@
 {
-  "ranAt": "2026-11-14T19:28:09.811Z",
-  "commit": "e291b7c",
+  "ranAt": "2026-11-15T01:14:08.131Z",
+  "commit": "420b064",
   "retrieval": {
     "questions": 60,
-    "passages": 732,
+    "passages": 749,
     "first": 51,
     "top3": 56,
     "reachedModel": 60,
-    "mrr": 0.898,
+    "mrr": 0.897,
     "wronglyTurnedAway": 0,
     "offTopic": 8,
     "offTopicStopped": 4
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 53,
+    "passedAll": 51,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 58
+        "passed": 57
       },
       {
         "id": "citesInRange",
@@ -30,7 +30,7 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 54
+        "passed": 53
       },
       {
         "id": "linksAllowed",
@@ -45,10 +45,10 @@
     ],
     "offTopicReachedModel": 4,
     "offTopicDeclined": 3,
-    "avgTokensIn": 2366,
-    "avgTokensOut": 317,
-    "ranAt": "2026-11-14T19:28:09.811Z",
-    "commit": "e291b7c"
+    "avgTokensIn": 2362,
+    "avgTokensOut": 316,
+    "ranAt": "2026-11-15T01:14:08.131Z",
+    "commit": "420b064"
   },
   "questions": [
     {
@@ -64,7 +64,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations [6]. Tools like ChatGPT, Perplexity, and Google's AI features synthesize answers from multiple sources and decide which brands to name [6]. GEO is broader and longer term than answer engine optimization (AEO), aiming to make a brand a recognized, trusted entity that AI systems mention by name [5]."
+      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations. It involves optimizing your digital footprint so AI systems recognize your brand as authoritative, relevant and trustworthy, which covers content strategy, entity optimization, reputation signals and technical implementation [6]. Joe describes GEO as broader and longer term than AEO, focused on making a brand a recognized entity that AI systems mention by name [5]. It also depends on being technically accessible, since AI search tools discover content through the same basic mechanisms as traditional crawlers [8]."
     },
     {
       "q": "Who came up with the term GEO?",
@@ -75,8 +75,11 @@
     {
       "q": "How long until SEO shows results?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "According to this site, companies with existing domain authority and content libraries typically see faster results, with an expected timeline of 3-6 months for significant improvements [1]. The site does not give a general timeline for all businesses, so the answer will depend on your situation. For questions about working with Joe on your site, you can reach out via the [contact page](/contact/)."
     },
     {
       "q": "Why isn't my content appearing in ChatGPT?",
@@ -99,18 +102,18 @@
     {
       "q": "How should I write paragraphs so AI tools quote them?",
       "rank": 0,
-      "pass": true,
-      "failed": []
-    },
-    {
-      "q": "How do I get featured in Google AI Overviews?",
-      "rank": 0,
       "pass": false,
       "failed": [
         "Cites a source",
         "Cites a page that holds the answer"
       ],
-      "answer": "To get featured in Google AI Overviews, this site recommends creating content that answers specific questions thoroughly, offers insights not easily found elsewhere, and is regularly updated. Google says AI Overviews aim to highlight high-quality content that best answers"
+      "answer": "This site has an article on this topic, [The 40-Word Rule: How to Structure Paragraphs for AI Citations in 2026](/blog/the-40-word-rule-how-to-structure-paragraph"
+    },
+    {
+      "q": "How do I get featured in Google AI Overviews?",
+      "rank": 0,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is semantic search?",
@@ -175,11 +178,8 @@
     {
       "q": "What are AI integration services?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "AI integration services cover more than automation alone. Automation handles a specific sequence of steps, while integration services also include the assessment, policy, tool selection, training, and measurement that make automation work across a business [1]. The site notes that cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much training the team requires [2]. For a number, the site points to a scoped proposal after an initial conversation about your workflows, which you can request through the [contact page](/contact/) [2]."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Is SEO dead?",
@@ -196,8 +196,11 @@
     {
       "q": "What should I look for when hiring an AEO consultant?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ]
     },
     {
       "q": "What am I actually paying for with AEO services?",
@@ -229,8 +232,11 @@
     {
       "q": "How do I do keyword research now?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Keyword research now centers on user intent and conversational queries rather than exact-match terms or search volume alone [4]. Start by focusing on the specific problems your audience wants to solve, and use tools such as SEMrush's Keyword Magic Tool to help identify the intent behind searches [4]. Look for intent classification, SERP feature presence, related keyword clusters, and seasonal intent shifts, and check the \"People Also Ask\" section and your existing content's user behavior data [3][6]. Joe also suggests building topic coverage around related subtopics, since AI engines understand context well [7]. For more, see the guide at /blog/keyword-research-in-2025-beyond-traditional-seo"
     },
     {
       "q": "What does a site audit cover?",
@@ -263,7 +269,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. The site describes him as based in the Denver metro area [7], and his contact page says he is based in Denver but works with teams anywhere in the US [8]. He also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial [5]. To discuss a project, visit [/contact/](/contact/)."
+      "answer": "Joe is based in Colorado. This site describes him as based in Denver [8] and serving the Denver metro area [7], and he also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial [5]. He works with teams across the US as well [8]."
     },
     {
       "q": "What AI tools has Joe built?",
@@ -304,8 +310,11 @@
     {
       "q": "Can Joe build an MCP server for Claude?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes. Joe works with Claude and the Model Context Protocol, and an MCP server is what lets Claude query outside systems such as Search Console or a reporting database, within limits you set [1]. His Claude and MCP service covers Claude skills and MCP servers for your systems [5], and he builds MCP connectors as part of his AI engineering work [6]. To discuss a project, see the [Claude and MCP service page](/services/claude-mcp-implementation/) or the [contact page](/contact/)."
     },
     {
       "q": "What does an AI agent project involve?",
@@ -368,7 +377,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Based on this site's FAQ, SEO is a long-term investment, and timelines depend on your starting point, competition, and objectives. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results often show at the six-to-twelve month mark [1]. AEO and GEO visibility in AI systems can shift faster, since those platforms update their knowledge bases [1]. For a specific estimate, see the contact page at /contact/."
+      "answer": "Based on this site's FAQ, meaningful organic traffic growth typically emerges between three and six months, with substantial, compounding results often visible at the six-to-twelve month mark. Technical improvements and quick wins can show impact within weeks, and visibility in AI systems can shift faster [1]. The timeline varies with your starting point, competition, and objectives [1]. You can find more on this at [FAQ](/faq/)."
     },
     {
       "q": "aeo vs geo",
@@ -420,13 +429,9 @@
     },
     {
       "q": "what do you charge",
-      "rank": 5,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer",
-        "Uses only links found in the sources"
-      ],
-      "answer": "This site doesn't list Joe's rates. The [FAQ page](/faq/) covers pricing, but the details aren't in the material I can see. For a quote, use the [contact page](/contact/). Joe's pricing is based on an agreed scope, so you can ask for the same initial brief from other providers to compare [2]."
+      "rank": 6,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "keyword research",
