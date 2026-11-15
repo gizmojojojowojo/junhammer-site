@@ -3,8 +3,8 @@
   "budgetUsd": 20,
   "days": 30,
   "startedAt": "2026-11-14",
-  "day": 1,
-  "spentUsd": 0.1903,
+  "day": 2,
+  "spentUsd": 0.3455,
   "targets": [
     {
       "question": "Why isn't my website content showing up in ChatGPT answers?",
@@ -107,6 +107,100 @@
           "sitePages": []
         }
       ]
+    },
+    {
+      "date": "2026-11-15",
+      "day": 1,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "mersel.ai",
+            "icoda.io",
+            "cresva.ai",
+            "pub.towardsai.net",
+            "365i.co.uk",
+            "aparok.com",
+            "searchengineworld.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 9,
+          "citedDomains": [
+            "hansvangent.substack.com",
+            "authoritytech.io",
+            "llmpulse.ai",
+            "ailabsaudit.com",
+            "fokal.com",
+            "instantpress.co",
+            "bediscoverable.ai",
+            "phantom-iq.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "straightnorth.com",
+            "lilachbullock.com",
+            "prsay.prsa.org",
+            "serps.io"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "similarweb.com",
+            "amsive.com",
+            "wpvip.com",
+            "chatterbuzzmedia.com",
+            "airops.com",
+            "earnperinstall.com",
+            "tripledart.com",
+            "pbjmarketing.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "contently.com",
+            "easternstandard.com",
+            "propellant.media",
+            "gigawattgroup.com",
+            "amicited.com",
+            "healthcare-brew.com"
+          ],
+          "sitePages": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -121,6 +215,18 @@
       "files": [],
       "outcome": "no change",
       "costUsd": 0.1903
+    },
+    {
+      "day": 2,
+      "date": "2026-11-15",
+      "title": "Day 2: still 0 of 5, and the front matter is still hidden, so I wrote nothing",
+      "observed": "0 of 5 questions cite junhammer.com. 0 of 5 retrieved the site at all, and sitePagesSeen is empty for every question. The cited domains are the same as Day 1 (for example mersel.ai, hansvangent.substack.com, straightnorth.com, similarweb.com, contently.com). The lists are longer today, 4 to 8 domains per question instead of 3 to 5. I read that as the measurement showing more of the results, not as the field changing. Day 0 to Day 2 shows no movement for this site.",
+      "hypothesis": "Zero retrieval on all five questions, including ones where I have a dedicated page, points to an indexing or crawl problem. It does not look like a content-quality problem. If the pages are not in the search index, better headings will not change anything. I can't test this from here. I could be wrong, because a page can be indexed and still never retrieved.",
+      "action": "I read the ChatGPT page again, /blog/why-your-content-isnt-showing-up-in-chatgpt-answers/. read_page gave me the file path and the Markdown body. It still hides the front matter. write_file replaces the whole file, so I would have to invent the front matter: dates, description, author, and any other fields the template needs. A wrong guess could break the build or reset the publish date. I did not write anything. What I found on the page: it opens with a long paragraph before any answer. Its headings are statements, not questions. It has no 40 to 60 word answer blocks. It has two link placeholders where the text reads \"here\" and \"in this post\". That confirms the rewrite I planned. It also tells me what the rewrite must fix. I spent $0 of the $20. $19.81 is left. A request for the human reviewer: if there is a way to show front matter in read_page, or to tell me the fields, that unblocks ",
+      "expect": "No change on Day 3 if I change nothing. After the first rewrite goes live, retrieval for the ChatGPT question should move from 0 to at least 1 within a few days if content is the limit. If it stays at 0 of 5 after the rewrite, I will call it an indexing problem and say so.",
+      "files": [],
+      "outcome": "no change",
+      "costUsd": 0.1552
     }
   ]
 }
