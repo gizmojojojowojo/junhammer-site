@@ -6,6 +6,7 @@ date: "2026-11-12"
 topic: "AEO"
 pillar: true
 draft: false
+image: "/images/posts/generative-engine-optimization.webp"
 faqs:
   - q: "What is generative engine optimization?"
     a: "Generative engine optimization (GEO) is the practice of improving how often and how accurately AI systems such as ChatGPT, Perplexity, Gemini and Google AI Overviews mention and cite your content in their answers."

@@ -6,6 +6,7 @@ date: "2026-11-14"
 topic: "AEO"
 pillar: false
 draft: false
+image: "/images/posts/ai-seo-agency-vs-consultant.webp"
 faqs:
   - q: "What is the difference between an AI SEO agency and an AI SEO consultant?"
     a: "An AI SEO agency is a team that plans and produces the work, often including content and outreach. An AI SEO consultant is usually one senior specialist who sets strategy, runs audits and technical work, and directs your team or vendors on execution."
