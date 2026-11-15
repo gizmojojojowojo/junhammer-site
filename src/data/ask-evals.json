@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-15T01:14:08.131Z",
-  "commit": "420b064",
+  "ranAt": "2026-11-15T02:29:42.425Z",
+  "commit": "c673dee",
   "retrieval": {
     "questions": 60,
     "passages": 749,
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 51,
+    "passedAll": 53,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 57
+        "passed": 60
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 53
+        "passed": 58
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 58
+        "passed": 55
       },
       {
         "id": "short",
@@ -46,9 +46,9 @@
     "offTopicReachedModel": 4,
     "offTopicDeclined": 3,
     "avgTokensIn": 2362,
-    "avgTokensOut": 316,
-    "ranAt": "2026-11-15T01:14:08.131Z",
-    "commit": "420b064"
+    "avgTokensOut": 314,
+    "ranAt": "2026-11-15T02:29:42.424Z",
+    "commit": "c673dee"
   },
   "questions": [
     {
@@ -60,11 +60,8 @@
     {
       "q": "What does generative engine optimization mean?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations. It involves optimizing your digital footprint so AI systems recognize your brand as authoritative, relevant and trustworthy, which covers content strategy, entity optimization, reputation signals and technical implementation [6]. Joe describes GEO as broader and longer term than AEO, focused on making a brand a recognized entity that AI systems mention by name [5]. It also depends on being technically accessible, since AI search tools discover content through the same basic mechanisms as traditional crawlers [8]."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Who came up with the term GEO?",
@@ -75,11 +72,8 @@
     {
       "q": "How long until SEO shows results?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "According to this site, companies with existing domain authority and content libraries typically see faster results, with an expected timeline of 3-6 months for significant improvements [1]. The site does not give a general timeline for all businesses, so the answer will depend on your situation. For questions about working with Joe on your site, you can reach out via the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Why isn't my content appearing in ChatGPT?",
@@ -102,12 +96,8 @@
     {
       "q": "How should I write paragraphs so AI tools quote them?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ],
-      "answer": "This site has an article on this topic, [The 40-Word Rule: How to Structure Paragraphs for AI Citations in 2026](/blog/the-40-word-rule-how-to-structure-paragraph"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do I get featured in Google AI Overviews?",
@@ -196,20 +186,17 @@
     {
       "q": "What should I look for when hiring an AEO consultant?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ]
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What am I actually paying for with AEO services?",
       "rank": 0,
       "pass": false,
       "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ]
+        "Uses only links found in the sources"
+      ],
+      "answer": "Joe's AEO program covers five areas. It starts with a visibility baseline of the questions your buyers ask and which brands each AI assistant cites today. Next come content rebuilt around direct, self-contained answers, and entity and schema work. Technical access (AI crawler rules, server-rendered content, llms.txt, and page speed) follows, and the program ends with monthly reporting of citation share next to your SEO numbers [3]. This site doesn't list prices, so for cost, use the [contact page](/contact/). When comparing any AEO provider, ask for the scope, the cost basis, and the measurement method together [1]."
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -232,17 +219,17 @@
     {
       "q": "How do I do keyword research now?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Keyword research now centers on user intent and conversational queries rather than exact-match terms or search volume alone [4]. Start by focusing on the specific problems your audience wants to solve, and use tools such as SEMrush's Keyword Magic Tool to help identify the intent behind searches [4]. Look for intent classification, SERP feature presence, related keyword clusters, and seasonal intent shifts, and check the \"People Also Ask\" section and your existing content's user behavior data [3][6]. Joe also suggests building topic coverage around related subtopics, since AI engines understand context well [7]. For more, see the guide at /blog/keyword-research-in-2025-beyond-traditional-seo"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What does a site audit cover?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "A technical SEO audit covers crawlability and indexation, site architecture and internal linking, page speed and Core Web Vitals, structured data, duplicate and thin content, international setup where relevant, and AI crawler access [4]. The output is a prioritized list of fixes ranked by impact and effort rather than a dump of every tool warning [3][4]. Modern audits also evaluate SEO and user experience together, since changes in one often affect the other [1]. You can find more details on the [technical SEO service page](/services/technical-seo/), or reach out through the [contact page](/contact/) if you want to work with Joe on an audit."
     },
     {
       "q": "How should humans and AI work together on content?",
@@ -269,7 +256,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe is based in Colorado. This site describes him as based in Denver [8] and serving the Denver metro area [7], and he also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial [5]. He works with teams across the US as well [8]."
+      "answer": "Joe Unhammer is based in Colorado. The site describes him as based in Denver and working with teams anywhere in the US [8]. He also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [5]."
     },
     {
       "q": "What AI tools has Joe built?",
@@ -314,7 +301,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes. Joe works with Claude and the Model Context Protocol, and an MCP server is what lets Claude query outside systems such as Search Console or a reporting database, within limits you set [1]. His Claude and MCP service covers Claude skills and MCP servers for your systems [5], and he builds MCP connectors as part of his AI engineering work [6]. To discuss a project, see the [Claude and MCP service page](/services/claude-mcp-implementation/) or the [contact page](/contact/)."
+      "answer": "Yes. The Claude & MCP Implementation service explains that an MCP server connects Claude to your systems, so Claude can query tools like Search Console or read a reporting database, within limits you set [1]. Joe also lists Claude skills and MCP servers among the things he builds for Claude working with your data [5]. Joe's AI Engineering page likewise offers MCP connectors [6]. To discuss a project, you can use the [contact page](/contact/)."
     },
     {
       "q": "What does an AI agent project involve?",
@@ -325,14 +312,20 @@
     {
       "q": "Can you automate our marketing reports?",
       "rank": 2,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes, this site describes automating marketing reports. Joe builds workflows that pull GA4 and Search Console data, summarize it, and format it into the deliverable your clients or leadership expect [3]. A typical version runs the same steps each month, with a person reviewing the final report [6]. Joe also sets up MCP connections to Search Console, GA4 and reporting data as part of Claude work [8]. To discuss your situation, see the [contact page](/contact/)."
     },
     {
       "q": "Do you offer AI strategy consulting?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. For more on working with Joe, see the [contact page](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -367,17 +360,17 @@
     {
       "q": "how does it take for seo to work?",
       "rank": 0,
-      "pass": true,
-      "failed": []
-    },
-    {
-      "q": "seo how long",
-      "rank": 4,
       "pass": false,
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Based on this site's FAQ, meaningful organic traffic growth typically emerges between three and six months, with substantial, compounding results often visible at the six-to-twelve month mark. Technical improvements and quick wins can show impact within weeks, and visibility in AI systems can shift faster [1]. The timeline varies with your starting point, competition, and objectives [1]. You can find more on this at [FAQ](/faq/)."
+      "answer": "Most sites see early movement in three to six months and compounding results in six to twelve. The timing depends on competition, site health, and how much content needs to be built, and new sites in competitive fields take longer [7]. Joe sets milestones for each quarter so progress is visible before rankings fully arrive [7]. You can read more on the [SEO services](/services/seo/) page."
+    },
+    {
+      "q": "seo how long",
+      "rank": 4,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "aeo vs geo",
