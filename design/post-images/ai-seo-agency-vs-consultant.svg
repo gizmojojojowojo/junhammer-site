@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#060e47" flood-opacity=".22"/></filter>
+    <symbol id="p" viewBox="0 0 60 80"><circle cx="30" cy="20" r="16"/><path d="M4 78 C4 52, 56 52, 56 78z"/></symbol>
+  </defs>
+  <rect width="1200" height="630" fill="#f6f3f4"/>
+  <!-- left: agency team block -->
+  <g filter="url(#sh)">
+    <rect x="70" y="95" width="460" height="440" rx="28" fill="#ffffff"/>
+  </g>
+  <rect x="70" y="95" width="460" height="64" rx="28" fill="#0b3a8c"/>
+  <rect x="70" y="131" width="460" height="28" fill="#0b3a8c"/>
+  <g fill="#f2c6d1"><circle cx="110" cy="127" r="9"/><circle cx="138" cy="127" r="9"/><circle cx="166" cy="127" r="9"/></g>
+  <g>
+    <use href="#p" x="110" y="190" width="60" height="80" fill="#0b3a8c"/>
+    <use href="#p" x="215" y="190" width="60" height="80" fill="#a1596c"/>
+    <use href="#p" x="320" y="190" width="60" height="80" fill="#45094b"/>
+    <use href="#p" x="425" y="190" width="60" height="80" fill="#0b3a8c"/>
+    <use href="#p" x="110" y="300" width="60" height="80" fill="#45094b"/>
+    <use href="#p" x="215" y="300" width="60" height="80" fill="#0b3a8c"/>
+    <use href="#p" x="320" y="300" width="60" height="80" fill="#a1596c"/>
+    <use href="#p" x="425" y="300" width="60" height="80" fill="#0b3a8c"/>
+  </g>
+  <g fill="#ddd5db">
+    <rect x="110" y="415" width="375" height="16" rx="8"/>
+    <rect x="110" y="445" width="300" height="16" rx="8"/>
+    <rect x="110" y="475" width="340" height="16" rx="8"/>
+  </g>
+  <!-- divider -->
+  <g fill="#a1596c"><circle cx="600" cy="285" r="6"/><circle cx="600" cy="315" r="6"/><circle cx="600" cy="345" r="6"/></g>
+  <!-- right: consultant with plan -->
+  <g filter="url(#sh)">
+    <rect x="670" y="95" width="460" height="440" rx="28" fill="#060e47"/>
+  </g>
+  <g opacity=".14" stroke="#a9bfff" stroke-width="2">
+    <path d="M710 160 H1090 M710 220 H1090 M710 280 H1090 M710 340 H1090 M710 400 H1090 M710 460 H1090"/>
+    <path d="M760 130 V500 M840 130 V500 M920 130 V500 M1000 130 V500 M1080 130 V500"/>
+  </g>
+  <path d="M740 470 C 800 470, 800 380, 870 370 S 960 300, 1000 250 S 1050 180, 1070 170" fill="none" stroke="#f2c6d1" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 16"/>
+  <g fill="#f2c6d1"><circle cx="740" cy="470" r="12"/><circle cx="870" cy="370" r="10"/><circle cx="1000" cy="250" r="10"/></g>
+  <g transform="translate(1070 170)">
+    <circle r="30" fill="#a1596c"/>
+    <path d="M-10 -2 l8 8 14 -16" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <use href="#p" x="845" y="410" width="90" height="120" fill="#f2c6d1"/>
+  <!-- compass -->
+  <g transform="translate(760 210)">
+    <circle r="44" fill="none" stroke="#a9bfff" stroke-width="4"/>
+    <path d="M0 -32 L10 0 L0 32 L-10 0z" fill="#f2c6d1"/>
+    <path d="M0 -32 L10 0 L-10 0z" fill="#a1596c"/>
+    <circle r="5" fill="#060e47"/>
+  </g>
+</svg>

@@ -6,6 +6,7 @@ date: "2026-11-12"
 topic: "AI"
 pillar: false
 draft: false
+image: "/images/posts/ai-agent-vs-ai-workflow.webp"
 faqs:
   - q: "What is the difference between an AI agent and an AI workflow?"
     a: "An AI workflow runs a large language model and tools through a fixed path that a developer defines. An AI agent lets the model decide its own next steps and which tools to use until the task is done."
