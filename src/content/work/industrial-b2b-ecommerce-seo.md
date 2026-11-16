@@ -1,16 +1,25 @@
 ---
 title: "B2B e-commerce: SEO and CRO for an industrial manufacturer"
 seoTitle: "B2B E-commerce SEO & CRO Case Study: Industrial Manufacturer"
-client: "Industrial manufacturer"
-sector: "Manufacturing"
-summary: "Technical product pages, content hubs and conversion fixes lifted organic traffic over 200% and direct-sales conversion from 2.8% to 4.5%."
-description: "How SEO and conversion rate optimization grew organic traffic 200%+ and lifted conversion rates for a maker of liquid-level senders and marine gauges."
-order: 5
-services: ["seo", "technical-seo"]
+client: Industrial manufacturer
+sector: Manufacturing
+summary: Technical product pages, content hubs and conversion fixes lifted
+  organic traffic over 200% and direct-sales conversion from 2.8% to 4.5%.
+description: How SEO and conversion rate optimization grew organic traffic 200%+
+  and lifted conversion rates for a maker of liquid-level senders and marine
+  gauges.
+order: 8
+draft: false
+services:
+  - seo
+  - technical-seo
 results:
-  - { value: "200%+", label: "organic traffic, year over year" }
-  - { value: "2.8→4.5%", label: "direct-sales conversion rate" }
-  - { value: "40%", label: "higher average order value" }
+  - value: 200%+
+    label: organic traffic, year over year
+  - value: 2.8→4.5%
+    label: direct-sales conversion rate
+  - value: 40%
+    label: higher average order value
 ---
 ## The challenge
 
