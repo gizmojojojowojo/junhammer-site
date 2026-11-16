@@ -1,17 +1,27 @@
 ---
 title: "LandmAIn: AI land intelligence for data center and energy site selection"
-client: "LandmAIn"
-sector: "AI infrastructure"
+client: LandmAIn
+sector: AI infrastructure
 year: "2026"
-link: "https://landmain.io"
-summary: "An AI-powered land intelligence platform for data center, industrial, solar and storage site selection, with a dated, inspectable source behind every finding."
-description: "LandmAIn combines GIS layers, public records, infrastructure evidence and policy context into a repeatable screen for AI data-center sites in Colorado."
-order: 3
-services: ["ai-engineering", "ai-consulting"]
+link: https://landmain.io
+summary: An AI-powered land intelligence platform for data center, industrial,
+  solar and storage site selection, with a dated, inspectable source behind
+  every finding.
+description: LandmAIn combines GIS layers, public records, infrastructure
+  evidence and policy context into a repeatable screen for AI data-center sites
+  in Colorado.
+order: 1
+draft: false
+services:
+  - ai-engineering
+  - ai-consulting
 results:
-  - { value: "5", label: "representative sites screened on one evidence model" }
-  - { value: "4", label: "public reports: briefing, atlas, profiles, deck" }
-  - { value: "1", label: "interactive five-screen corridor explorer" }
+  - value: "5"
+    label: representative sites screened on one evidence model
+  - value: "4"
+    label: "public reports: briefing, atlas, profiles, deck"
+  - value: "1"
+    label: interactive five-screen corridor explorer
 ---
 ## The problem
 
