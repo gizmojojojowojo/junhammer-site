@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-16T12:30:17.245Z",
-  "commit": "a1691e4",
+  "ranAt": "2026-11-16T12:31:14.917Z",
+  "commit": "70bf6e6",
   "retrieval": {
     "questions": 60,
     "passages": 751,
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 49,
+    "passedAll": 53,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 57
+        "passed": 59
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 54
+        "passed": 56
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 55
+        "passed": 57
       },
       {
         "id": "short",
@@ -46,9 +46,9 @@
     "offTopicReachedModel": 4,
     "offTopicDeclined": 3,
     "avgTokensIn": 2352,
-    "avgTokensOut": 337,
-    "ranAt": "2026-11-16T12:30:17.244Z",
-    "commit": "a1691e4"
+    "avgTokensOut": 316,
+    "ranAt": "2026-11-16T12:31:14.917Z",
+    "commit": "70bf6e6"
   },
   "questions": [
     {
@@ -102,11 +102,8 @@
     {
       "q": "How do I get featured in Google AI Overviews?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "This site suggests a few steps for getting featured in Google AI Overviews:\n\n- **Answer specific questions thoroughly.** Google's AI systems favor content that covers the core question and related subtopics in depth, offers insights not easily found elsewhere, and is kept up to date [6].\n- **Be patient.** There's no guaranteed timeframe, but websites typically need 2-3 months of consistent optimization before they appear in AI Overviews [1].\n- **Consider an AEO audit.** Joe Unhammer offers an AI visibility audit that shows where a brand is and isn't cited today, plus content restructuring for answer extraction, entity and schema work, and an llms.txt and AI crawler access review [8]. Details"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is semantic search?",
@@ -171,11 +168,8 @@
     {
       "q": "What are AI integration services?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "AI integration services go beyond a single automation. They cover the assessment, policy, tool selection, training, and measurement that make automation work across a business, and AI workflow automation is one part of them [1]. Cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, so a scoped proposal after an initial conversation is the most reliable way to get a number [2]. The site does not give a fuller definition of the service, so for questions about working with Joe, see [the contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Is SEO dead?",
@@ -192,11 +186,8 @@
     {
       "q": "What should I look for when hiring an AEO consultant?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ]
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What am I actually paying for with AEO services?",
@@ -206,7 +197,7 @@
         "Cites a source",
         "Cites a page that holds the answer"
       ],
-      "answer": "This site's AEO service page lists five parts of an A"
+      "answer": "An AEO program, as described on this site, covers five"
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -223,11 +214,8 @@
     {
       "q": "What technical SEO does a GEO strategy need?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "A GEO strategy needs technical SEO as its base. Without it, AI systems may be unable to crawl or index your content, and unstructured or slow pages may be passed over [2]. The essentials include making sure AI crawlers can reach your pages, that important content renders in the HTML, and that pages are indexed [3]. Joe's AEO program also covers AI crawler rules, server-rendered content, llms.txt, page speed, and schema markup such as organization, person, and service schema [4]. Fast loading, mobile optimization, and clean site architecture are also treated as GEO essentials [7]. For more on working with Joe, see [the contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do I do keyword research now?",
@@ -266,7 +254,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. Based in Denver, he works with teams anywhere in the US [8]. He also serves businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, plus teams across the US [5]. To discuss a project, visit /contact/."
+      "answer": "Joe Unhammer is based in Colorado. He is described as based in Denver, and he works with teams anywhere in the US [8]. He also serves businesses in the south metro area, including Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial [5]. To discuss a project, you can use the contact page at /contact/."
     },
     {
       "q": "What AI tools has Joe built?",
@@ -319,11 +307,8 @@
     {
       "q": "Can you automate our marketing reports?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Yes, this site describes automated reporting from GA4 and Search Console data. Joe pulls in CRM, GA4 and Search Console data, summarizes it, and formats it into the report your team or clients expect [1]. He also notes that he builds these for an agency today [1], and that monthly reporting is a good fit for a workflow because the steps are the same each month [8]. To talk about your specific setup, you can reach out through [the contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Do you offer AI strategy consulting?",
@@ -332,7 +317,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on where AI fits and can move from strategy into building LLM applications, agents, and data tools [5]. Joe's Denver page describes this same AI strategy work [4]. To discuss a project, you can reach out via the [contact page](/contact/)."
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds the tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also offers both strategy and hands-on implementation, and many engagements combine the two [3]. Before recommending a custom build, he usually starts with off-the-shelf tools configured well [2]. For more on working with Joe, see [/contact/](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -371,7 +356,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Most sites see early movement in three to six months and compounding results in six to twelve. The timing depends on competition, site health, and how much content needs to be built. New sites in competitive fields take longer [7]. Joe sets quarterly milestones so progress is visible before rankings fully arrive [7]."
+      "answer": "Most sites see early movement in three to six months and compounding results in six to twelve, depending on competition, site health, and how much content needs to be built [7]. New sites in competitive fields take longer [7]. Joe sets milestones for each quarter so progress is visible before rankings fully arrive [7]. You can read more on the [SEO service page](/services/seo/)."
     },
     {
       "q": "seo how long",
@@ -380,7 +365,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Meaningful organic traffic growth typically emerges between three and six months, with substantial, compounding results often visible at the six-to-twelve month mark [1]. Technical fixes and quick wins can show impact within weeks [1]. For AI visibility (AEO and GEO), changes can shift faster because these platforms update their knowledge bases [1]. Timelines vary with your starting point, competition, and goals, so this site notes that Joe sets expectations based on your situation [1]. For a specific estimate, see the contact page at /contact/."
+      "answer": "Joe's FAQ says SEO is a long-term investment, but timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results often show up at six to twelve months [1]. Visibility in AI systems can shift faster, since those platforms update their knowledge bases regularly [1]. For more detail on your situation, see the contact page at /contact/."
     },
     {
       "q": "aeo vs geo",
@@ -429,16 +414,18 @@
       "rank": 0,
       "pass": false,
       "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
+        "Uses only links found in the sources"
       ],
-      "answer": "For healthcare marketers, the core question is how to get an organization's content feat"
+      "answer": "For healthcare marketers, the core challenge is getting their organization's content featured in AI-generated responses [5]. This site suggests testing relevant healthcare queries regularly, documenting which sources appear, and tracking featured snippet capture and branded search trends as measures [3]. Joe offers healthcare AEO built on E-E-A-T and YMYL standards, including an [AI visibility audit](/services/answer-engine-optimization/) [4]. To discuss a project, use the [contact page](/contact/)."
     },
     {
       "q": "what do you charge",
       "rank": 6,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "This site doesn't list Joe's rates. The FAQ page covers pricing and how Joe works with clients [7], so start at [the FAQ](/faq/). For a quote tied to your scope, use the [contact page](/contact/). When you compare proposals, the site suggests pricing the same initial brief and checking how many pages, technical changes, and measurement coverage each one includes [2]."
     },
     {
       "q": "keyword research",
