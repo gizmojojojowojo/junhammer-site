@@ -8,7 +8,7 @@
   "location": "Denver, Colorado",
   "linkedin": "https://www.linkedin.com/in/junhammer/",
   "github": "https://github.com/gizmojojojowojo",
-  "formEndpoint": "",
-  "formAccessKey": "",
-  "footerNote": "Built with Astro and hosted on Cloudflare Pages."
+  "formEndpoint": "https://api.web3forms.com/submit",
+  "formAccessKey": "51300023-c927-4352-aa40-a51c9f136ead",
+  "footerNote": "Built by Joe Unhammer with Astro and hosted on Cloudflare."
 }
