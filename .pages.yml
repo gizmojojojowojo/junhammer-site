@@ -75,7 +75,11 @@ content:
     type: collection
     path: src/content/work
     view:
-      fields: [title, client, draft]
+      fields: [order, title, client, draft]
+      sort: [order, title]
+      default:
+        sort: order
+        order: asc
     fields:
       - { name: title, label: Title, type: string, required: true }
       - { name: seoTitle, label: SEO title, type: string }
@@ -85,7 +89,7 @@ content:
       - { name: link, label: Project link, type: string }
       - { name: summary, label: Summary, type: text, required: true }
       - { name: description, label: Meta description, type: text }
-      - { name: order, label: Order, type: number }
+      - { name: order, label: Order on the Work page, type: number, required: true, description: "1 shows first. Numbers don't need to be consecutive; use 10, 20, 30 to leave room." }
       - { name: draft, label: Draft (hidden), type: boolean, default: false }
       - { name: services, label: Service slugs, type: string, list: true }
       - name: results
