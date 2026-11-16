@@ -1,13 +1,13 @@
 {
-  "ranAt": "2026-11-15T02:29:42.425Z",
-  "commit": "c673dee",
+  "ranAt": "2026-11-16T00:57:03.855Z",
+  "commit": "a551bcc",
   "retrieval": {
     "questions": 60,
-    "passages": 749,
-    "first": 51,
+    "passages": 751,
+    "first": 52,
     "top3": 56,
     "reachedModel": 60,
-    "mrr": 0.897,
+    "mrr": 0.907,
     "wronglyTurnedAway": 0,
     "offTopic": 8,
     "offTopicStopped": 4
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 53,
+    "passedAll": 43,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 60
+        "passed": 56
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 58
+        "passed": 49
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 55
+        "passed": 53
       },
       {
         "id": "short",
@@ -44,11 +44,11 @@
       }
     ],
     "offTopicReachedModel": 4,
-    "offTopicDeclined": 3,
-    "avgTokensIn": 2362,
-    "avgTokensOut": 314,
-    "ranAt": "2026-11-15T02:29:42.424Z",
-    "commit": "c673dee"
+    "offTopicDeclined": 1,
+    "avgTokensIn": 2352,
+    "avgTokensOut": 320,
+    "ranAt": "2026-11-16T00:57:03.855Z",
+    "commit": "a551bcc"
   },
   "questions": [
     {
@@ -60,8 +60,11 @@
     {
       "q": "What does generative engine optimization mean?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations. It involves optimizing your digital footprint so AI systems like ChatGPT, Google's Search Generative Experience, and Perplexity recognize your brand as authoritative, relevant, and trustworthy enough to cite [6]. Compared with AEO, GEO is broader and longer term, focused on making your brand a recognized entity that AI systems mention by name [5]. You can read more on the [FAQ page](/faq/)."
     },
     {
       "q": "Who came up with the term GEO?",
@@ -78,8 +81,11 @@
     {
       "q": "Why isn't my content appearing in ChatGPT?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "The site has a article on this exact frustration, which says the causes tend to cluster around a handful of issues, and most don't require a technical background to fix [2]. It's worth reading the full piece at /blog/why-your-content-isnt-showing-up-in-chatgpt-answers/ [1]. More broadly, AI engines build answers and pull in sources they can use, rather than ranking pages, so content has to say something usable and be structured to be extracted [4]. Common blockers include thin content, outdated information, missing structured data, and restricted content behind paywalls or registration [6]. For help diagnosing your specific site, you can reach Joe through the [contact page](/contact/)."
     },
     {
       "q": "How do AI search engines pick which sites to cite?",
@@ -90,14 +96,20 @@
     {
       "q": "What is the 40 word rule?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "The 40-word rule is a way of structuring paragraphs so AI systems can cite them. Joe uses it to keep answer paragraphs short and self-contained, so each one makes sense on its own [4]. Pages are rebuilt around direct, self-contained answers under question-based headings, which helps AI systems extract them cleanly [5]. For the full explanation, see [The 40-Word Rule](/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/)."
     },
     {
       "q": "How should I write paragraphs so AI tools quote them?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Joe recommends opening each page with a direct answer and using question-style headings. He keeps answer paragraphs short and self-contained, following his [40-word rule](/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/) [8]. Joe also suggests citing credible sources, adding specific statistics, and quoting experts where they help the reader [8]."
     },
     {
       "q": "How do I get featured in Google AI Overviews?",
@@ -168,8 +180,11 @@
     {
       "q": "What are AI integration services?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "AI integration services cover more than automating a single task. They include the assessment, policy, tool selection, training, and measurement that make automation work across a business [1]. Joe's AI integration guide describes the process of moving from zero AI to AI in every workflow [1]. Cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, and the most reliable way to get a figure is a scoped proposal after an initial conversation about your workflows [2]. To discuss your situation, visit [the contact page](/contact/)."
     },
     {
       "q": "Is SEO dead?",
@@ -186,17 +201,20 @@
     {
       "q": "What should I look for when hiring an AEO consultant?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ]
     },
     {
       "q": "What am I actually paying for with AEO services?",
       "rank": 0,
       "pass": false,
       "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Joe's AEO program covers five areas. It starts with a visibility baseline of the questions your buyers ask and which brands each AI assistant cites today. Next come content rebuilt around direct, self-contained answers, and entity and schema work. Technical access (AI crawler rules, server-rendered content, llms.txt, and page speed) follows, and the program ends with monthly reporting of citation share next to your SEO numbers [3]. This site doesn't list prices, so for cost, use the [contact page](/contact/). When comparing any AEO provider, ask for the scope, the cost basis, and the measurement method together [1]."
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ]
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -213,8 +231,11 @@
     {
       "q": "What technical SEO does a GEO strategy need?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "A GEO strategy needs technical SEO as its foundation. Without it, AI systems may not be able to crawl your content, index it for retrieval, or parse it for extraction, and slow, insecure or mobile-unfriendly pages may be deprioritized [2]. The essentials include making sure AI crawlers can reach your pages, that important content renders in the HTML, and that pages are indexed [3]. Schema markup and clean site architecture also help AI systems understand your content and its relationships [2][7]. Joe's AEO program covers these items under technical access, including AI crawler rules, server-rendered content, llms.txt and page speed [4]. For questions about working with Joe on this, see the ["
     },
     {
       "q": "How do I do keyword research now?",
@@ -225,11 +246,8 @@
     {
       "q": "What does a site audit cover?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "A technical SEO audit covers crawlability and indexation, site architecture and internal linking, page speed and Core Web Vitals, structured data, duplicate and thin content, international setup where relevant, and AI crawler access [4]. The output is a prioritized list of fixes ranked by impact and effort rather than a dump of every tool warning [3][4]. Modern audits also evaluate SEO and user experience together, since changes in one often affect the other [1]. You can find more details on the [technical SEO service page](/services/technical-seo/), or reach out through the [contact page](/contact/) if you want to work with Joe on an audit."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How should humans and AI work together on content?",
@@ -256,11 +274,11 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. The site describes him as based in Denver and working with teams anywhere in the US [8]. He also works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [5]."
+      "answer": "Joe Unhammer is based in Colorado. He is described as based in the Denver metro area and as working with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [5][7]. His contact page says he is based in Denver and works with teams anywhere in the US [8]."
     },
     {
       "q": "What AI tools has Joe built?",
-      "rank": 3,
+      "rank": 5,
       "pass": true,
       "failed": []
     },
@@ -297,11 +315,8 @@
     {
       "q": "Can Joe build an MCP server for Claude?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Yes. The Claude & MCP Implementation service explains that an MCP server connects Claude to your systems, so Claude can query tools like Search Console or read a reporting database, within limits you set [1]. Joe also lists Claude skills and MCP servers among the things he builds for Claude working with your data [5]. Joe's AI Engineering page likewise offers MCP connectors [6]. To discuss a project, you can use the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What does an AI agent project involve?",
@@ -311,12 +326,12 @@
     },
     {
       "q": "Can you automate our marketing reports?",
-      "rank": 2,
+      "rank": 0,
       "pass": false,
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes, this site describes automating marketing reports. Joe builds workflows that pull GA4 and Search Console data, summarize it, and format it into the deliverable your clients or leadership expect [3]. A typical version runs the same steps each month, with a person reviewing the final report [6]. Joe also sets up MCP connections to Search Console, GA4 and reporting data as part of Claude work [8]. To discuss your situation, see the [contact page](/contact/)."
+      "answer": "Yes, the site says Joe automates reporting from your CRM, GA4 and Search Console, with the data pulled, summarized and formatted into the report your team or clients expect [1][2]. He has built this for an agency, and the site describes it as ready-to-send client deliverables [1][2]. A monthly marketing report, where the steps are the same each month, is the kind of task the site describes as a good fit for an automated workflow [8].\n\nIf you want to discuss your reports, you can reach Joe through the [contact page](/contact/)."
     },
     {
       "q": "Do you offer AI strategy consulting?",
@@ -325,7 +340,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. For more on working with Joe, see the [contact page](/contact/)."
+      "answer": "Yes. Joe offers AI consulting that looks at how a team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on whether off-the-shelf tools are enough before recommending a custom build [2]. Joe can work as a strategic advisor, take on implementation, or blend both [3]. To discuss working with him, visit [the contact page](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -336,8 +351,11 @@
     {
       "q": "How do I get in touch about a project?",
       "rank": 1,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "To start a project, send Joe what you need, your timeline, and your site or product URL. You can email brubeckunhammer@gmail.com, and he replies within two business days [2]. You can also reach him on [LinkedIn](https://www.linkedin.com/in/junhammer/) [2]. The full contact details are on the [contact page](/contact/) [2]."
     },
     {
       "q": "Does Joe work with companies in Denver?",
@@ -364,13 +382,16 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Most sites see early movement in three to six months and compounding results in six to twelve. The timing depends on competition, site health, and how much content needs to be built, and new sites in competitive fields take longer [7]. Joe sets milestones for each quarter so progress is visible before rankings fully arrive [7]. You can read more on the [SEO services](/services/seo/) page."
+      "answer": "Most sites see early movement in three to six months and compounding results in six to twelve months, depending on competition, site health, and how much content needs to be built [7]. New sites in competitive fields take longer [7]. Joe sets milestones each quarter so progress is visible before rankings fully arrive [7]. You can read more on the [SEO service page](/services/seo/)."
     },
     {
       "q": "seo how long",
       "rank": 4,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Based on this site's FAQ, SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results are often visible at six to twelve months [1]. AI visibility (AEO and GEO) can shift faster because these platforms update their knowledge bases [1]. For a timeline specific to your situation, see the contact page at /contact/."
     },
     {
       "q": "aeo vs geo",
@@ -417,20 +438,32 @@
     {
       "q": "ai overviews for hospitals",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "This site covers hospital visibility in AI Overvi"
     },
     {
       "q": "what do you charge",
       "rank": 6,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer",
+        "Uses only links found in the sources"
+      ],
+      "answer": "This site doesn't list Joe's own rates. The [FAQ page](/faq/) covers pricing, but the excerpt I can see has no figures. For a quote, use the [contact page](/contact/).\n\nFor context only, MarketerHire's 2026 figures for other providers run from $3,000 to $15,000 per month for a fractional AEO consultant retainer and $8,000 to $25,000 for a project engagement. Those are not Joe's prices [4]."
     },
     {
       "q": "keyword research",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "This site describes keyword research as moving beyond exact-match targe"
     }
   ],
   "semantic": {
