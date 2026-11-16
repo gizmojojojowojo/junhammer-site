@@ -1,18 +1,26 @@
 ---
-title: "A map agent that answers land questions in plain language"
+title: A map agent that answers land questions in plain language
 seoTitle: "Natural-Language Map Agent: AI Agent Case Study"
-client: "Map agent (open source)"
-sector: "Geospatial AI"
+client: Map agent (open source)
+sector: Geospatial AI
 year: "2026"
-link: "https://github.com/gizmojojojowojo/map-agent"
-summary: "Ask about land sites in plain language and see the answer on a map. The agent picks from three checked tools and never writes its own database queries."
-description: "How Joe Unhammer built a natural-language map agent with tool calling, input checks and a 65-question test set run three times per question."
-order: 9
-services: ["ai-agent-development"]
+link: https://github.com/gizmojojojowojo/map-agent
+summary: Ask about land sites in plain language and see the answer on a map. The
+  agent picks from three checked tools and never writes its own database
+  queries.
+description: How Joe Unhammer built a natural-language map agent with tool
+  calling, input checks and a 65-question test set run three times per question.
+order: 4
+draft: false
+services:
+  - ai-agent-development
 results:
-  - { value: "65", label: "test questions in three sets, each run three times" }
-  - { value: "3", label: "tools, with every input checked before it runs" }
-  - { value: "0", label: "database queries written by the model" }
+  - value: "65"
+    label: test questions in three sets, each run three times
+  - value: "3"
+    label: tools, with every input checked before it runs
+  - value: "0"
+    label: database queries written by the model
 ---
 ## The problem
 
