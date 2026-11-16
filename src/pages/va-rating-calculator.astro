@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 
 const CFR = 'https://www.ecfr.gov/current/title-38/chapter-I/part-4/subpart-A';
+const CFR3 = 'https://www.ecfr.gov/current/title-38/part-3';
 const schema = [
   {
     '@type': 'WebApplication',
@@ -31,23 +32,43 @@ const schema = [
         name: 'Can I get paid at 100 percent without a 100 percent rating?',
         acceptedAnswer: { '@type': 'Answer', text: 'Sometimes. A total disability rating based on individual unemployability pays at the 100 percent rate at a lower schedular rating. Under 38 CFR 4.16(a) the percentage threshold is one disability at 60 percent or more, or one disability at 40 percent or more with a combined rating of 70 percent or more. Meeting that threshold is not the same as qualifying: the VA also has to find that the service-connected disabilities prevent substantially gainful employment.' },
       },
+      {
+        '@type': 'Question',
+        name: 'Do I need to have gone to sick call to get VA disability?',
+        acceptedAnswer: { '@type': 'Answer', text: 'No. 38 CFR 3.303(d) says service connection may be granted for any disease diagnosed after discharge, when all the evidence, including that pertinent to service, establishes that the disease was incurred in service. Service treatment records help, but their absence does not end a claim. The VA must consider all pertinent medical and lay evidence.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What does service connected mean?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Under 38 CFR 3.303(a), service connection means the evidence establishes that an injury or disease resulting in disability was incurred during service, or existed before service and was aggravated by it. It can be shown directly from the evidence or through a statutory presumption.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is a presumptive condition?',
+        acceptedAnswer: { '@type': 'Answer', text: 'A presumptive condition is one the VA treats as service connected when your service and diagnosis fit a rule, without you having to prove the link. For example, under 38 CFR 3.320 a veteran who served in Afghanistan on or after September 19, 2001 is presumed exposed to fine particulate matter, and asthma, rhinitis and sinusitis are service connected if they appear to any degree at any time after separation.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the first step to file a VA disability claim?',
+        acceptedAnswer: { '@type': 'Answer', text: 'File an intent to file. Under 38 CFR 3.155(b), if the complete claim arrives within one year, the VA treats it as filed on the date the intent to file was received. The intent to file does not need to name the medical conditions. Then talk to a VA accredited representative, whose help is free.' },
+      },
     ],
   },
 ];
 ---
 <Base
-  title="VA rating calculator"
-  seoTitle="VA Combined Disability Rating Calculator (38 CFR 4.25 and 4.26)"
-  description="Work out a VA combined disability rating with every step shown, including the bilateral factor for paired limbs and the 38 CFR 4.16(a) unemployability threshold. Nothing is sent anywhere."
+  title="VA disability calculator and eligibility"
+  seoTitle="VA Disability Rating Calculator and Eligibility (38 CFR)"
+  description="Combine VA disability ratings with every step shown, check whether a condition is presumptive, and see the first steps to file. Every answer cites Title 38."
   schema={schema}
 >
   <div class="narrow vac">
     <header class="page-head">
-      <h1>VA rating calculator</h1>
-      <p class="lede">VA disability ratings do not add up. 50 percent and 30 percent pay as 70, not 80. This works the combination the way <a href={`${CFR}/section-4.25`}>38 CFR 4.25</a> and <a href={`${CFR}/section-4.26`}>38 CFR 4.26</a> require and shows every step, so you can check it against your decision letter.</p>
+      <h1>VA disability calculator and eligibility</h1>
+      <p class="lede">VA disability ratings do not add up. 50 percent and 30 percent pay as 70, not 80. This works the combination the way <a href={`${CFR}/section-4.25`}>38 CFR 4.25</a> and <a href={`${CFR}/section-4.26`}>38 CFR 4.26</a> require and shows every step, so you can check it against your decision letter. Not rated yet? The <a href="#eligibility">eligibility section</a> covers whether you can claim at all.</p>
     </header>
 
-    <h2 class="vac-jump">Wondering if you qualify for disability? <a href="/va-disability-eligibility/">Can I get disability at all?</a></h2>
+    <h2 class="vac-jump">Wondering if you qualify for disability? <a href="#eligibility">Can I get disability at all?</a></h2>
 
     <details class="vac-letter" id="vac-letter">
       <summary>Have your decision letter? Paste it and the ratings are filled in for you</summary>
@@ -87,6 +108,49 @@ const schema = [
     </form>
 
     <section id="vac-out" class="vac-out" aria-live="polite"></section>
+
+    <div class="vae" id="eligibility">
+      <h2>Can I get VA disability?</h2>
+      <p class="vae-lede">Most veterans who never file are stopped by one of three beliefs: that it had to be in their service medical records, that too much time has passed, or that they do not know where to start. The regulation answers all three, and this section quotes it.</p>
+      <p class="vae-myth"><strong>You did not have to go to sick call.</strong> <a href={`${CFR3}/section-3.303`}>38 CFR 3.303(d)</a> says service connection "may be granted for any disease diagnosed after discharge, when all the evidence, including that pertinent to service, establishes that the disease was incurred in service." Records help a great deal. Their absence is not the end of a claim.</p>
+
+      <section aria-labelledby="vae-ask-h">
+        <h3 id="vae-ask-h">Ask a question</h3>
+        <p class="vae-lede">Answers come from the text of Title 38, with the section cited so you can read it yourself.</p>
+        <form id="vaq-form" class="vae-form">
+          <label class="vae-sr" for="vaq-q">Your question</label>
+          <input id="vaq-q" type="text" maxlength="400" autocomplete="off" placeholder="Can I claim something that is not in my records?" />
+          <button class="btn" type="submit">Ask</button>
+        </form>
+        <ul id="vaq-suggest" class="vae-suggest"></ul>
+        <div id="vaq-out" class="vae-out" aria-live="polite"></div>
+        <p class="meta">It will not predict whether a claim succeeds, what rating a condition would get, or what to claim. Nobody can tell you that from a web page. Your question is sent to Anthropic to generate the answer.</p>
+      </section>
+
+      <section aria-labelledby="vae-pre-h">
+        <h3 id="vae-pre-h">Is my condition presumptive?</h3>
+        <p class="vae-lede">A presumption removes the hardest part of a claim. If your service and your diagnosis fit the rule, you do not have to prove the condition came from service.</p>
+        <form id="vae-find" class="vae-form" onsubmit="return false">
+          <label class="vae-sr" for="vae-cond">A condition</label>
+          <input id="vae-cond" type="text" maxlength="80" autocomplete="off" placeholder="Type a condition, such as asthma or arthritis" />
+        </form>
+        <div id="vae-matches" class="vae-out" aria-live="polite"></div>
+        <div id="vae-groups" class="vae-groups"></div>
+        <p class="meta" id="vae-notcovered"></p>
+      </section>
+
+      <section aria-labelledby="vae-steps-h">
+        <h3 id="vae-steps-h">The first steps, in order</h3>
+        <ol class="vae-steps">
+          <li><strong>File an intent to file today.</strong> If your complete claim arrives within one year, the VA treats it as filed on the date the intent was received (<a href={`${CFR3}/section-3.155`}>38 CFR 3.155(b)</a>). It does not need to name any medical condition. That date decides how far back payment can go.</li>
+          <li><strong>Talk to a VA accredited representative.</strong> They are free. A Veterans Service Organization can see your file and act on your behalf, which no website can.</li>
+          <li><strong>Gather evidence.</strong> Service records, medical records since discharge, and statements from you and from people who served with you. Lay statements are evidence (<a href={`${CFR3}/section-3.303`}>38 CFR 3.303(a)</a>).</li>
+          <li><strong>File the claim within the year.</strong> Once ratings come back, the <a href="#vac-form">calculator above</a> shows how they combine.</li>
+        </ol>
+        <h4>Where to go</h4>
+        <ul id="vae-links" class="vae-links"></ul>
+      </section>
+    </div>
 
     <section class="vac-about">
       <h2>The detail, if you want it</h2>
@@ -130,17 +194,22 @@ const schema = [
       </details>
 
       <details class="vac-d">
+        <summary>Every regulation the answers use</summary>
+        <div class="prose"><ul id="vae-corpus" class="vae-corpus"></ul></div>
+      </details>
+
+      <details class="vac-d">
         <summary>What this page is and is not</summary>
         <div class="prose">
           <p>The calculator is arithmetic applied to ratings the VA has already assigned. It does not decide what rating any condition should get, which is the part that actually determines your compensation, and it cannot see your evidence, your effective dates or your file. The VA's own decision governs.</p>
-          <p class="meta">Nothing you type into the calculator leaves your browser: that part is the regulation's arithmetic running on your device, with no server call and no logging. The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/va/rating.mjs">code</a> is public. The arithmetic is tested against all 684 cells of the printed table in 4.25 and every worked example in 4.25, 4.26 and 4.16.</p>
+          <p class="meta">The question box is the exception: questions you ask there are sent to Anthropic to generate the answer. Nothing you type into the calculator leaves your browser: that part is the regulation's arithmetic running on your device, with no server call and no logging. The <a href="https://github.com/gizmojojojowojo/junhammer-site/blob/main/src/va/rating.mjs">code</a> is public. The arithmetic is tested against all 684 cells of the printed table in 4.25 and every worked example in 4.25, 4.26 and 4.16.</p>
         </div>
       </details>
 
     </section>
 
-    <p class="vac-disclaimer">This site is not affiliated with, endorsed by, or operated by the U.S. Department of Veterans Affairs. It is an independent tool built by an Army veteran.</p>
-    <noscript><p class="meta">This calculator needs JavaScript.</p></noscript>
+    <p class="vac-disclaimer">This site is not affiliated with, endorsed by, or operated by the U.S. Department of Veterans Affairs. It is an independent tool built by an Army veteran. It explains what the regulations say. It does not decide claims, and it is not legal advice.</p>
+    <noscript><p class="meta">The calculator, the question box and the condition lookup need JavaScript. The rest of the page works without it.</p></noscript>
   </div>
 </Base>
 
@@ -489,4 +558,195 @@ const schema = [
   .vac-d[open] summary { color: var(--fjord); }
   .vac-d > div { padding: 0 0 1.1rem; }
   @media (max-width: 560px) { .vac-field, .vac-field-wide { flex: 1 1 100%; } .vac-row { gap: .5rem; } }
+</style>
+
+<script>
+  import { CORPUS, LINKS, SUGGESTED } from '../va/answer.mjs';
+  import { NOT_COVERED, PRESUMPTIVE, findCondition } from '../va/presumptive.mjs';
+
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  };
+  const link = (text, href) => {
+    const a = el('a', '', text);
+    a.href = href;
+    return a;
+  };
+
+  // ---- links and sources ----
+  for (const l of LINKS) {
+    const li = el('li');
+    li.append(link(l.label, l.url), el('p', 'meta', l.note));
+    $('vae-links').append(li);
+  }
+  for (const c of CORPUS) {
+    const li = el('li');
+    li.append(link(c.cite, c.url), document.createTextNode(`: ${c.topic}`));
+    $('vae-corpus').append(li);
+  }
+
+  // ---- presumptive lookup ----
+  for (const p of PRESUMPTIVE) {
+    const d = el('details', 'vae-d');
+    d.append(el('summary', '', p.label));
+    const body = el('div', 'prose');
+    const who = el('p');
+    who.append(el('strong', '', 'Who it covers: '), document.createTextNode(p.service));
+    const rule = el('p');
+    rule.append(el('strong', '', 'The rule: '), document.createTextNode(`${p.rule} `), link(p.cite, p.url));
+    body.append(who, rule);
+    for (const g of p.groups) {
+      body.append(el('p', 'vae-gname', g.name));
+      const ul = el('ul', 'vae-conds');
+      for (const c of g.conditions) ul.append(el('li', '', c));
+      body.append(ul);
+    }
+    d.append(body);
+    $('vae-groups').append(d);
+  }
+  $('vae-notcovered').textContent = `These lists are the regulation's and are not complete. Not included: ${NOT_COVERED.join('; ')}. The VA's PACT Act page, linked under "Where to go", has the current list.`;
+
+  $('vae-cond').addEventListener('input', (e) => {
+    const q = e.target.value;
+    const box = $('vae-matches');
+    if (q.trim().length < 3) return box.replaceChildren();
+    const found = findCondition(q);
+    if (!found.length) {
+      box.replaceChildren(el('p', 'vae-note', 'Not on the lists this page has. That does not mean it is not presumptive: Congress has added conditions by statute, and a condition that is not presumptive can still be service connected directly. An accredited representative can check.'));
+      return;
+    }
+    const parts = found.map((m) => {
+      const card = el('div', 'vae-match');
+      card.append(el('p', 'vae-match-name', m.condition), el('p', 'meta', m.label));
+      const who = el('p');
+      who.append(el('strong', '', 'Who it covers: '), document.createTextNode(m.service));
+      const rule = el('p');
+      rule.append(el('strong', '', 'The rule: '), document.createTextNode(`${m.rule} `), link(m.cite, m.url));
+      card.append(who, rule);
+      return card;
+    });
+    parts.push(el('p', 'meta', 'Being on a list means the name matches. Whether your service and your diagnosis fit the rule is for the VA to decide.'));
+    box.replaceChildren(...parts);
+  });
+
+  // ---- the question box ----
+  const qForm = $('vaq-form');
+  const qInput = $('vaq-q');
+  const qOut = $('vaq-out');
+  const qBtn = qForm.querySelector('button');
+  let asking = false;
+  let history = [];
+
+  for (const q of SUGGESTED) {
+    const li = el('li');
+    const b = el('button', 'vae-chip', q);
+    b.type = 'button';
+    b.addEventListener('click', () => {
+      qInput.value = q;
+      ask(q);
+    });
+    li.append(b);
+    $('vaq-suggest').append(li);
+  }
+
+  // Answers arrive whole and already checked, and are rendered as text only.
+  function showAnswer(text, sources) {
+    const box = el('div', 'vae-answer');
+    for (const para of text.split(/\n{2,}/)) if (para.trim()) box.append(el('p', '', para.trim()));
+    if (sources?.length) {
+      const list = el('p', 'meta');
+      list.append(document.createTextNode('Sources: '));
+      sources.forEach((s, i) => {
+        if (i) list.append(document.createTextNode(', '));
+        list.append(link(s.cite, s.url));
+      });
+      box.append(list);
+    }
+    qOut.replaceChildren(box);
+  }
+
+  async function ask(question) {
+    if (asking || !question.trim()) return;
+    asking = true;
+    qBtn.disabled = true;
+    qBtn.textContent = 'Asking…';
+    qOut.replaceChildren(el('p', 'meta', 'Reading the regulations…'));
+    try {
+      const res = await fetch('/api/va-ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question, history }) });
+      if (!(res.headers.get('content-type') || '').includes('text/event-stream')) {
+        const data = await res.json().catch(() => ({}));
+        qOut.replaceChildren(el('p', 'vae-note', data.error || 'That did not work. Try again in a moment.'));
+      } else {
+        const text = await new Response(res.body).text();
+        let handled = false;
+        for (const block of text.split('\n\n').filter(Boolean)) {
+          const ev = block.match(/^event: (.+)$/m);
+          const da = block.match(/^data: (.+)$/m);
+          if (!ev || !da) continue;
+          const data = JSON.parse(da[1]);
+          handled = true;
+          if (ev[1] === 'answer') {
+            showAnswer(data.text, data.sources);
+            history = [...history, { role: 'user', content: question }, { role: 'assistant', content: data.text }].slice(-4);
+          } else if (ev[1] === 'refused') {
+            const p = el('p', 'vae-note', `${data.message} `);
+            p.append(link('Find one near you', data.link));
+            qOut.replaceChildren(p);
+          } else qOut.replaceChildren(el('p', 'vae-note', data.message || 'Something went wrong.'));
+        }
+        if (!handled) qOut.replaceChildren(el('p', 'vae-note', 'The answer was cut off. Try again.'));
+      }
+    } catch {
+      qOut.replaceChildren(el('p', 'vae-note', 'Something went wrong. Try again in a moment.'));
+    }
+    asking = false;
+    qBtn.disabled = false;
+    qBtn.textContent = 'Ask';
+  }
+  qForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    ask(qInput.value);
+  });
+</script>
+
+<style is:global>
+  .vae { margin-top: 3.5rem; padding-top: 2.5rem; border-top: 2px solid var(--ink); }
+  .vae section { margin-top: 2.5rem; }
+  .vae h4 { font-size: var(--step-0); font-family: var(--font-ui); margin: 1.4rem 0 .4rem; }
+  .vae h2 { font-size: var(--step-2); margin-bottom: .4rem; }
+  .vae h3 { font-size: var(--step-1); margin: 1.6rem 0 .4rem; }
+  .vae-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .vae-lede { max-width: var(--measure); }
+  .vae-myth, .vae-note { max-width: var(--measure); margin-top: 1.5rem; padding: .9rem 1.1rem; border: 1px solid var(--rule); border-left: 3px solid var(--fjord); border-radius: var(--radius-s); background: var(--surface); }
+  .vae-form { display: flex; gap: .6rem; margin-top: 1rem; max-width: var(--measure); }
+  .vae-form input { flex: 1; min-width: 0; font: inherit; font-family: var(--font-ui); padding: .75rem .9rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); color: var(--ink); }
+  .vae-form .btn { cursor: pointer; }
+  .vae-form button:disabled { opacity: .55; cursor: default; }
+  .vae-suggest { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0 0; padding: 0; }
+  .vae-chip { font-family: var(--font-ui); font-size: .78rem; padding: .35rem .7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--surface); color: var(--ink-soft); cursor: pointer; }
+  .vae-chip:hover { border-color: var(--fjord); color: var(--fjord); }
+  .vae-out:not(:empty) { margin-top: 1.25rem; }
+  .vae-answer, .vae-match { max-width: var(--measure); padding: 1.1rem 1.25rem; border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--surface); }
+  .vae-answer p, .vae-match p { margin: 0 0 .6rem; }
+  .vae-answer p:last-child, .vae-match p:last-child { margin-bottom: 0; }
+  .vae-match + .vae-match { margin-top: .7rem; }
+  .vae-match-name { font-family: var(--font-ui); font-weight: 700; }
+  .vae-groups { margin-top: 1.5rem; max-width: var(--measure); }
+  .vae-d { border-bottom: 1px solid var(--rule); }
+  .vae-d summary { cursor: pointer; padding: .85rem 0; font-family: var(--font-ui); font-weight: 600; }
+  .vae-d summary:hover, .vae-d[open] summary { color: var(--fjord); }
+  .vae-d > div { padding: 0 0 1.1rem; }
+  .vae-gname { font-family: var(--font-ui); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin: 1rem 0 .3rem; }
+  .vae-conds { columns: 2; column-gap: 2rem; margin: 0; padding-left: 1.2rem; font-size: var(--step--1); }
+  .vae-conds li { break-inside: avoid; margin-bottom: .2rem; }
+  .vae-steps { margin: 1rem 0 0; padding-left: 1.3rem; display: grid; gap: .8rem; max-width: var(--measure); }
+  .vae-links { margin: 0; padding-left: 1.2rem; display: grid; gap: .6rem; max-width: var(--measure); }
+  .vae-links .meta { margin: .1rem 0 0; }
+  .vae-corpus { display: grid; gap: .3rem; }
+  .vae-disclaimer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); max-width: var(--measure); }
+  @media (max-width: 560px) { .vae-conds { columns: 1; } .vae-form { flex-direction: column; } }
 </style>

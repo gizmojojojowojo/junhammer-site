@@ -165,7 +165,7 @@ The citation reading is shared with the budget agent, which imports it from `src
 
 ## VA tools
 
-Two pages: `/va-rating-calculator/` (arithmetic, runs in the browser) and `/va-disability-eligibility/` (grounded answers and a presumptive condition lookup). Neither is affiliated with the VA, and both say so.
+One page: `/va-rating-calculator/`. The calculator runs in the browser; the eligibility section below it has grounded answers and a presumptive condition lookup. `/va-disability-eligibility/` was merged into it and redirects there. The page states that it is not affiliated with the VA.
 
 - `src/va/rating.mjs`, `tdiu.mjs`: 38 CFR 4.25, 4.26 and 4.16(a), tested against all 684 cells of the printed table.
 - `src/va/thresholds.mjs`: what changes at each rating, federal entries cited to the regulation and four Colorado entries cited to the state agency pages.
