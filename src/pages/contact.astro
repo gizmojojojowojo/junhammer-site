@@ -20,6 +20,9 @@ const hasForm = Boolean(site.formEndpoint);
       <form class="form" method="POST" action={site.formEndpoint}>
         {site.formAccessKey && <input type="hidden" name="access_key" value={site.formAccessKey} />}
         <input type="hidden" name="subject" value="New project inquiry from junhammer.com" />
+        <input type="hidden" name="from_name" value="junhammer.com contact form" />
+        <input type="hidden" name="redirect" value="https://junhammer.com/contact/?sent=1" />
+        <p class="sent" id="sent" hidden role="status">Thanks, your message is on its way. I reply within two business days.</p>
         <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <label>Name<input name="name" required autocomplete="name" /></label>
         <label>Email<input name="email" type="email" required autocomplete="email" /></label>
@@ -43,7 +46,9 @@ const hasForm = Boolean(site.formEndpoint);
     )}
   </div>
   <script>
-    const s = new URLSearchParams(location.search).get('service');
+    const q = new URLSearchParams(location.search);
+    if (q.get('sent') === '1') document.getElementById('sent')?.removeAttribute('hidden');
+    const s = q.get('service');
     const sel = document.getElementById('service') as HTMLSelectElement | null;
     if (s && sel && [...sel.options].some((o) => o.value === s)) sel.value = s;
   </script>
@@ -56,6 +61,7 @@ const hasForm = Boolean(site.formEndpoint);
   label { display: grid; gap: .35rem; font-weight: 600; font-size: .95rem; }
   input, select, textarea { font: inherit; font-weight: 400; padding: .7rem .8rem; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--paper); color: var(--ink); }
   .hp { display: none; }
+  .sent { margin: 0; padding: .8rem 1rem; border-radius: var(--radius-s); background: var(--highlight); color: var(--highlight-ink); font-weight: 600; }
   .fallback h2 { font-size: var(--step-2); }
   .fallback p { margin: 0; }
   .form .btn { justify-self: start; }
