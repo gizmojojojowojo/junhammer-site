@@ -1,16 +1,25 @@
 ---
-title: "AI chat functions for hospital systems"
+title: AI chat functions for hospital systems
 seoTitle: "Healthcare AI Chat for Hospital Systems: Case Study"
-client: "Enterprise hospital systems"
-sector: "Healthcare"
-year: "2025–2026"
-summary: "Conversational AI that helps patients find services and care information, built alongside AEO and technical SEO programs for enterprise health systems."
-description: "How Joe Unhammer designed AI chat functions for hospital systems that help patients navigate services and care information, alongside healthcare AEO."
-order: 2
-services: ["ai-engineering", "answer-engine-optimization"]
+client: Enterprise hospital systems
+sector: Healthcare
+year: 2025–2026
+summary: Conversational AI that helps patients find services and care
+  information, built alongside AEO and technical SEO programs for enterprise
+  health systems.
+description: How Joe Unhammer designed AI chat functions for hospital systems
+  that help patients navigate services and care information, alongside
+  healthcare AEO.
+order: 9
+draft: false
+services:
+  - ai-engineering
+  - answer-engine-optimization
 results:
-  - { value: "50%", label: "account scope growth in six weeks" }
-  - { value: "AEO", label: "practice launched for healthcare clients" }
+  - value: 50%
+    label: account scope growth in six weeks
+  - value: AEO
+    label: practice launched for healthcare clients
 ---
 ## The problem
 
