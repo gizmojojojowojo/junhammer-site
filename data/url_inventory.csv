@@ -92,3 +92,4 @@ old_url,type,title,published,words,clicks_16mo,impressions_16mo,avg_position,top
 /work/merge-healthcare-ai-chat/,legacy,,,,,,,,REDIRECT,/work/hospital-ai-chat/,,Renamed to remove client name
 /work/whole-whale-ai-tools/,legacy,,,,,,,,REDIRECT,/work/agency-ai-tools/,,Renamed to remove client name
 /services/claude-mcp-implementation/,page,Claude & MCP Implementation,2026-01-01,707,,,,,REDIRECT,/services/ai-automation/,Services,"Merged into AI automation, Nov 2026"
+/va-disability-eligibility/,page,Can I get VA disability?,2026-11-14,,,,,,REDIRECT,/va-rating-calculator/,Tools,"Merged into the calculator page, Nov 2026"
