@@ -1,16 +1,26 @@
 ---
-title: "Agentic AI tools that turn agency work into software"
+title: Agentic AI tools that turn agency work into software
 seoTitle: "Agentic AI Tools for a Digital Agency: Case Study"
-client: "Digital agency for nonprofits"
-sector: "Nonprofit digital agency"
-year: "2026–present"
-summary: "Plugins, browser extensions, Claude skills, chat functions and reporting automations that package an agency's SEO and AEO processes into one-click workflows."
-description: "Agentic AI tools for a nonprofit digital agency: Claude skills, plugins, browser extensions, chat functions and automated GA4 and Search Console reporting."
-order: 1
-services: ["ai-automation", "ai-consulting", "answer-engine-optimization"]
+client: Digital agency for nonprofits
+sector: Nonprofit digital agency
+year: 2026–present
+summary: Plugins, browser extensions, Claude skills, chat functions and
+  reporting automations that package an agency's SEO and AEO processes into
+  one-click workflows.
+description: "Agentic AI tools for a nonprofit digital agency: Claude skills,
+  plugins, browser extensions, chat functions and automated GA4 and Search
+  Console reporting."
+order: 7
+draft: false
+services:
+  - ai-automation
+  - ai-consulting
+  - answer-engine-optimization
 results:
-  - { value: "1-click", label: "SEO and AEO workflows packaged as reusable tools" }
-  - { value: "GA4 + GSC", label: "client reports generated automatically" }
+  - value: 1-click
+    label: SEO and AEO workflows packaged as reusable tools
+  - value: GA4 + GSC
+    label: client reports generated automatically
 ---
 ## The problem
 
