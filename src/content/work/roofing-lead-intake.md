@@ -1,17 +1,26 @@
 ---
-title: "AI lead intake that files roofing leads in HubSpot and Asana"
+title: AI lead intake that files roofing leads in HubSpot and Asana
 seoTitle: "AI Lead Intake for a Roofing Company: Case Study"
-client: "Roofing lead intake (demo build)"
-sector: "Home services"
+client: Roofing lead intake (demo build)
+sector: Home services
 year: "2026"
-summary: "Web forms, emails and voicemails read by AI, sorted by urgency and filed in HubSpot with a drafted reply and an Asana task. Tested on 40 realistic leads."
-description: "How Joe Unhammer built AI lead intake for a roofing company scenario: leads sorted, emergencies flagged, deals and tasks created in HubSpot and Asana."
-order: 8
-services: ["ai-automation"]
+summary: Web forms, emails and voicemails read by AI, sorted by urgency and
+  filed in HubSpot with a drafted reply and an Asana task. Tested on 40
+  realistic leads.
+description: "How Joe Unhammer built AI lead intake for a roofing company
+  scenario: leads sorted, emergencies flagged, deals and tasks created in
+  HubSpot and Asana."
+order: 2
+draft: false
+services:
+  - ai-automation
 results:
-  - { value: "40 of 40", label: "test messages sorted into the right category" }
-  - { value: "8 of 8", label: "emergencies flagged as emergencies" }
-  - { value: "2 of 2", label: "repeat callers matched to their open deal" }
+  - value: 40 of 40
+    label: test messages sorted into the right category
+  - value: 8 of 8
+    label: emergencies flagged as emergencies
+  - value: 2 of 2
+    label: repeat callers matched to their open deal
 ---
 ## The problem
 
@@ -35,14 +44,16 @@ There was no real roofer's data to start from, so I wrote 40 realistic messages 
 
 A scoring script sends all 40 to the live service and compares the results with the answer key, field by field. On the final live run:
 
+
 | Field | Correct |
-|---|---|
+| ------------------ | ------------- |
 | Category | 40 of 40 |
 | Name, phone, email | 34 of 34 each |
 | Job type | 34 of 34 |
 | City | 33 of 34 |
 | Insurance claim | 20 of 21 |
 | Urgency | 26 of 33 |
+
 
 Every urgency miss was one level off, such as a hail claim with no deadline rated normal instead of high. The run created 29 deals and 32 tasks.
 
