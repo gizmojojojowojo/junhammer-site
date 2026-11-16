@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-16T12:45:15.616Z",
-  "commit": "0d26276",
+  "ranAt": "2026-11-16T12:54:02.863Z",
+  "commit": "402bc5c",
   "retrieval": {
     "questions": 60,
     "passages": 751,
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 46,
+    "passedAll": 49,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 58
+        "passed": 57
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 53
+        "passed": 52
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 52
+        "passed": 55
       },
       {
         "id": "short",
@@ -46,9 +46,9 @@
     "offTopicReachedModel": 4,
     "offTopicDeclined": 3,
     "avgTokensIn": 2352,
-    "avgTokensOut": 312,
-    "ranAt": "2026-11-16T12:45:15.615Z",
-    "commit": "0d26276"
+    "avgTokensOut": 329,
+    "ranAt": "2026-11-16T12:54:02.863Z",
+    "commit": "402bc5c"
   },
   "questions": [
     {
@@ -64,7 +64,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations. It involves optimizing your digital footprint so AI systems like ChatGPT, Google's AI features and Perplexity recognize your brand as authoritative, relevant and trustworthy enough to cite [6]. It is broader and longer term than AEO, focusing on making a brand a recognized entity that AI systems mention by name [5]. Joe's site also notes that GEO depends on solid technical SEO foundations, since AI search engines discover content through the same basic mechanisms as traditional crawlers [8]."
+      "answer": "Generative Engine Optimization (GEO) is a strategic framework for making sure your brand appears in AI-generated search results and recommendations. It involves optimizing your digital footprint so AI systems like ChatGPT, Google's Search Generative Experience, and Perplexity recognize your brand as authoritative and trustworthy enough to cite [6]. Per this site, GEO is broader and longer term than AEO, focusing on making a brand a recognized entity that AI systems mention by name [5]. You can read more on the [FAQ page](/faq/)."
     },
     {
       "q": "Who came up with the term GEO?",
@@ -85,7 +85,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "The site's article on why content isn't showing up in ChatGPT answers says this is a common frustration and is usually fixable, with causes that tend to cluster around a handful of issues, most of which don't need a technical background to address [2]. The article itself is linked from this site at /blog/why-your-content-isnt-showing-up-in-chatgpt-answers/ [1]. Joe also explains that AI search engines build answers and pull in sources they trust rather than ranking pages, so the question they ask is whether your content says something they can use [3][4]. If you want help with your specific site, you can reach Joe through [the contact page](/contact/)."
+      "answer": "According to this site, content not appearing in ChatGPT answers is a common problem, and it is usually fixable, with causes that tend to cluster around a handful of issues that most people can address without a technical background [2]. The article \"Why Your Content Isn't Showing Up in ChatGPT Answers\" covers these causes in detail [1]. Some common issues that can keep content out of AI answers include thin content, outdated information, missing structured data, and restricted content behind paywalls or registration [6]. If you want help working through your specific situation, you can reach out via the [contact page](/contact/)."
     },
     {
       "q": "How do AI search engines pick which sites to cite?",
@@ -108,11 +108,8 @@
     {
       "q": "How do I get featured in Google AI Overviews?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "The site suggests a few things that help. Content should answer specific questions thoroughly, offer insights not easily found elsewhere, and be kept current [6]. Google says AI Overviews aim to highlight high-quality content that best answers the query [6]. Joe's answer engine optimization service covers an AI visibility audit, restructuring content for answer extraction, entity and schema work, and a review of llms.txt and AI crawler access [8]. Results take time: there's no guaranteed timeframe, but sites typically need 2-3 months of consistent optimization [1]. For healthcare or pharmaceutical content, the site notes stricter YMYL criteria apply [2][5]. To discuss working with Joe, see t"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is semantic search?",
@@ -147,11 +144,8 @@
     {
       "q": "How do pharma companies optimize content for Perplexity?",
       "rank": 2,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Based on this site's pharmaceutical guide, pharma companies can start by auditing existing pages for clear author attribution, medical review documentation, citation quality, and structural clarity [3]. They should also set up a medical review workflow so content stays accurate as information changes, since AI systems increasingly penalize outdated pharmaceutical information [3].\n\nFor Perplexity specifically, the site advises ensuring indexability [2]. More broadly, it says the foundation is strong technical SEO, with AI-specific optimizations layered on top [4]. Content should serve both healthcare professionals and patients, with depth and language suited to each [3].\n\nThis site doesn't de"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is entity-based optimization for health systems?",
@@ -180,11 +174,8 @@
     {
       "q": "What are AI integration services?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "AI integration services cover more than automation alone. They include the assessment, policy, tool selection, training, and measurement that make AI work across a business, and AI workflow automation is one part of them [1]. Cost depends on how many workflows are covered, whether custom software or configured off-the-shelf tools are needed, and how much team training is required, and Joe recommends a scoped proposal after an initial conversation about your workflows [2]. To discuss your needs, see the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Is SEO dead?",
@@ -271,7 +262,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. His contact page says he is based in Denver and works with teams anywhere in the US [8]. His Parker page says he works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [5]. To discuss a project, you can use the contact page at /contact/."
+      "answer": "Joe Unhammer is based in Colorado. His contact page places him in Denver and says he works with teams anywhere in the US [8]. His Parker page says he is based in Colorado's south metro and works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, as well as teams across the US [5]. To discuss working with Joe, use the contact page at /contact/."
     },
     {
       "q": "What AI tools has Joe built?",
@@ -306,8 +297,11 @@
     {
       "q": "Does Joe have ecommerce SEO experience?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes. Joe has worked on e-commerce SEO, including a B2B e-commerce project for an industrial manufacturer where the work covered SEO and conversion rate optimization [1][2]. His SEO service page lists results such as increasing a B2B e-commerce client's organic traffic more than 200% and growing a client's e-commerce sales 115% across B2B and B2C [3]. You can read more about the industrial manufacturer case study at [/work/industrial-b2b-ecommerce-seo/](/work/industrial-b2b-ecommerce-seo/) or get in touch through [/contact/](/contact/)."
     },
     {
       "q": "Can Joe build an MCP server for Claude?",
@@ -330,8 +324,11 @@
     {
       "q": "Do you offer AI strategy consulting?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes. Joe offers AI consulting that looks at how your team works today, finds tasks where AI saves real time or improves quality, and turns that into a plan covering tools, what to build, rules, and how to measure results [1]. He also advises on where AI fits and can move from strategy into building LLM applications, agents, and data tools [5]. Most teams should start with off-the-shelf tools configured well, and Joe builds custom solutions only where the workflow is specific to the business or the data must stay in your systems [2]. To discuss a project, see the [contact page](/contact/)."
     },
     {
       "q": "Can you help with a site migration?",
@@ -370,7 +367,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Most sites see early movement from SEO in three to six months and compounding results in six to twelve months. The timing depends on competition, site health, and how much content needs to be built, and new sites in competitive fields take longer [7]. Joe sets milestones for each quarter so progress is visible before rankings fully arrive [7]. You can read more on the [SEO service page](/services/seo/) [7]."
+      "answer": "According to this site, most SEO work shows early movement in three to six months and compounding results in six to twelve months, depending on competition, site health, and how much content needs to be built [7]. New sites in competitive fields take longer [7]. Joe sets quarterly milestones so progress is visible before rankings fully arrive [7]. You can learn more on the [SEO service page](/services/seo/)."
     },
     {
       "q": "seo how long",
@@ -380,7 +377,7 @@
         "Cites a page that holds the answer",
         "Uses only links found in the sources"
       ],
-      "answer": "Based on this site's FAQ, SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results are often visible at six to twelve months [1]. AI visibility (AEO and GEO) can shift faster as those platforms update their knowledge bases [1]. For a timeline specific to your site, see [the contact page](/contact/)."
+      "answer": "Per this site's FAQ, SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial, compounding results are often visible at six to twelve months [1]. Visibility in AI systems (AEO and GEO) can shift faster, since those platforms update their knowledge bases more often [1]. For a timeline specific to your situation, you can reach out via the [contact page](/contact/)."
     },
     {
       "q": "aeo vs geo",
@@ -391,11 +388,8 @@
     {
       "q": "chatgpt not showing my site",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "ChatGPT tends to cite the page that most clearly and specifically answers the question, not the best-known site on the topic, so a well-structured page can beat a vague one even on a newer site [2]. Sites are usually cited because their content is structured as extractable answers [3]. Joe says these issues are usually fixable and that most don't require a technical background [1]. ChatGPT also mentions businesses that are clearly described and consistently listed and cited by other trustworthy sites, so Joe audits how assistants describe a business today and then fixes the site content, structured data and outside listings [7]. If you want help with this, you can reach Joe through the [cont"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "joe army",
@@ -406,11 +400,8 @@
     {
       "q": "mcp server",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "An MCP server connects an AI application such as Claude to outside tools and data. It can let Claude read from a database, query an analytics account, or take an action in another system [1]. The Model Context Protocol is an open standard for this. With an MCP server, Claude can read your CRM or reporting data within limits you set, usually read-only to start [2]. Joe builds mostly with Claude and MCP [3]. To discuss a setup, you can use the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "agents vs workflows",
@@ -435,18 +426,20 @@
       "rank": 0,
       "pass": false,
       "failed": [
+        "Cites a source",
         "Cites a page that holds the answer"
       ],
-      "answer": "This site covers getting hospital content into AI Overviews. Joe's answer engine optimization service includes healthcare AEO built on E-E-A-T and YMYL standards, plus an AI visibility audit that shows where a brand is and is not cited today [4]. Measurement should include regularly testing relevant healthcare queries and tracking featured sn"
+      "answer": "This site covers AI Overviews for healthcare organizations. Healthcare marketers are asking how to get their organization's content featured in AI"
     },
     {
       "q": "what do you charge",
       "rank": 6,
       "pass": false,
       "failed": [
+        "Cites a page that holds the answer",
         "Uses only links found in the sources"
       ],
-      "answer": "This site doesn't list Joe's rates. The FAQ page covers pricing, but the excerpt I can see only describes its topics [7]. The only figures on the site are third-party market ranges from MarketerHire, which are not Joe's prices [4]. For a quote, use the [contact page](/contact/)."
+      "answer": "This site doesn't list Joe's own rates. The [FAQ page](/faq/) covers pricing as a topic, but the details aren't in the material I can access. For a quote, use the [contact page](/contact/).\n\nFor context, MarketerHire's 2026 estimates for market ranges are a fractional AEO consultant retainer at $3,000 to $15,000 per month, and a project engagement at $8,000 to $25,000 total. These are industry figures, not Joe's prices [4]. Scope drives cost more than seniority, so price any provider against the same written brief [2][4]."
     },
     {
       "q": "keyword research",
