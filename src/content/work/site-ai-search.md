@@ -1,18 +1,28 @@
 ---
 title: "AI search for this site: cited answers from my own content"
 seoTitle: "AI Site Search With Cited Answers: RAG Case Study"
-client: "junhammer.com"
-sector: "AI search"
+client: junhammer.com
+sector: AI search
 year: "2026"
-link: "https://junhammer.com/ask/"
-summary: "A question box that answers from this site's pages, cites every source, and declines when the site has no answer. Built on Cloudflare and Claude, with a test set that measures it."
-description: "How I built AI search for junhammer.com: BM25 retrieval, streamed answers from Claude with citations, guardrails against invented links, and evals."
-order: 7
-services: ["ai-engineering"]
+link: https://junhammer.com/ask/
+summary: A question box that answers from this site's pages, cites every source,
+  and declines when the site has no answer. Built on Cloudflare and Claude, with
+  a test set that measures it.
+description: "How I built AI search for junhammer.com: BM25 retrieval, streamed
+  answers from Claude with citations, guardrails against invented links, and
+  evals."
+order: 5
+draft: false
+services:
+  - ai-engineering
 results:
-  - { value: "60 of 60", label: "test questions get the right page in front of the model" }
-  - { value: "93%", label: "of test questions rank the right page first, up from 85% with keywords alone" }
-  - { value: "0", label: "packages added to the site" }
+  - value: 60 of 60
+    label: test questions get the right page in front of the model
+  - value: 93%
+    label: of test questions rank the right page first, up from 85% with keywords
+      alone
+  - value: "0"
+    label: packages added to the site
 ---
 ## The problem
 
@@ -39,13 +49,15 @@ I built it in one day, working with Claude as a coding agent. The code is public
 
 I wrote the test set before trusting the feature: 60 questions, each labeled with the pages that hold the answer, plus eight off-topic questions the site should turn away. Twelve of the 60 are short or misspelled, the way people type.
 
+
 | Measure | Result |
-|---|---|
+| ------------------------------------------------------------------ | ---------- |
 | Right page reaches the model | 60 of 60 |
 | Right page ranked first | 85% |
 | Right page in the top three | 93% |
 | Off-topic questions stopped before the model | 4 of 8 |
 | Automated tests for index, ranking, prompt, streaming and endpoint | 16 passing |
+
 
 Two limits apply to these numbers. I tuned the ranking on the same 60 questions, so they are a ceiling. They also measure retrieval only. A second script calls the model for every question and checks that each answer cites a real source, cites an expected page and uses only links from the passages.
 
@@ -57,11 +69,13 @@ Keyword ranking misses a question that shares no words with the page that answer
 
 I measured both versions on the same 60 questions against the deployed site.
 
+
 | Measure | Keywords alone | Keywords plus meaning |
-|---|---|---|
+| ---------------------------- | -------------- | --------------------- |
 | Right page ranked first | 51 of 60 (85%) | 56 of 60 (93%) |
 | Right page in the top three | 56 of 60 | 59 of 60 |
 | Right page reaches the model | 60 of 60 | 60 of 60 |
+
 
 Eight questions moved up and one moved down. The biggest gains came on short, vague questions, where one moved from sixth place to third and another from fifth to second. Keyword search already got the right page to the model every time, so the gain is in ordering. The hybrid version is now live, and it falls back to keywords if the embedding service is slow or down. Current numbers are on the [eval results page](/ask/evals/).
 
