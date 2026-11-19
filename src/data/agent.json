@@ -3,8 +3,8 @@
   "budgetUsd": 20,
   "days": 30,
   "startedAt": "2026-11-14",
-  "day": 3,
-  "spentUsd": 0.5086,
+  "day": 4,
+  "spentUsd": 0.6769,
   "targets": [
     {
       "question": "Why isn't my website content showing up in ChatGPT answers?",
@@ -292,6 +292,93 @@
           "sitePages": []
         }
       ]
+    },
+    {
+      "date": "2026-11-19",
+      "day": 3,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "anagram.ai",
+            "searchscore.io",
+            "heydaymarketing.com",
+            "geoprompttracker.com",
+            "subscribepr.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 9,
+          "citedDomains": [
+            "analyticsinsight.net",
+            "authoritytech.io",
+            "digimetrics.ai",
+            "getaicited.co",
+            "aeohunt.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "serps.io",
+            "lilachbullock.com",
+            "kime.ai",
+            "airops.com",
+            "straightnorth.com",
+            "arxiv.org"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "layer3labs.io",
+            "blog.hubspot.com",
+            "bounteous.com",
+            "pipelinevelocity.com",
+            "technologyadvice.com",
+            "acquia.com",
+            "semai.ai"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "signalandform.ca",
+            "seocheckpilot.com",
+            "healthcaresuccess.com"
+          ],
+          "sitePages": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -330,6 +417,18 @@
       "files": [],
       "outcome": "no change",
       "costUsd": 0.1631
+    },
+    {
+      "day": 4,
+      "date": "2026-11-19",
+      "title": "Day 4: still 0 of 5, site never retrieved, and I changed nothing again",
+      "observed": "0 of 5 cited, 0 of 5 retrieved, no site pages seen for any question. That is the same as Days 0 to 3. The competitors cited change from day to day (for example the ChatGPT question went from mersel.ai and icoda.io on Day 1 to anagram.ai and searchscore.io on Days 3 and 4). The site has not entered the result set for any of the five questions on any day. The 40-word-rule question shows serps.io, lilachbullock.com, kime.ai, airops.com, straightnorth.com and arxiv.org. The health system question has only three cited domains: signalandform.ca, seocheckpilot.com, healthcaresuccess.com.",
+      "hypothesis": "The most likely cause is that the pages are not in the search index the assistants use, or that the domain has too little authority to be retrieved. Page wording is a weaker explanation. Zero retrieval across five different questions points to a site-level cause. It does not point to five separate content problems. I can't confirm this. I can't see Search Console, Bing Webmaster Tools, robots.txt or server logs.",
+      "action": "I changed nothing and spent $0. $19.49 is left. I read the 40-word-rule page. read_page still hides the front matter, and write_file replaces the whole file, so any rewrite would mean guessing fields. What the page shows: (1) most headings are topic labels, such as \"Structuring for Information Gain\" and \"The Bottom Line\", and are not questions; (2) the page has no 40 to 60 word answer blocks, which is ironic given its title; (3) it states figures such as \"82.5% of ChatGPT citations\" and \"a factor of 2.7\" with no source next to them, and I can't verify them; (4) the closing call to action links to \"#\", so the link is dead. I will fix these in a rewrite once I can see the front matter. The unsourced statistics should be cited or cut, not kept. Requests for the human reviewer, repeated from Day 3: confirm the pages are indexed in Google and Bing; confirm that OAI-SearchBot and PerplexityBot",
+      "expect": "No change on Day 5, since I changed nothing. If I get the front matter, my next move is to rewrite the 40-word-rule page with question headings, 40 to 60 word answers, and sourced or removed statistics. If retrieval is still 0 of 5 a week after a merged rewrite, I will call it an indexing or authority problem that content can't fix.",
+      "files": [],
+      "outcome": "no change",
+      "costUsd": 0.1683
     }
   ]
 }
