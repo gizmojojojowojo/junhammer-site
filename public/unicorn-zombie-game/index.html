@@ -110,6 +110,40 @@ kbd{background:#f1e6ff;border-radius:6px;padding:1px 7px;font-family:inherit;fon
 #btnJump{right:126px;bottom:24px;width:72px;height:72px;background:rgba(120,200,255,.6)}
 #btnStomp{right:36px;bottom:136px;width:62px;height:62px;font-size:24px;background:rgba(160,120,255,.55)}
 #btnAct{right:110px;bottom:116px;width:62px;height:62px;font-size:24px;background:rgba(255,200,80,.65)}
+/* ---- touch screens only (phones and tablets). Nothing here applies on a computer with a mouse or trackpad. ---- */
+#btnCall{display:none}
+.rotateHint{display:none}
+body.touch #help,body.touch #stompInfo{display:none}
+body.touch #btnCall{display:block;right:36px;bottom:208px;width:62px;height:62px;font-size:24px;background:rgba(255,160,200,.65)}
+body.touch #btnAct{right:128px;bottom:126px}
+body.touch .wslot{width:54px;height:54px;font-size:0;padding:0}
+body.touch .wslot .e{font-size:24px}
+body.touch .wslot .k{font-size:10px}
+body.touch #weaponBar{left:12px;bottom:186px;transform:none;gap:6px}
+body.touch #prompt{bottom:auto;top:312px;font-size:15px;white-space:normal;text-align:center;max-width:86%}
+body.touch #left{width:178px;padding:8px 10px}
+body.touch #pname{font-size:15px}
+body.touch #tip{font-size:13px}
+body.touch #right{width:132px;padding:8px 10px}
+body.touch #score,body.touch #coins{font-size:20px}
+body.touch #wave{font-size:12px}
+body.touch #map{width:104px;height:104px}
+body.touch .sbtn{min-width:34px;height:32px;font-size:15px}
+body.touch #banner{font-size:34px}
+@media (orientation:portrait){ body.touch .rotateHint{display:block} }
+@media (orientation:landscape){
+  body.touch #weaponBar{left:50%;transform:translateX(-50%);bottom:auto;top:10px}
+  body.touch #prompt{top:76px}
+  body.touch #left{width:200px}
+  body.touch #map{width:92px;height:92px}
+  body.touch #btnFire{right:20px;bottom:18px;width:88px;height:88px}
+  body.touch #btnJump{right:118px;bottom:14px;width:70px;height:70px}
+  body.touch #btnAct{right:198px;bottom:14px;width:60px;height:60px}
+  body.touch #btnStomp{right:268px;bottom:14px;width:60px;height:60px}
+  body.touch #btnCall{right:338px;bottom:14px;width:60px;height:60px}
+  body.touch #joy{left:18px;bottom:16px;width:128px;height:128px}
+  body.touch #knob{left:31px;top:31px}
+}
 /* code viewer */
 #code{position:fixed;top:0;right:0;bottom:0;width:var(--cw);background:#1d1830;color:#ece6ff;display:none;flex-direction:column;
   font-family:'Fredoka',system-ui,sans-serif;user-select:text;-webkit-user-select:text;touch-action:auto;border-left:4px solid #b46cff}
@@ -187,7 +221,8 @@ body.code #help{display:none}
       <span><kbd>E</kbd></span><span>Get on / off the unicorn · open the shop</span>
       <span><kbd>Q</kbd> · <kbd>C</kbd></span><span>Unicorn stomp · call your unicorn</span>
     </div>
-    <div class="keys hidden" id="ctrlTouch"><span>Stick</span><span>Move</span><span>✨ ⬆️ 💥 🦄</span><span>Shoot, jump, stomp, get on/off</span></div>
+    <div class="keys hidden" id="ctrlTouch"><span>Stick</span><span>Move</span><span>Drag · pinch</span><span>Look around · zoom</span><span>✨ ⬆️ 💥</span><span>Shoot, jump, stomp</span><span>🦄 · 🎵</span><span>Get on/off, shop &amp; bar · call your unicorn</span></div>
+    <p class="rotateHint" style="font-weight:600;color:#b44bd6">📱 Turn your phone sideways for the best view!</p>
     <div><button class="big hidden" id="contBtn">▶ Continue</button> <button class="big" id="startBtn">New Ride 🦄</button><button class="big alt shopOpen">🛒 Shop</button></div>
     <p id="startCoins" style="margin-top:10px;font-weight:600"></p>
     <p style="margin-top:6px"><button class="sbtn codeBtn">&lt;/&gt; See how the game is made</button> <button class="sbtn" id="wipeBtn">🗑️ Start from scratch</button></p>
@@ -243,6 +278,7 @@ body.code #help{display:none}
   <div id="joy"><div id="knob"></div></div>
   <button class="tbtn" id="btnStomp">💥</button>
   <button class="tbtn" id="btnAct">🦄</button>
+  <button class="tbtn" id="btnCall">🎵</button>
   <button class="tbtn" id="btnJump">⬆️</button>
   <button class="tbtn" id="btnFire">✨</button>
 </div>
@@ -273,6 +309,9 @@ const rand = (a,b) => a + Math.random()*(b-a);
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
 const TAU = Math.PI*2;
 const angDiff = (a,b) => { let d = (b-a) % TAU; if (d > Math.PI) d -= TAU; if (d < -Math.PI) d += TAU; return d; };
+// phones and tablets get a touch layout and slightly lighter graphics. Computers with a mouse or trackpad are unchanged.
+const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
+if (IS_TOUCH) document.body.classList.add('touch');
 const WORLD = 185;                                    // radius of the meadow
 const BEACH = {x0:150, x1:345, z0:-160, z1:160};      // the beach + ocean area
 const BEACH_WAVE = 4;                                 // the beach opens when you reach this wave
@@ -290,7 +329,7 @@ const TUNE = {
 
 // ---------- Renderer / scene ----------
 const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, IS_TOUCH ? 1.5 : 2));
 const gameEl = $('game');
 renderer.setSize(gameEl.clientWidth, gameEl.clientHeight);
 renderer.shadowMap.enabled = true;
@@ -309,7 +348,7 @@ scene.add(new THREE.HemisphereLight(0xffffff, 0x6aa84f, 0.62));
 const sun = new THREE.DirectionalLight(0xfff4e0, 0.85);
 sun.position.set(20,40,10);
 sun.castShadow = true;
-sun.shadow.mapSize.set(2048,2048);
+sun.shadow.mapSize.set(IS_TOUCH ? 1024 : 2048, IS_TOUCH ? 1024 : 2048);
 sun.shadow.bias = -0.0005;
 Object.assign(sun.shadow.camera, {left:-40,right:40,top:40,bottom:-40,near:1,far:130});
 scene.add(sun); scene.add(sun.target);
@@ -1374,14 +1413,15 @@ function updateParkedUnicorn(dt){
   U.head.rotation.x = Math.max(0, Math.sin(uni.graze*0.6))*0.6;
   U.tail.rotation.y = Math.sin(time*3)*0.35;
 }
+const KEY_E = () => isTouch ? 'Tap 🦄' : 'Press E';
 function promptText(){
   if (P.slide || state !== 'play') return '';
-  if (distXZ(P.pos, SHOP_POS) < 5.5 && P.y < 2) return 'Press E to open the shop 🛒';
-  if (unlocked.beach && distXZ(P.pos, BAR) < 6.8 && P.y < 2) return 'Press E for the beach bar 🍹';
-  if (!raceState.active && raceState.near >= 0) return 'Press E to start the ' + RACES[raceState.near].name + ' 🏁';
-  if (!mounted && distXZ(P.pos, U.g.position) < 3.8) return 'Press E to hop on 🦄';
-  if (mounted && distXZ(P.pos, PARK_POS) < 3) return 'Press E to park and hop off 🅿️';
-  if (!mounted && distXZ(P.pos, U.g.position) > 30) return 'Press C to call your unicorn 🎵';
+  if (distXZ(P.pos, SHOP_POS) < 5.5 && P.y < 2) return KEY_E() + ' to open the shop 🛒';
+  if (unlocked.beach && distXZ(P.pos, BAR) < 6.8 && P.y < 2) return KEY_E() + ' for the beach bar 🍹';
+  if (!raceState.active && raceState.near >= 0) return KEY_E() + ' to start the ' + RACES[raceState.near].name + ' 🏁';
+  if (!mounted && distXZ(P.pos, U.g.position) < 3.8) return KEY_E() + ' to hop on 🦄';
+  if (mounted && distXZ(P.pos, PARK_POS) < 3) return KEY_E() + ' to park and hop off 🅿️';
+  if (!mounted && distXZ(P.pos, U.g.position) > 30) return (isTouch ? 'Tap 🎵' : 'Press C') + ' to call your unicorn 🎵';
   return '';
 }
 
@@ -2126,7 +2166,7 @@ function loop(now){
 requestAnimationFrame(loop);
 
 // ---------- Input ----------
-const isTouch = window.matchMedia('(pointer: coarse)').matches;
+const isTouch = IS_TOUCH;
 if (isTouch){ $('ctrlDesk').classList.add('hidden'); $('ctrlTouch').classList.remove('hidden'); }
 function setPaused(p){
   if (p && state === 'play'){ state = 'paused'; firing = false; $('pause').classList.remove('hidden'); }
@@ -2159,12 +2199,23 @@ addEventListener('pagehide', saveRun);
 
 // click and drag to look around, scroll to zoom, a quick click shoots
 let drag = null;
+const fingers = new Map(); let pinch = null;               // two fingers on a phone = pinch to zoom
+const fingerGap = () => { const f = [...fingers.values()]; return Math.hypot(f[0].x - f[1].x, f[0].y - f[1].y); };
 canvas.addEventListener('pointerdown', e=>{
+  if (e.pointerType === 'touch'){
+    fingers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    if (fingers.size === 2){ pinch = {gap:fingerGap(), dist:camDist}; drag = null; try { canvas.setPointerCapture(e.pointerId); } catch(err){} return; }
+    if (fingers.size > 2) return;
+  }
   drag = {x:e.clientX, y:e.clientY, moved:0};
   try { canvas.setPointerCapture(e.pointerId); } catch(err){}
   canvas.classList.add('dragging');
 });
 canvas.addEventListener('pointermove', e=>{
+  if (e.pointerType === 'touch' && fingers.has(e.pointerId)){
+    fingers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    if (pinch && fingers.size === 2){ camDist = Math.max(5, Math.min(28, pinch.dist * pinch.gap / Math.max(20, fingerGap()))); return; }
+  }
   if (!drag) return;
   const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
   drag.x = e.clientX; drag.y = e.clientY; drag.moved += Math.abs(dx) + Math.abs(dy);
@@ -2173,7 +2224,8 @@ canvas.addEventListener('pointermove', e=>{
     camH = Math.max(1, Math.min(16, camH + dy * 0.03));         // drag up/down: look from low or high
   }
 });
-const endDrag = ()=>{
+const endDrag = (e)=>{
+  if (e && e.pointerType === 'touch'){ fingers.delete(e.pointerId); if (fingers.size < 2) pinch = null; }
   if (!drag) return;
   if (drag.moved < 6 && state === 'play') clickShot = true;
   drag = null; canvas.classList.remove('dragging');
@@ -2205,6 +2257,7 @@ fb.addEventListener('pointerdown', e=>{ e.preventDefault(); fb.setPointerCapture
 $('btnJump').addEventListener('pointerdown', e=>{ e.preventDefault(); jumpQueued = 0.15; });
 $('btnStomp').addEventListener('pointerdown', e=>{ e.preventDefault(); stomp(); });
 $('btnAct').addEventListener('pointerdown', e=>{ e.preventDefault(); interact(); });
+$('btnCall').addEventListener('pointerdown', e=>{ e.preventDefault(); callUnicorn(); });
 document.addEventListener('contextmenu', e=>{ if (!e.target.closest('#code')) e.preventDefault(); });
 
 $('muteBtn').addEventListener('click', ()=>{ muted = !muted; $('muteBtn').textContent = muted ? '🔇' : '🔊'; });
@@ -2325,10 +2378,11 @@ function buildCodeViewer(){
   $('tuneRows').innerHTML = TUNE_UI.map(([k,label,min,max,step])=>
     '<div class="tr"><div>' + label + '<br><code>TUNE.' + k + '</code></div><input type="range" data-k="' + k + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + TUNE[k] + '"><span id="tv_' + k + '">' + TUNE[k] + '</span></div>').join('');
 }
-const codeWidth = () => Math.min(Math.round(innerWidth*0.46), 700);
+const codeWidth = () => isTouch && innerWidth < 900 ? innerWidth : Math.min(Math.round(innerWidth*0.46), 700);   // phones: full screen
 function toggleCode(open){
   const on = typeof open === 'boolean' ? open : !document.body.classList.contains('code');
   if (on && !$('codeBody').innerHTML) buildCodeViewer();
+  if (on && isTouch && innerWidth < 900) setPaused(true);   // on a phone the code covers the game, so pause it
   document.body.classList.toggle('code', on);
   document.documentElement.style.setProperty('--cw', on ? codeWidth() + 'px' : '0px');
   onResize();
