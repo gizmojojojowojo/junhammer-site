@@ -76,6 +76,13 @@ const graph = {
     <script is:inline>
       try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZDK698HC2"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-9ZDK698HC2');
+    </script>
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
   </head>
   <body>
