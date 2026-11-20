@@ -1453,7 +1453,7 @@ function killZombie(z){
   if (safeNow){
     // no camping! a zombie beaten from a safe place gets replaced, and drops nothing
     toSpawn++;
-    if (time - safeKillMsgT > 20){ safeKillMsgT = time; toast("🛡️ You can't end a wave from a safe area. Go out and fight 'em like a girl! 💪"); }
+    if (time - safeKillMsgT > 10){ safeKillMsgT = time; toast("🛡️ You can't end a wave from a safe area. Go out and fight 'em like a girl! 💪"); }
     return;
   }
   const zx = z.g.position.x, zz = z.g.position.z;
