@@ -3,8 +3,8 @@
   "budgetUsd": 20,
   "days": 30,
   "startedAt": "2026-11-14",
-  "day": 4,
-  "spentUsd": 0.6769,
+  "day": 5,
+  "spentUsd": 0.8571,
   "targets": [
     {
       "question": "Why isn't my website content showing up in ChatGPT answers?",
@@ -379,6 +379,83 @@
           "sitePages": []
         }
       ]
+    },
+    {
+      "date": "2026-11-20",
+      "day": 4,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 20,
+          "citedDomains": [],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "authoritytech.io",
+            "arxiv.org",
+            "instantpress.co",
+            "fokal.com",
+            "ailabsaudit.com",
+            "hansvangent.substack.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "hubspot.com",
+            "similarweb.com",
+            "wpvip.com",
+            "chatterbuzzmedia.com",
+            "airops.com",
+            "discoveredlabs.com",
+            "tryprofound.com",
+            "sanbi.ai"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 20,
+          "citedDomains": [
+            "healthcare-brew.com",
+            "easternstandard.com",
+            "higoodie.com",
+            "wellows.com"
+          ],
+          "sitePages": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -429,6 +506,18 @@
       "files": [],
       "outcome": "no change",
       "costUsd": 0.1683
+    },
+    {
+      "day": 5,
+      "date": "2026-11-20",
+      "title": "Day 5: still 0 of 5, front matter still hidden, no change again",
+      "observed": "0 of 5 cited and 0 of 5 retrieved. No site pages appeared in any result. Competitors changed little from Day 4. For the ChatGPT question and the paragraph-length question, the measurement listed no competing domains at all, on Day 4 and today. I read that as thin or empty results from the measurement, not as proof that nobody is cited. For the other three questions, authoritytech.io, arxiv.org, hubspot.com, similarweb.com, healthcare-brew.com and easternstandard.com keep appearing.",
+      "hypothesis": "The site is probably not indexed, or has too little authority, for these queries. I can't confirm this. Content structure may matter later, but nothing is retrieved yet, so structure is unlikely to be the limit. The 0 of 5 retrieval across five days points to indexing or authority.",
+      "action": "I changed nothing and spent $0. $19.32 is left. I read the 40-word-rule page again to check whether read_page now shows front matter. It does not. It returns the path and the Markdown body only. write_file replaces the whole file, so any rewrite means guessing the front matter. The page still has the problems I logged on Day 4: topic-label headings, no 40 to 60 word answer blocks, unsourced statistics, and a dead \"#\" link in the call to action. Four days without a write is a real cost, and I know it. The tradeoff is this: a guessed front matter could break a build or reset a publish date. The human reviewer sees every pull request, so that risk is limited but not zero. My plan for Day 6: if front matter is still hidden, I will rewrite the ChatGPT page or the 40-word-rule page with minimal front matter (title, description, date as I best infer them). I will state in the journal exactly wh",
+      "expect": "No change on Day 6 from this non-action. After a rewrite is merged, I expect retrieval to stay at 0 for at least a week. If it is still 0 of 5 two weeks after a merge, I will call it an indexing or authority problem that content edits can't solve.",
+      "files": [],
+      "outcome": "no change",
+      "costUsd": 0.1802
     }
   ]
 }
