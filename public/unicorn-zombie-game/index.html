@@ -1606,7 +1606,7 @@ function syncModels(dt){
 // ---------- Zombies chase you ----------
 function updateZombies(dt){
   const pos = P.pos;
-  if (safeNow){
+  if (safeNow && unlocked.beach && wave >= GUARD_WAVE){
     // while she hides, some zombies sneak off to guard the OTHER safe places
     const guards = zombies.filter(z=>z.guard).length;
     if (guards < Math.ceil(zombies.length*0.4) && Math.random() < dt*0.7){
@@ -1780,6 +1780,7 @@ function updateParticles(dt){
 // ---------- Safe places ----------
 // Home base, the beach bar, any water (ocean or pools) and the slides are safe: zombies can't get you there.
 // But zombies beaten from a safe place don't count, so every wave has to be finished out in the open!
+const GUARD_WAVE = 6;     // from this wave on (once the beach is open), zombies guard the other safe places while you hide
 const WANDER_WAVE = 15;   // from this wave on, some zombies roam the world instead of charging at you
 const SAFE_NAMES = {home:'Home Base 🏠', bar:'Beach Bar 🍹', water:'In the water 🌊', slide:'Slides 🛝'};
 function safeZone(){
@@ -1993,8 +1994,16 @@ function drawMap(){
     c.fillStyle = p.kind === 'chicken' ? '#ff922b' : p.kind === 'weapon' ? '#ff5fa2' : RANCH[p.kind].css;
     c.beginPath(); c.arc(m[0], m[1], p.kind === 'weapon' ? 9 : 7, 0, TAU); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 2; c.stroke();
   }
-  for (const z of zombies){ const m = toMap(z.g.position.x, z.g.position.z, false); if (!m) continue;
-    c.fillStyle = z.guard ? '#c2410c' : '#2f7a2f'; c.beginPath(); c.arc(m[0], m[1], z.type === 'boss' ? 10 : 5.5, 0, TAU); c.fill(); }
+  const lastFew = toSpawn === 0 && zombies.length <= 5, pulse = Math.sin(time*6);
+  for (const z of zombies){
+    const m = toMap(z.g.position.x, z.g.position.z, false); if (!m) continue;
+    if (lastFew){                                   // the last 5 zombies glow red so they're easy to find
+      c.fillStyle = 'rgba(255,40,40,.28)'; c.beginPath(); c.arc(m[0], m[1], 15 + pulse*3, 0, TAU); c.fill();
+      c.fillStyle = '#ff1f1f'; c.strokeStyle = '#fff'; c.lineWidth = 2.5; c.beginPath(); c.arc(m[0], m[1], 8.5, 0, TAU); c.fill(); c.stroke();
+      continue;
+    }
+    c.fillStyle = z.guard ? '#c2410c' : '#2f7a2f'; c.beginPath(); c.arc(m[0], m[1], z.type === 'boss' ? 10 : 5.5, 0, TAU); c.fill();
+  }
   c.restore();
   c.textAlign = 'center'; c.textBaseline = 'middle';
   const emo = (e, x, z, size) => { const m = toMap(x, z, true); c.font = size + 'px "Apple Color Emoji","Segoe UI Emoji",sans-serif'; c.fillText(e, m[0], m[1]); };
@@ -2003,7 +2012,11 @@ function drawMap(){
   else emo('🔒', 200, 0, 24);
   RACES.forEach(r=>{ if (!r.beach || unlocked.beach) emo('🏁', r.rings[0][0], r.rings[0][2], 20); });
   if (!mounted) emo('🦄', U.g.position.x, U.g.position.z, 24);
-  if (toSpawn === 0 && zombies.length <= 4) zombies.forEach(z=>{ if (!toMap(z.g.position.x, z.g.position.z, false)) emo('🧟', z.g.position.x, z.g.position.z, 20); });
+  if (lastFew) zombies.forEach(z=>{                // off the map? show a red marker at the edge pointing the way
+    if (toMap(z.g.position.x, z.g.position.z, false)) return;
+    const m = toMap(z.g.position.x, z.g.position.z, true);
+    c.fillStyle = '#ff1f1f'; c.strokeStyle = '#fff'; c.lineWidth = 3; c.beginPath(); c.arc(m[0], m[1], 10 + pulse*1.5, 0, TAU); c.fill(); c.stroke();
+  });
   c.save(); c.translate(R, R); c.rotate(-(P.ang - camYaw));
   c.fillStyle = '#ff4d9a'; c.strokeStyle = '#fff'; c.lineWidth = 3;
   c.beginPath(); c.moveTo(0,-14); c.lineTo(10,10); c.lineTo(0,5); c.lineTo(-10,10); c.closePath(); c.fill(); c.stroke(); c.restore();
@@ -2033,7 +2046,7 @@ function updateHUD(force){
   $('tip').textContent = raceState.active ? '🏁 Ring ' + raceState.idx + ' of ' + raceState.active.rings.length + ' · ' + Math.ceil(raceState.t) + 's'
     : safeNow ? '🛡️ Safe: ' + SAFE_NAMES[safeNow] + (inBase ? ' · healing' : '')
     : P.health < 35 ? 'Find some chicken! 🍗'
-    : toSpawn === 0 && left > 0 && left <= 4 ? '🧟 Only ' + left + ' left! Hunt them on the map'
+    : toSpawn === 0 && left > 0 && left <= 5 ? '🧟 Only ' + left + ' left! Find the red dots on the map'
     : (slidesDone === 0 && time > 25 ? 'Follow 🌈 on the map to the slide!' : '');
   $('score').textContent = '⭐ ' + score;
   $('coins').textContent = '🪙 ' + fmtNum(save.coins);
@@ -2238,7 +2251,7 @@ const EXPLAIN = {
   'The ocean': 'The ocean is drawn by a <b>shader</b>: a tiny program the graphics card runs for every single pixel, 60 times a second. It adds up a few wave patterns, mixes turquoise near the shore into deep blue far out, reflects the sky, adds sparkles where the sun hits, and paints white foam at the water\'s edge.',
   'Map layout: ground, ramps, towers and water': '<b>groundH</b> answers "how high is the ground here?" (sand, sea floor, ramps, towers and the pier). <b>waterSurface</b> answers "is there water here?", which is how the game knows when to swim. <b>inWorld</b> keeps you inside the map and keeps the beach locked until Wave 4.',
   'Beach and resort': 'Builds the beach: sand that slopes into the sea, hotels, pools, three water slides, palm trees, umbrellas, the palapa beach bar, the pier, buoys and sailboats. Palm trees are "instanced" so 60 of them draw as fast as one.',
-  'Safe places': 'Zombies can\'t enter safe places, but a zombie beaten from a safe place gets replaced. That\'s how the game stops you from winning while hiding! While you hide, some zombies sneak off to guard the other safe places.',
+  'Safe places': 'Zombies can\'t enter safe places, but a zombie beaten from a safe place gets replaced. That\'s how the game stops you from winning while hiding! From Wave 6, while you hide, some zombies sneak off to guard the other safe places.',
   'Beach bar': 'The menu is a list. Each item has a price and a <b>use</b> function that runs when you buy it, like adding health or turning on a power.',
   'Ring races': 'Each race is a list of ring positions. Stand on the yellow circle and press E to start. The game checks how far the princess is from the next ring (using the Pythagorean theorem!) and moves on when she\'s close enough.',
   'Seashells and beach ball': 'The beach ball has simple <b>physics</b>: gravity pulls it down, it bounces (losing some speed each time), it floats on water, and it slows down as it rolls.',
