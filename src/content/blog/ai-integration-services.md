@@ -74,6 +74,8 @@ A good AI adoption strategy starts by naming where you are today. Most businesse
 
 Most businesses reading this are in stage 1 or 2. That is a normal place to start. The data shows how much room there is: as of May 2026, the U.S. Census Bureau found that [19.8% of U.S. firms used AI in their business](https://census.gov/library/stories/2026/05/ai-use-businesses.html), with use far more common at large firms than small ones.
 
+What stage 5 means for an established business, and whether it is a realistic goal, is covered in [What is an AI-native company?](/blog/what-is-an-ai-native-company/) For another way to place your company, see [AI-native vs AI-enabled vs AI-first](/blog/ai-native-vs-ai-enabled/).
+
 ## What is an AI readiness assessment?
 
 An AI readiness assessment is a structured review of your workflows, tools, data, people, and risks that shows where AI will pay off and what has to be in place first. It ends with a ranked list of opportunities, so you start with the work that saves the most time at the lowest risk.
@@ -134,7 +136,7 @@ Training is the step companies skip most easily. Only [39% of AI users had recei
 
 ### Step 6: Measure results, then scale to every department
 
-Once the pilot shows measurable time saved or quality gained, repeat the pattern in the next department. Track a few numbers per workflow: hours saved, error rate, and cost per task. Review them every quarter and retire what does not pay off.
+Once the pilot shows measurable time saved or quality gained, repeat the pattern in the next department. Track a few numbers per workflow: hours saved, error rate, and cost per task. Review them every quarter and retire what does not pay off. For how to rebuild each workflow so AI does the routine work, and how the operating model changes as you go, see [How to become an AI-native company](/blog/how-to-become-ai-native/).
 
 **How I help:** I build the rollout plan and backlog, and I automate the reporting so results show up without anyone rebuilding a spreadsheet.
 

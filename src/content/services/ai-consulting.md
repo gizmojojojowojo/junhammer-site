@@ -33,12 +33,16 @@ Most companies already pay for AI tools. Fewer have changed how work gets done. 
 
 I start with your real workflows: how content gets researched, how reports get built, how leads get qualified, where people copy and paste between systems. Then I rank the opportunities by time saved, risk and effort, and we pick the few that matter.
 
+If you want to know where your company stands today, the self-check in [AI-native vs AI-enabled vs AI-first](/blog/ai-native-vs-ai-enabled/) is a quick starting point. [What is an AI-native company?](/blog/what-is-an-ai-native-company/) describes where this work leads.
+
 ## How an engagement runs
 
 1. **Discovery.** Interviews with the people doing the work, plus a look at your tools, data and constraints.
 2. **Opportunity map.** A ranked list of AI use cases with expected effort, risk and payoff.
 3. **Pilot.** One workflow set up end to end, with prompts, review steps and a simple way to measure results.
 4. **Roll-out plan.** Guardrails, training and a backlog, including anything worth building as a custom tool.
+
+The full sequence, from usage rules to expanding in waves, is laid out in [How to become an AI-native company](/blog/how-to-become-ai-native/).
 
 ## Why work with me
 
