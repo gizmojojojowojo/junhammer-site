@@ -34,7 +34,7 @@ faqs:
 ---
 ## Start with where the hours go
 
-Before building anything, I look at how your team spends its week. The best candidates repeat often, follow a process someone could write down and produce output a person can check. Lead intake, follow-up and monthly reporting are the usual first picks.
+Before building anything, I look at how your team spends its week. The best candidates repeat often, follow a process someone could write down and produce output a person can check. Lead intake, follow-up and monthly reporting are the usual first picks. [How to become an AI-native company](/blog/how-to-become-ai-native/) shows how I score candidate workflows and test the first build.
 
 ## What I automate
 

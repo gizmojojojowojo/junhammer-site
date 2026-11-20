@@ -6,6 +6,7 @@ date: "2026-11-20"
 topic: "AI"
 pillar: false
 draft: false
+image: "/images/posts/ai-native-vs-ai-enabled.webp"
 faqs:
   - q: "What is the difference between AI-native and AI-enabled?"
     a: "An AI-enabled company adds AI to work that already exists, so the work still runs without it. An AI-native company designs the work around AI, so important functions stop if the AI is switched off."

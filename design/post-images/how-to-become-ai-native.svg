@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#060e47" flood-opacity=".25"/></filter>
+  </defs>
+  <rect width="600" height="630" fill="#f6f3f4"/>
+  <rect x="600" width="600" height="630" fill="#060e47"/>
+  <!-- road -->
+  <path d="M60 500 C 200 500, 230 360, 350 360 S 520 470, 640 420 S 820 220, 940 230 S 1080 140, 1140 120" fill="none" stroke="#0b3a8c" stroke-width="34" stroke-linecap="round" opacity=".18"/>
+  <path d="M60 500 C 200 500, 230 360, 350 360 S 520 470, 640 420 S 820 220, 940 230 S 1080 140, 1140 120" fill="none" stroke="#0b3a8c" stroke-width="5" stroke-dasharray="14 12" stroke-linecap="round"/>
+  <path d="M640 420 S 820 220, 940 230 S 1080 140, 1140 120" fill="none" stroke="#f2c6d1" stroke-width="5" stroke-dasharray="14 12" stroke-linecap="round"/>
+  <!-- milestones -->
+  <g filter="url(#sh)">
+    <circle cx="150" cy="490" r="38" fill="#0b3a8c"/>
+    <circle cx="350" cy="360" r="38" fill="#0b3a8c"/>
+    <circle cx="530" cy="440" r="38" fill="#0b3a8c"/>
+    <circle cx="760" cy="300" r="38" fill="#a1596c"/>
+    <circle cx="940" cy="230" r="38" fill="#0b3a8c" stroke="#f2c6d1" stroke-width="4"/>
+    <rect x="1060" y="90" width="90" height="90" rx="20" fill="#f2c6d1"/>
+  </g>
+  <g stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M134 490 l11 11 20 -22"/><path d="M334 360 l11 11 20 -22"/><path d="M514 440 l11 11 20 -22"/>
+  </g>
+  <!-- gear-like work-in-progress mark -->
+  <circle cx="760" cy="300" r="14" fill="none" stroke="#ffffff" stroke-width="5"/>
+  <g stroke="#ffffff" stroke-width="5" stroke-linecap="round"><path d="M760 276 v-6"/><path d="M760 330 v-6"/><path d="M736 300 h-6"/><path d="M790 300 h-6"/></g>
+  <circle cx="940" cy="230" r="10" fill="#f2c6d1"/>
+  <!-- destination: core with spokes -->
+  <g stroke="#45094b" stroke-width="4" stroke-linecap="round"><path d="M1105 135 v-30"/><path d="M1105 135 l26 -15"/><path d="M1105 135 l26 15"/><path d="M1105 135 v30"/><path d="M1105 135 l-26 15"/><path d="M1105 135 l-26 -15"/></g><g fill="#45094b"><circle cx="1105" cy="105" r="6"/><circle cx="1131" cy="120" r="6"/><circle cx="1131" cy="150" r="6"/><circle cx="1105" cy="165" r="6"/><circle cx="1079" cy="150" r="6"/><circle cx="1079" cy="120" r="6"/></g>
+  <circle cx="1105" cy="135" r="15" fill="#45094b"/><circle cx="1105" cy="135" r="6" fill="#ffffff"/>
+</svg>

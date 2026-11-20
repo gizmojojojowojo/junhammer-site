@@ -6,6 +6,7 @@ date: "2026-11-20"
 topic: "AI"
 pillar: false
 draft: false
+image: "/images/posts/how-to-become-ai-native.webp"
 faqs:
   - q: "How does an established company become AI-native?"
     a: "Set rules for AI use, write down how the company works, pick one high-volume workflow, rebuild it so AI does the routine steps, test it against known answers, measure the results, and repeat with the next workflow."

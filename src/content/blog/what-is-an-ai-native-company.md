@@ -6,6 +6,7 @@ date: "2026-11-20"
 topic: "AI"
 pillar: true
 draft: false
+image: "/images/posts/what-is-an-ai-native-company.webp"
 faqs:
   - q: "What is an AI-native company?"
     a: "An AI-native company is one whose products, workflows and operating model are designed around AI, so AI does core work rather than assisting with it. If you switched the AI off, important parts of the business would stop."
