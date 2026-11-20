@@ -1231,7 +1231,7 @@ function banner(text){ const b = $('banner'); b.textContent = text; b.classList.
 let toastTimer = 0;
 function toast(text){        // a friendly notice that slides in at the top, then slides away
   const t = $('toast'); t.textContent = text; t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 4500);
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 10000);   // stays up for 10 seconds
 }
 function floatText(text, pos, color='#fff'){
   const v = new THREE.Vector3(pos.x, (pos === P.pos ? P.y : (pos.y || 0)) + 3.5, pos.z); v.project(camera);
@@ -1453,7 +1453,7 @@ function killZombie(z){
   if (safeNow){
     // no camping! a zombie beaten from a safe place gets replaced, and drops nothing
     toSpawn++;
-    if (time - safeKillMsgT > 20){ safeKillMsgT = time; toast("🛡️ You can't end a wave from a safe area. Go out and fight 'em like a girl! 💪"); }
+    if (time - safeKillMsgT > 15){ safeKillMsgT = time; toast("🛡️ You can't end a wave from a safe area. Go out and fight 'em like a girl! 💪"); }
     return;
   }
   const zx = z.g.position.x, zz = z.g.position.z;
