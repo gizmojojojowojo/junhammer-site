@@ -3,8 +3,8 @@
   "budgetUsd": 20,
   "days": 30,
   "startedAt": "2026-11-14",
-  "day": 5,
-  "spentUsd": 0.8571,
+  "day": 6,
+  "spentUsd": 1.0944,
   "targets": [
     {
       "question": "Why isn't my website content showing up in ChatGPT answers?",
@@ -456,6 +456,94 @@
           "sitePages": []
         }
       ]
+    },
+    {
+      "date": "2026-11-21",
+      "day": 5,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "dev.to",
+            "pavadotech.com",
+            "web2agents.com",
+            "seoskill.dev",
+            "startupfortune.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 9,
+          "citedDomains": [
+            "getaicited.co",
+            "aioseo.com",
+            "aeohunt.com",
+            "digitalstrategyforce.com",
+            "ziptie.dev",
+            "phantom-iq.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "lilachbullock.com",
+            "geoclarity.io",
+            "airops.com",
+            "prsay.prsa.org",
+            "ahrefs.com",
+            "tjrobertson.com",
+            "arxiv.org"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "novastacks-ai.com",
+            "columnfivemedia.com",
+            "blog.hubspot.com",
+            "withmaya.ai",
+            "chatterbuzzmedia.com",
+            "onemetrik.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "contently.com",
+            "blog.ratings.md",
+            "healthcare-brew.com"
+          ],
+          "sitePages": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -518,6 +606,20 @@
       "files": [],
       "outcome": "no change",
       "costUsd": 0.1802
+    },
+    {
+      "day": 6,
+      "date": "2026-11-21",
+      "title": "Day 6: still 0 of 5, and I finally rewrote a page with guessed front matter",
+      "observed": "Still 0 of 5 cited. The site was not retrieved for any question, and sitePagesSeen is empty for all five. Day 5 and Day 6 competitor lists are almost the same. For example, dev.to, pavadotech.com and web2agents.com are cited for the ChatGPT question, and lilachbullock.com, geoclarity.io and airops.com for the paragraph-length question. The competitors are not moving much, and neither is this site. read_page still hides front matter. It returns the path and the Markdown body only.",
+      "hypothesis": "The site is not being retrieved at all, so the cause is probably indexing, crawler access or low authority, and not paragraph structure. This rewrite is cheap and worth doing, but I doubt it moves retrieval on its own.",
+      "action": "I rewrote one file: src/content/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026.md. It targets the question \"How long should a paragraph be to get cited by AI search engines?\". Changes: (1) every heading is now a question; (2) each section opens with a direct answer, and the first one answers the target question in the first sentence; (3) I cut the statistics I could not verify (82.5% of ChatGPT citations, the 2.7 factor, the 2.5x table claim, the 45.5% Ahrefs figure, the SMX Munich claim, the 2024 schema experiment). I kept one sourced claim and linked the Princeton GEO paper on arXiv, worded as \"up to about 40%\" in a research setting; (4) I said plainly that 40 to 60 words is a heuristic, not a measured threshold; (5) I fixed the dead \"#\" link so it points to /the-complete-aeo-playbook/; (6) I kept the internal links to the sibling pages. The front matter is ",
+      "expect": "No change on Day 7, because the PR needs review and merge first. If it merges, I expect retrieval for the paragraph-length question to stay at 0 for about a week. If it is still 0 of 5 two weeks after merge, I will call it an indexing or authority problem that content edits can't fix. Then I will try a new page on a narrower question.",
+      "files": [
+        "src/content/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026.md"
+      ],
+      "outcome": "pull request opened",
+      "costUsd": 0.2373
     }
   ]
 }
