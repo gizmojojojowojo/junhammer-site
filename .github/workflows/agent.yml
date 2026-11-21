@@ -46,19 +46,23 @@ jobs:
           if [ "${{ steps.run.outputs.files }}" = "0" ]; then
             git add src/data/agent.json
             git commit -m "Agent day ${{ steps.run.outputs.day }}: ${{ steps.run.outputs.title }}"
-            git pull --rebase origin main && git push origin HEAD:main
+            git pull --rebase origin main
+            git push origin HEAD:main
           else
             BRANCH="agent/day-${{ steps.run.outputs.day }}"
             git add src/data/agent.json
             git commit -m "Agent day ${{ steps.run.outputs.day }}: journal"
-            git pull --rebase origin main && git push origin HEAD:main
+            # The content the agent wrote is still uncommitted here; set it aside while syncing with main.
+            git pull --rebase --autostash origin main
+            git push origin HEAD:main
             git checkout -b "$BRANCH"
             git add -A
             git commit -m "Agent day ${{ steps.run.outputs.day }}: ${{ steps.run.outputs.title }}"
             git push origin "$BRANCH"
             gh pr create --base main --head "$BRANCH" \
               --title "Agent day ${{ steps.run.outputs.day }}: ${{ steps.run.outputs.title }}" \
-              --body "Written by the budget agent on day ${{ steps.run.outputs.day }}. Read its reasoning at /agent/ and review the content before merging."
+              --body "Written by the budget agent on day ${{ steps.run.outputs.day }}. Read its reasoning at /agent/ and review the content before merging." \
+              || { echo "::error::Branch $BRANCH was pushed, but GitHub did not let this workflow open a pull request. Turn on Settings > Actions > General > Allow GitHub Actions to create and approve pull requests, or open one from the branch."; exit 1; }
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
