@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-21T21:39:34.150Z",
-  "commit": "5483d6c",
+  "ranAt": "2026-11-21T21:45:07.597Z",
+  "commit": "d472d0d",
   "retrieval": {
     "questions": 60,
     "passages": 828,
@@ -20,7 +20,7 @@
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 57
+        "passed": 58
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 54
+        "passed": 55
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 57
+        "passed": 56
       },
       {
         "id": "short",
@@ -46,9 +46,9 @@
     "offTopicReachedModel": 4,
     "offTopicDeclined": 2,
     "avgTokensIn": 2357,
-    "avgTokensOut": 308,
-    "ranAt": "2026-11-21T21:39:34.150Z",
-    "commit": "5483d6c"
+    "avgTokensOut": 323,
+    "ranAt": "2026-11-21T21:45:07.597Z",
+    "commit": "d472d0d"
   },
   "questions": [
     {
@@ -102,8 +102,12 @@
     {
       "q": "How do I get featured in Google AI Overviews?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Google says AI Overviews aim to highlight high-quality content that best answers the query, so your"
     },
     {
       "q": "What is semantic search?",
@@ -120,8 +124,11 @@
     {
       "q": "What is E-E-A-T and how do I show it to AI systems?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "E-E-A-T stands for Experience, Expertise, Authoritativeness and Trustworthiness. Google's guidelines emphasize these factors for judging content quality, and they can affect whether a site appears in AI Overviews [3]. AI search engines evaluate them through computational methods, so they read machine-readable signals rather than only reputation [1].\n\nTo show these signals to AI systems, the site suggests:\n\n- **Structured data:** Use schema markup for author information, professional qualifications and organizational affiliations, since credentials in flowing prose may not register as clearly [1].\n- **Author credentials:** Include detailed author bios highlighting relevant qualifications and "
     },
     {
       "q": "Which schema markup matters for medical pages?",
@@ -172,7 +179,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "AI integration services are the broader work of taking a business from little or no AI use to AI across its workflows. They cover assessment, policy, tool selection, training, and measurement, and AI workflow automation is one part of them [1]. Moving a company up from AI-assisted to AI-enabled is mostly about policy, approved tools and integrations, and the site's guide on [AI integration services](/blog/ai-integration-services/) explains the path from zero AI to AI in every workflow [3]. The site also suggests starting with a one or two page policy that sets which AI tools staff may use and what data can go into them [4]. For pricing or a scoped proposal, the [contact page](/contact/) is t"
+      "answer": "AI integration services cover more than automation alone. Automation handles a specific sequence of steps, while integration services also cover the assessment, policy, tool selection, training, and measurement that make automation work across a business [1]. Joe's post on the topic describes a path from having no AI to AI in every workflow, and it is the best place to start [1]. For a sense of scope, see [AI integration services: how to go from zero AI to AI in every workflow](/blog/ai-integration-services/). If you want a price or a proposal, this site does not give figures, but the most reliable route is a scoped proposal after an initial conversation about your workflows [2]. You can rea"
     },
     {
       "q": "Is SEO dead?",
@@ -189,11 +196,8 @@
     {
       "q": "What should I look for when hiring an AEO consultant?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ]
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What am I actually paying for with AEO services?",
@@ -202,7 +206,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Based on this site's AEO service page, an AEO program covers five areas: a visibility baseline of the questions your buyers ask and which brands each AI assistant cites today, content rebuilt around direct, self-contained answers, entity and schema work, technical access such as AI crawler rules and llms.txt, and monthly reporting of citation share next to your SEO numbers ([Answer Engine Optimization](/services/answer-engine-optimization/); [3]). AEO itself means structuring content so AI syst"
+      "answer": "Joe's AEO program covers five areas: a visibility baseline that checks which brands AI assistants cite for the questions your buyers ask, content rebuilt around direct answers, entity and schema work, technical access such as crawler rules and page speed, and monthly reporting on citation share next to your SEO numbers [3]. AEO itself means structuring content so"
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -259,7 +263,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado's south metro and works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, as well as teams across the US [6]. He is also described as based in Denver, and he works with teams anywhere in the US [8]. For a project, you can reach him through the contact page at /contact/ [8]."
+      "answer": "Joe Unhammer is based in Colorado. He works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [6]. He is based in the Denver metro area and works with teams anywhere in the US [7][8]."
     },
     {
       "q": "What AI tools has Joe built?",
@@ -312,11 +316,8 @@
     {
       "q": "Can you automate our marketing reports?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "Yes. Joe automates reporting that pulls data from your CRM, GA4 and Search Console, then summarizes it and formats it into the report your team or clients expect [1]. He has done this for GA4 and Search Console reporting, producing ready-to-send client deliverables [2]. In marketing workflows, a person typically still handles final edits and fact checks [4]. To discuss your setup, see the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Do you offer AI strategy consulting?",
@@ -333,8 +334,11 @@
     {
       "q": "How do I get in touch about a project?",
       "rank": 2,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "To start a project, send Joe what you need, your timeline, and your site or product URL. Email brubeckunhammer@gmail.com, or use the [contact page](/contact/). He is based in Denver, Colorado, works with teams anywhere in the US, and replies within two business days [3]. You can also find him on [LinkedIn](https://www.linkedin.com/in/junhammer/) [3]."
     },
     {
       "q": "Does Joe work with companies in Denver?",
@@ -367,7 +371,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe's FAQ says SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial compounding results are often visible at six to twelve months [1]. AEO and GEO visibility in AI systems can sometimes shift faster [1]. For a timeline specific to your site, see the contact page at /contact/."
+      "answer": "SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins from foundational issues can show impact within weeks. Meaningful organic traffic growth typically appears between three and six months, with substantial, compounding results often visible at six to twelve months [1]. Visibility in AI systems for AEO and GEO can shift faster, and Joe sets expectations based on each situation [1]."
     },
     {
       "q": "aeo vs geo",
@@ -378,11 +382,8 @@
     {
       "q": "chatgpt not showing my site",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ]
+      "pass": true,
+      "failed": []
     },
     {
       "q": "joe army",
@@ -397,7 +398,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "An MCP server is the piece that lets an AI application such as Claude connect to outside tools and data. It can let Claude read from a database, query an analytics account or take an action in another system [1]. The Model Context Protocol is an open standard for this kind of connection, and with an MCP server Claude can read your CRM or reporting data within limits you set, usually read-only to start [2]. Joe mostly builds with Claude and MCP [3]. For a project, see [/contact/](/contact/)."
+      "answer": "An MCP server is the piece that lets an AI application such as Claude connect to outside tools and data. It can let Claude read from a database, query an analytics account or take an action in another system [1]. Joe uses MCP servers to connect AI to systems like a CRM or reporting data, usually read-only to start, within limits the business sets [2]. You can learn more on the [AI automation](/services/ai-automation/) page, and for questions about working with Joe, use the [contact page](/contact/)."
     },
     {
       "q": "agents vs workflows",
@@ -425,7 +426,7 @@
         "Cites a source",
         "Cites a page that holds the answer"
       ],
-      "answer": "This site covers AI Overviews for healthcare. Joe has led answer engine optimization for enterprise hospital systems, and his [AEO service](/services/answer-engine-optimization/) includ"
+      "answer": "This site has a healthcare article on getting featured in AI Overviews. It suggests tracking appearances by regularly testing relevant healthcare queries, and treating featured snippet capture as a proxy metric, since content that earns snippets often performs well in AI Overviews ["
     },
     {
       "q": "what do you charge",
