@@ -1,11 +1,14 @@
 ---
 title: "The 40-Word Rule: How to Structure Paragraphs for AI Citations in 2026"
+seoTitle: "Show Up in AI Search With the 40-word Rule"
 description: "How long should a paragraph be to get cited by AI search? Put a 40 to 60 word answer under each question heading, then add detail. Here is the rule and how to apply it."
-date: 2026-11-22
-pubDate: 2026-11-22
-updatedDate: 2026-11-22
-author: "Joe Unhammer"
+slug: "the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026"
+date: "2026-03-24"
+updated: "2026-11-21"
+topic: "AEO"
+pillar: false
 draft: false
+image: "/images/wp/2025/07/hand-using-laptop-with-secure-online-technology-data-policy.webp"
 ---
 
 ## How long should a paragraph be to get cited by AI search engines?

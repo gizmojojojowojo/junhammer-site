@@ -89,3 +89,19 @@ test('a model that never calls the tool, or an API error, fails loudly', async (
   const bad = async () => new Response('{"type":"error"}', { status: 400 });
   await assert.rejects(callForTool({ key: 'k', toolName: 'report', fetchImpl: bad, payload: { model: 'm', messages: [] } }), /report: 400/);
 });
+
+test('edits keep the file front matter; new files need required fields', async () => {
+  const { keepFrontMatter, missingFields } = await import('../scripts/agent/lib.mjs');
+  const existing = '---\ntitle: "Old"\ndescription: "old"\ndate: "2026-03-24"\ntopic: "AEO"\nimage: "/a.webp"\n---\nOld body\n';
+  const proposed = '---\ntitle: "Guess"\ndescription: "New summary"\ndate: 2026-11-22\nauthor: "x"\n---\nNew body\n';
+  const out = keepFrontMatter(existing, proposed, '2026-11-21');
+  assert.match(out, /title: "Old"/);
+  assert.match(out, /description: "New summary"/);
+  assert.match(out, /date: "2026-03-24"/);
+  assert.match(out, /topic: "AEO"/);
+  assert.match(out, /updated: "2026-11-21"/);
+  assert.doesNotMatch(out, /author:/);
+  assert.match(out, /\nNew body\n$/);
+  assert.deepEqual(missingFields('src/content/blog/new.md', '---\ntitle: "x"\ndate: 2026-01-01\n---\nbody'), ['topic']);
+  assert.deepEqual(missingFields('src/content/blog/new.md', '---\ntitle: "x"\ndate: 2026-01-01\ntopic: AEO\n---\nbody'), []);
+});

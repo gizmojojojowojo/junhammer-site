@@ -7,9 +7,9 @@
 // nothing it produces reaches the live site without a human merging it.
 //
 // Run: ANTHROPIC_API_KEY=... node scripts/agent/run.mjs [--dry]
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { CONFIG, SITE, checkWrite, cleanTargets, costOf, measurementBrief, readAnswer, recordEntry, recordMeasurement, stopReason } from './lib.mjs';
+import { CONFIG, SITE, checkWrite, cleanTargets, costOf, keepFrontMatter, measurementBrief, missingFields, readAnswer, recordEntry, recordMeasurement, stopReason, today } from './lib.mjs';
 
 const root = new URL('../../', import.meta.url);
 const STATE = new URL('src/data/agent.json', root);
@@ -188,11 +188,17 @@ async function decide(results) {
       let result;
       if (call.name === 'read_page') {
         const page = pages.find((p) => p.url === call.input?.url);
-        result = page ? { url: page.url, title: page.title, path: pathOf(page.url), markdown: (page.body || '').slice(0, 30000) } : { error: 'No such page.' };
+        const file = page && existsSync(new URL(pathOf(page.url), root)) ? readFileSync(new URL(pathOf(page.url), root), 'utf8') : '';
+        const frontMatter = (/^---\n[\s\S]*?\n---\n/.exec(file) || [''])[0];
+        result = page ? { url: page.url, title: page.title, path: pathOf(page.url), front_matter: frontMatter || undefined, markdown: (page.body || '').slice(0, 30000) } : { error: 'No such page.' };
         say(`  read ${call.input?.url}`);
       } else if (call.name === 'write_file') {
-        const { path, content } = call.input || {};
-        const problem = checkWrite(path, content, written);
+        const { path } = call.input || {};
+        let { content } = call.input || {};
+        const exists = typeof path === 'string' && existsSync(new URL(path, root));
+        if (exists && typeof content === 'string') content = keepFrontMatter(readFileSync(new URL(path, root), 'utf8'), content, today());
+        const missing = !exists && typeof content === 'string' ? missingFields(path, content) : [];
+        const problem = checkWrite(path, content, written) || (missing.length ? `A new file needs these front matter fields: ${missing.join(', ')}.` : null);
         if (problem) result = { error: problem };
         else {
           if (!dry) {

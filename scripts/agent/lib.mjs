@@ -57,6 +57,47 @@ export function checkWrite(path, content, written) {
 
 export const today = (now = new Date()) => now.toISOString().slice(0, 10);
 
+const FM = /^---\n([\s\S]*?)\n---\n?/;
+const REQUIRED = { blog: ['title', 'date', 'topic'], services: ['title', 'navLabel', 'summary'], work: ['title', 'client', 'summary'], pages: ['title'] };
+
+/** Front matter keys present at the top level of a Markdown file. */
+export function frontMatterKeys(content) {
+  const m = FM.exec(content || '');
+  return m ? [...m[1].matchAll(/^([A-Za-z][\w-]*):/gm)].map((k) => k[1]) : [];
+}
+
+/**
+ * The agent sees a page's text, not its file, so it guesses front matter. When it edits an
+ * existing file, keep that file's front matter as it is, take only a new one-line description
+ * or seoTitle from the agent, and record today's date as `updated`.
+ */
+export function keepFrontMatter(existing, proposed, day) {
+  const old = FM.exec(existing || '');
+  const next = FM.exec(proposed || '');
+  if (!old || !next) return proposed;
+  let lines = old[1].split('\n');
+  for (const key of ['description', 'seoTitle']) {
+    const line = next[1].split('\n').find((l) => l.startsWith(key + ':') && l.slice(key.length + 1).trim());
+    if (!line) continue;
+    const at = lines.findIndex((l) => l.startsWith(key + ':'));
+    if (at >= 0) lines[at] = line;
+    else lines.splice(1, 0, line);
+  }
+  const updated = `updated: "${day}"`;
+  const at = lines.findIndex((l) => l.startsWith('updated:'));
+  if (at >= 0) lines[at] = updated;
+  else lines.push(updated);
+  return `---\n${lines.join('\n')}\n---\n` + proposed.slice(next[0].length);
+}
+
+/** A new file must carry the fields its collection requires, or the site build fails. */
+export function missingFields(path, content) {
+  const kind = (path.match(/^src\/content\/(\w+)\//) || [])[1];
+  const keys = frontMatterKeys(content);
+  return (REQUIRED[kind] || []).filter((k) => !keys.includes(k));
+}
+
+
 /** Why today's run should not happen, or null. */
 export function stopReason(state, now = new Date()) {
   if (state.spentUsd >= state.budgetUsd) return 'The budget is spent.';
