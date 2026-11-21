@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZDK698HC2"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZDK698HC2');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Princess Unicorn vs. Zombies</title>
 <meta name="description" content="Princess Unicorn vs. Zombies: a 3D browser game made with three.js. Ride a unicorn, blast silly zombies, swim at Unicorn Beach and see how the code works.">
@@ -486,14 +484,14 @@ function rampH(r, x, z){
   const lx = x - r.x0, lz = z - r.z0, t = lx*r.dx + lz*r.dz, s = -lx*r.dz + lz*r.dx;
   return (t >= 0 && t <= r.len && Math.abs(s) < r.w/2) ? t/r.len*r.h : -99;
 }
-function structureH(x, z){
-  let h = -99;
+function structureH(x, z, refY){
+  let h = slideH(x, z, refY);
   for (const r of RAMPS) h = Math.max(h, rampH(r, x, z));
   for (const T of TOWERS) if (Math.hypot(x-T.x, z-T.z) < T.r) h = Math.max(h, T.h);
   for (const p of PLATFORMS) if (inRect(p, x, z)) h = Math.max(h, p.h);
   return h;
 }
-function groundH(x, z){ return Math.max(terrainH(x, z), structureH(x, z)); }
+function groundH(x, z, refY){ return Math.max(terrainH(x, z), structureH(x, z, refY)); }
 function waterSurface(x, z){
   for (const p of POOLS) if (inRect(p, x, z)) return p.surf;
   if (x > 236 && terrainH(x, z) < -0.05) return 0;
@@ -528,6 +526,33 @@ const SLIDES = SLIDE_DEFS.map(d=>{
   const curve = new THREE.CatmullRomCurve3(d.pts.map(p=>new THREE.Vector3(p[0], p[1], p[2])), false, 'catmullrom', 0.5);
   return Object.assign({}, d, {curve, len:curve.getLength(), start:curve.getPointAt(0)});
 });
+// you can walk on the slides too: sample points every half step along each slide, sorted into a grid so they're quick to look up
+const SLIDE_GRID = new Map(), GRID = 4;
+const gridKey = (x, z) => Math.floor(x/GRID) + ',' + Math.floor(z/GRID);
+SLIDES.forEach(sl=>{
+  const n = Math.ceil(sl.len/0.5); sl.samples = [];
+  for (let i=0;i<=n;i++){ const p = sl.curve.getPointAt(i/n), s = {x:p.x, y:p.y, z:p.z}; sl.samples.push(s);
+    const k = gridKey(p.x, p.z); if (!SLIDE_GRID.has(k)) SLIDE_GRID.set(k, []); SLIDE_GRID.get(k).push(s); }
+  const t = sl.curve.getTangentAt(0), l = Math.hypot(t.x, t.z) || 1; sl.dir = {x:t.x/l, z:t.z/l};   // which way is "down the slide"
+});
+// height of a slide's floor here. refY = how high she is now: slide parts far above her are overhead, not floor
+function slideH(x, z, refY){
+  let best = -99; const cx = Math.floor(x/GRID), cz = Math.floor(z/GRID);
+  for (let i=-1;i<=1;i++) for (let j=-1;j<=1;j++){
+    const a = SLIDE_GRID.get((cx+i) + ',' + (cz+j)); if (!a) continue;
+    for (const p of a) if ((x-p.x)*(x-p.x) + (z-p.z)*(z-p.z) < 4.0 && p.y > best && (refY === undefined || p.y <= refY + 2.3)) best = p.y;
+  }
+  return best;
+}
+// the middle of the closest slide floor (used to keep her from drifting off the side while walking)
+function slideNearest(x, z, refY){
+  let best = null, bd = 6.25; const cx = Math.floor(x/GRID), cz = Math.floor(z/GRID);
+  for (let i=-1;i<=1;i++) for (let j=-1;j<=1;j++){
+    const a = SLIDE_GRID.get((cx+i) + ',' + (cz+j)); if (!a) continue;
+    for (const p of a){ const d = (x-p.x)*(x-p.x) + (z-p.z)*(z-p.z); if (d < bd && Math.abs(p.y - refY) < 1) { bd = d; best = p; } }
+  }
+  return best;
+}
 // ring races: fly through the rainbow rings before time runs out
 function ringLoop(cx, cz, rx, rz, n){ const pts = []; for (let i=0;i<n;i++){ const a = i/n*TAU; pts.push([cx + Math.cos(a)*rx, 2.6, cz + Math.sin(a)*rz]); } return pts; }
 const RACES = [
@@ -612,11 +637,17 @@ function buildSlideMesh(S){
   g.setIndex(idx); g.computeVertexNormals();
   const m = new THREE.Mesh(g, new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}));
   m.castShadow = true; scene.add(m);
-  const supG = new THREE.CylinderGeometry(0.22,0.22,1,8);
-  const n = Math.max(6, Math.round(S.len/9));
-  for (let i=1;i<n;i++){
-    const c = S.curve.getPointAt(i/n), base = Math.max(-9, terrainH(c.x, c.z));
-    if (c.y - base > 0.8){ const s = add(supG, L(0xffffff), c.x, (c.y+base)/2, c.z, scene); s.scale.y = c.y - base; }
+  // support poles: only where the pole won't poke up through another part of a slide, and stopping just under the slide
+  const supG = new THREE.CylinderGeometry(0.22,0.22,1,8), pts = S.samples;
+  let lastI = -99;
+  for (let i=6;i<pts.length-3;i+=2){
+    if (i - lastI < 14) continue;
+    const c = pts[i], base = Math.max(-9, terrainH(c.x, c.z)), top = c.y - 0.12;
+    if (top - base < 0.8 || TOWERS.some(T=>Math.hypot(c.x-T.x, c.z-T.z) < T.r + 0.6)) continue;
+    const inTheWay = SLIDES.some(o=>o.samples.some((s,k)=>(o !== S || Math.abs(k - i) > 12) &&
+      (c.x-s.x)*(c.x-s.x) + (c.z-s.z)*(c.z-s.z) < 7.3 && s.y < top && s.y > base - 0.5));
+    if (inTheWay) continue;
+    const s = add(supG, L(0xffffff), c.x, (top + base)/2, c.z, scene); s.scale.y = top - base; lastI = i;
   }
 }
 function buildTower(T, body, gaps){
@@ -1586,7 +1617,7 @@ function updatePlayer(dt){
   P.spd = spd;
   if (P.moving) P.ang += angDiff(P.ang, Math.atan2(mx, mz)) * Math.min(1, dt*12);
   const dl = mlen || 1, nx = pos.x + mx/dl*spd*dt, nz = pos.z + mz/dl*spd*dt;
-  const step = P.swim ? 2.2 : 1.3, canGo = (x, z) => inWorld(x, z) && groundH(x, z) <= P.y + step;
+  const step = P.swim ? 2.2 : 1.3, canGo = (x, z) => inWorld(x, z) && groundH(x, z, P.y) <= P.y + step;
   if (canGo(nx, nz)){ pos.x = nx; pos.z = nz; }
   else if (canGo(nx, pos.z)) pos.x = nx;
   else if (canGo(pos.x, nz)) pos.z = nz;
@@ -1598,10 +1629,16 @@ function updatePlayer(dt){
     }
   }
   if (P.y < 60) pushOutRects(pos, bodyR);
+  // slides are shaped like a U, so walking on one gently keeps her near the middle (she can still jump off the side)
+  if (P.grounded){
+    const sp = slideNearest(pos.x, pos.z, P.y);
+    if (sp){ const dx = sp.x - pos.x, dz = sp.z - pos.z, d = Math.hypot(dx, dz);
+      if (d > 0.6){ const k = Math.min(1, dt*6) * (d - 0.6)/d; pos.x += dx*k; pos.z += dz*k; } }
+  }
   if (!inWorld(pos.x, pos.z)){ pos.set(0, 0, 4); P.y = 0; }
 
   // jumping, gravity and swimming
-  const gh = groundH(pos.x, pos.z), surf = waterSurface(pos.x, pos.z);
+  const gh = groundH(pos.x, pos.z, P.y), surf = waterSurface(pos.x, pos.z);
   const deep = surf !== null && gh < surf - 0.9;            // deep enough to swim
   const floor = deep ? surf - (mounted ? 1.45 : 0.95) : gh;
   jumpQueued = Math.max(0, jumpQueued - dt);
@@ -1620,8 +1657,11 @@ function updatePlayer(dt){
     spawnParticle(new THREE.Vector3(pos.x+rand(-0.8,0.8), surf+0.1, pos.z+rand(-0.8,0.8)), 0xffffff, new THREE.Vector3(rand(-1,1), rand(1,2.5), rand(-1,1)), 0.8, 0.4, 6);
 
   // reached the top of the tower? Off we go down the slide!
+  // a slide only grabs her when she's on her feet, at the top, heading DOWN it.
+  // Walking up a slide (or jumping over the top) takes her onto the tower instead.
   for (const sl of SLIDES){
-    if (P.y > sl.start.y - 1.2 && Math.hypot(pos.x - sl.start.x, pos.z - sl.start.z) < 1.5){
+    const goingDown = P.moving && (Math.sin(P.ang)*sl.dir.x + Math.cos(P.ang)*sl.dir.z) > 0.3;
+    if (P.grounded && goingDown && P.y > sl.start.y - 1.2 && Math.hypot(pos.x - sl.start.x, pos.z - sl.start.z) < 1.5){
       P.slide = {u:0, v:10, s:sl}; sfx.slide(); banner('Wheeee! ' + sl.name + '!'); break;
     }
   }
@@ -1851,7 +1891,7 @@ function safeZone(){
   if (distXZ(P.pos, BASE) < BASE.r && P.y < 3) return 'home';
   if (unlocked.beach && distXZ(P.pos, BAR) < BAR.r) return 'bar';
   if (P.inWater || PLATFORMS.some(p=>inRect(p, P.pos.x, P.pos.z))) return 'water';
-  if (P.y > 1.5 && structureH(P.pos.x, P.pos.z) > 1) return 'slide';
+  if (P.y > 1.5 && structureH(P.pos.x, P.pos.z, P.y) > 1) return 'slide';
   return null;
 }
 function landSpot(x, z){
@@ -2017,7 +2057,7 @@ const ball = (function(){
       const nx = p.x + v.x*dt, nz = p.z + v.z*dt;
       if (inWorld(nx, nz)){ p.x = nx; p.z = nz; } else { v.x *= -0.7; v.z *= -0.7; }
       p.y += v.y*dt;
-      const surf = waterSurface(p.x, p.z), gnd = surf !== null ? Math.max(groundH(p.x, p.z), surf - 0.3) : groundH(p.x, p.z);
+      const surf = waterSurface(p.x, p.z), gnd = surf !== null ? Math.max(groundH(p.x, p.z, p.y), surf - 0.3) : groundH(p.x, p.z, p.y);
       if (p.y - 1 < gnd){ p.y = gnd + 1; v.y = v.y < -2 ? -v.y*0.55 : 0; const f = surf !== null ? 0.97 : 0.985; v.x *= f; v.z *= f; }
       m.rotation.x += v.z*dt; m.rotation.z -= v.x*dt;
     }};
@@ -2325,7 +2365,7 @@ const EXPLAIN = {
   'Getting started': 'A few helper tools the rest of the game uses, like <b>rand</b> (pick a random number) and <b>pick</b> (pick a random thing from a list).',
   'Tuning (try changing these!)': 'These numbers decide how the game <b>feels</b>. Move the sliders at the top of this panel and the game changes right away. Programmers call these "settings" or "variables".',
   'The ocean': 'The ocean is drawn by a <b>shader</b>: a tiny program the graphics card runs for every single pixel, 60 times a second. It adds up a few wave patterns, mixes turquoise near the shore into deep blue far out, reflects the sky, adds sparkles where the sun hits, and paints white foam at the water\'s edge.',
-  'Map layout: ground, ramps, towers and water': '<b>groundH</b> answers "how high is the ground here?" (sand, sea floor, ramps, towers and the pier). <b>waterSurface</b> answers "is there water here?", which is how the game knows when to swim. <b>inWorld</b> keeps you inside the map and keeps the beach locked until Wave 4.',
+  'Map layout: ground, ramps, towers and water': '<b>groundH</b> answers "how high is the ground here?" (sand, sea floor, ramps, towers, the pier, and the slides, which you can walk up!). <b>waterSurface</b> answers "is there water here?", which is how the game knows when to swim. <b>inWorld</b> keeps you inside the map and keeps the beach locked until Wave 4.',
   'Beach and resort': 'Builds the beach: sand that slopes into the sea, hotels, pools, three water slides, palm trees, umbrellas, the palapa beach bar, the pier, buoys and sailboats. Palm trees are "instanced" so 60 of them draw as fast as one.',
   'Safe places': 'Zombies can\'t enter safe places, but a zombie beaten from a safe place gets replaced. That\'s how the game stops you from winning while hiding! From Wave 6, while you hide, some zombies sneak off to guard the other safe places.',
   'Beach bar': 'The menu is a list. Each item has a price and a <b>use</b> function that runs when you buy it, like adding health or turning on a power.',
