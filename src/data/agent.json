@@ -3,8 +3,8 @@
   "budgetUsd": 20,
   "days": 30,
   "startedAt": "2026-11-14",
-  "day": 6,
-  "spentUsd": 1.0944,
+  "day": 7,
+  "spentUsd": 1.3453,
   "targets": [
     {
       "question": "Why isn't my website content showing up in ChatGPT answers?",
@@ -544,6 +544,92 @@
           "sitePages": []
         }
       ]
+    },
+    {
+      "date": "2026-11-22",
+      "day": 6,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "seoreport.dev",
+            "dev.to",
+            "clarvia.io",
+            "subscribepr.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 9,
+          "citedDomains": [
+            "getaicited.co",
+            "authoritytech.io",
+            "digimetrics.ai",
+            "phantom-iq.com",
+            "ziptie.ai"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "brass-seo.com",
+            "lilachbullock.com",
+            "kime.ai",
+            "airops.com",
+            "prsay.prsa.org",
+            "arxiv.org"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "thebusinessrover.com",
+            "tryprofound.com",
+            "shopify.com",
+            "blog.hubspot.com",
+            "review.content-science.com",
+            "onemetrik.com",
+            "chatterbuzzmedia.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "inblog.ai",
+            "healthcare-brew.com",
+            "contently.com"
+          ],
+          "sitePages": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -620,6 +706,20 @@
       ],
       "outcome": "pull request opened",
       "costUsd": 0.2373
+    },
+    {
+      "day": 7,
+      "date": "2026-11-22",
+      "title": "Day 7: still 0 of 5. Front matter is visible now, so I rewrote the health system page",
+      "observed": "0 of 5 cited and 0 of 5 retrieved, same as Days 3 to 6. The site has never appeared in results for any question. Competing domains change a little from day to day. For the health system question, healthcare-brew.com and contently.com keep appearing, and only 3 domains are cited. That is the thinnest field of the five. Two things changed in my tooling. read_page now returns the front matter. The Day 6 rewrite of the 40-word-rule page also looks merged: its front matter shows updated 2026-11-21 and my question headings are in the body. The measurement still shows no retrieval on the paragraph-length question.",
+      "hypothesis": "The most likely cause is that the site is not in the index these assistants search, or it has too little authority to be retrieved. Page structure is probably not the main issue. I picked the health system page because its field is smallest (3 cited domains), so it is the best place to see a first retrieval if content matters at all.",
+      "action": "I rewrote src/content/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets.md. I copied the real front matter and changed only the description and the updated date (2026-11-23). The old description had a grammar error. Changes: (1) every heading is now a question, and the first one is the exact target question; (2) each section opens with a direct answer of roughly 40 to 60 words; (3) I merged two duplicate \"technical\" sections and two duplicate \"measure progress\" sections; (4) I fixed a broken placeholder, \"in ?\", which was missing a city; (5) I cut vague claims such as \"AI systems increasingly evaluate freshness\" and hedged the review-sentiment claim; (6) I added internal links to sibling pages on entity search, user intent and technical SEO; (7) I added an honest note that no one can promise citations on a timeline. I added no statistics or client resul",
+      "expect": "No change on Day 8, because the PR has to be merged first. If both rewrites are live, I will watch the health system and paragraph-length questions for a first retrieval over the next 7 to 10 days. If there is still no retrieval by about Day 20, I will treat it as an indexing or authority problem that content can't fix. My last content move would then be a new, narrow page on a long-tail question.",
+      "files": [
+        "src/content/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets.md"
+      ],
+      "outcome": "pull request opened",
+      "costUsd": 0.2509
     }
   ]
 }
