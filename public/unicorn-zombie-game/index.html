@@ -74,7 +74,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#aee0ff;font-family:'F
   font-weight:700;font-size:18px;padding:10px 20px;border-radius:16px;box-shadow:0 6px 18px rgba(120,40,160,.35);text-align:center;pointer-events:none;opacity:0;transition:transform .35s ease,opacity .35s ease;z-index:5}
 #toast.show{transform:translate(-50%,0);opacity:1}
 #hurt{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 140px rgba(255,0,70,.75);opacity:0;transition:opacity .35s}
-.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+.overlay{z-index:10;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(circle at 50% 30%,rgba(255,200,240,.55),rgba(150,90,220,.6));padding:12px}
 .card{background:#fff;border-radius:26px;padding:22px 26px;max-width:580px;width:100%;text-align:center;color:#4a2a6a;
   box-shadow:0 12px 40px rgba(90,30,140,.35);max-height:94%;overflow:auto}
@@ -144,6 +144,22 @@ body.touch #banner{font-size:34px}
   body.touch #joy{left:18px;bottom:16px;width:128px;height:128px}
   body.touch #knob{left:31px;top:31px}
 }
+/* tabs, wardrobe */
+.tabs{display:flex;gap:6px;justify-content:center;margin:10px 0 4px}
+.tab{font:inherit;font-weight:700;border:0;border-radius:12px;padding:7px 14px;background:#f1e6ff;color:#6a3fa0;cursor:pointer}
+.tab.on{background:linear-gradient(90deg,#ff5fa2,#b46cff);color:#fff}
+.wcat{text-align:left;margin:12px 0 5px;font-weight:700;font-size:15px}
+.witems{display:flex;flex-wrap:wrap;gap:6px}
+.witem{font:inherit;font-size:13px;font-weight:600;border:2px solid #eadcff;background:#faf3ff;border-radius:12px;padding:6px 9px;cursor:pointer;color:#4a2a6a}
+.witem.on{border-color:#ff5fa2;background:#fff0f7}
+.witem.locked{opacity:.5;cursor:default}
+.swatch{display:inline-block;width:13px;height:13px;border-radius:50%;vertical-align:-2px;margin-right:5px;border:1px solid rgba(0,0,0,.18)}
+.shopRow.slim{padding:6px 12px;margin:5px 0}
+.owned{font-weight:700;color:#2f9e44;min-width:110px;text-align:center}
+.small{font-size:13px;opacity:.8}
+.overlay.side{justify-content:flex-start;background:linear-gradient(90deg,rgba(150,90,220,.55),rgba(150,90,220,0) 60%)}
+.wcard{max-width:440px}
+@media (max-width:700px){.overlay.side{align-items:flex-end;background:linear-gradient(0deg,rgba(150,90,220,.55),rgba(150,90,220,0) 70%)}.wcard{max-height:58%}}
 /* code viewer */
 #code{position:fixed;top:0;right:0;bottom:0;width:var(--cw);background:#1d1830;color:#ece6ff;display:none;flex-direction:column;
   font-family:'Fredoka',system-ui,sans-serif;user-select:text;-webkit-user-select:text;touch-action:auto;border-left:4px solid #b46cff}
@@ -201,7 +217,7 @@ body.code #help{display:none}
 <div id="start" class="overlay">
   <div class="card">
     <h1>Princess Unicorn<br>vs. Zombies</h1>
-    <p>Gallop across the magic meadow, blast silly zombies, collect coins, race through rings, and reach Wave 4 to open <b>🏖️ Unicorn Beach</b> with its resort, water slides and beach bar!</p>
+    <p>Gallop across the magic meadow, blast silly zombies, collect coins, race through rings, and dress up in your house! Beat Wave 5 to open <b>🏖️ Unicorn Beach</b>, and Wave 10 to open <b>🏰 the castle</b>.</p>
     <label for="nameIn">What's the princess's name?</label>
     <input id="nameIn" maxlength="18" placeholder="Princess">
     <div class="items">
@@ -250,7 +266,8 @@ body.code #help{display:none}
   <div class="card">
     <h1>🛒 Unicorn Shop</h1>
     <div id="shopCoins">🪙 0</div>
-    <p style="font-size:14px;opacity:.8">Your coins and upgrades are saved, even after the zombies get you.</p>
+    <p style="font-size:14px;opacity:.8">Your coins, upgrades and outfits are saved, even after the zombies get you.</p>
+    <div class="tabs" id="shopTabs"><button class="tab on" data-tab="up">⚡ Upgrades</button><button class="tab" data-tab="ward">👗 Wardrobe</button></div>
     <div id="shopRows"></div>
     <button class="big" id="shopClose">Done ✔</button>
   </div>
@@ -263,6 +280,16 @@ body.code #help{display:none}
     <p style="font-size:14px;opacity:.8">All drinks are virgin. ¡Salud, princesa!</p>
     <div id="barRows"></div>
     <button class="big" id="barClose">Done ✔</button>
+  </div>
+</div>
+
+<div id="wardrobe" class="overlay side hidden">
+  <div class="card wcard">
+    <h1>👗 Wardrobe</h1>
+    <div class="tabs" id="wardTabs"><button class="tab on" data-w="princess">👸 Princess</button><button class="tab" data-w="unicorn">🦄 Unicorn</button></div>
+    <div id="wardRows"></div>
+    <p class="small" style="margin-top:12px">Buy more outfits in the 🛒 shop at your home base.</p>
+    <button class="big" id="wardClose">Done ✔</button>
   </div>
 </div>
 
@@ -314,8 +341,9 @@ const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
 if (IS_TOUCH) document.body.classList.add('touch');
 const WORLD = 185;                                    // radius of the meadow
 const BEACH = {x0:150, x1:345, z0:-160, z1:160};      // the beach + ocean area
-const BEACH_WAVE = 4;                                 // the beach opens when you reach this wave
-const unlocked = {beach:false};
+const BEACH_WAVE = 6;                                 // the beach opens once you beat Wave 5 (and its boss)
+const CASTLE_WAVE = 11;                               // the castle opens once you beat Wave 10 (and the Fire Zombie King)
+const unlocked = {beach:false, castle:false};
 
 // ---------- Tuning (try changing these!) ----------
 // These numbers control how the game feels. The sliders in the code panel change them live.
@@ -503,6 +531,25 @@ function inWorld(x, z){
 }
 const HOTELS = [ {x:175, z:150, w:24, d:14, h:42}, {x:172, z:58, w:22, d:18, h:34}, {x:162, z:95, w:14, d:16, h:50} ];
 const RECTS = HOTELS.map(h=>({x0:h.x-h.w/2, x1:h.x+h.w/2, z0:h.z-h.d/2, z1:h.z+h.d/2}));
+// the castle (opens after Wave 10): a great hall with four towers. The princess tower has a room on top.
+const CX = -95, CZ = -70;
+const HALL = {x0:CX-20, x1:CX+20, z0:CZ-14, z1:CZ+14};
+const PT = {x:CX-20, z:CZ-14, r:6, h:18};                 // the princess tower
+TOWERS.push({x:CX+20, z:CZ+14, r:4, h:20}, {x:CX+20, z:CZ-14, r:4, h:20}, {x:CX-20, z:CZ+14, r:4, h:20}, PT);
+RAMPS.push({x0:CX+10, z0:CZ-10.5, dx:-1, dz:0, len:25.5, w:4, h:18, stairs:true});   // stairs up to the princess tower
+PLATFORMS[0].water = true;                                                         // the pier is over the ocean
+PLATFORMS.push({x0:CX-30, x1:CX-25.5, z0:CZ-16, z1:CZ-12, h:18},                   // the tower balcony
+               {x0:CX-3, x1:CX+3, z0:CZ-9.2, z1:CZ-5.8, h:0.5});                   // the throne's step
+const CASTLE_RECTS = [
+  {x0:CX-20.6, x1:CX+20.6, z0:CZ-14.6, z1:CZ-13.4},                                // back wall
+  {x0:CX-20.6, x1:CX-19.4, z0:CZ-14.6, z1:CZ+14.6},                                // west wall
+  {x0:CX+19.4, x1:CX+20.6, z0:CZ-14.6, z1:CZ+14.6},                                // east wall
+  {x0:CX-20.6, x1:CX-4, z0:CZ+13.4, z1:CZ+14.6}, {x0:CX+4, x1:CX+20.6, z0:CZ+13.4, z1:CZ+14.6}   // front wall, with a gap for the gate
+];
+const GATE_RECT = {x0:CX-4, x1:CX+4, z0:CZ+13.4, z1:CZ+14.6};
+RECTS.push(...CASTLE_RECTS, GATE_RECT);
+const ROOM_OPENINGS = [Math.atan2((CX-15.5) - PT.x, (CZ-10.5) - PT.z), -Math.PI/2];   // the stairs and the balcony
+
 function pushOutRects(pos, r){
   for (const R of RECTS){
     if (!inRect(R, pos.x, pos.z, r)) continue;
@@ -520,7 +567,9 @@ const SLIDE_DEFS = [
   {name:'Big Blue Spiral', colors:[0x1c7ed6,0xa5d8ff], stripes:'length', water:true,
    pts:[[205,16.1,122.6],[205.5,15.5,126],[208,14,130.5],[213,12.6,133],[218,11.2,131.5],[220.5,9.8,127],[218.5,8.4,122.5],[213.5,7,121.5],[210.5,5.6,125.5],[212,4.2,130.5],[217,2.8,132],[222,1.6,129],[225,0.6,124],[227,0.1,121]]},
   {name:'Orange Twister', colors:[0xfd7e14,0xffd8a8], stripes:'length', water:true,
-   pts:[[205,16.1,113.4],[205.5,15.2,109.5],[208,13.5,105],[213,11.5,102],[219,9.5,101.5],[224,7.6,103.5],[226,5.8,108],[223,4.2,112],[219,2.8,111],[217.5,1.5,107.5],[219.5,0.6,105],[223,0.1,104]]}
+   pts:[[205,16.1,113.4],[205.5,15.2,109.5],[208,13.5,105],[213,11.5,102],[219,9.5,101.5],[224,7.6,103.5],[226,5.8,108],[223,4.2,112],[219,2.8,111],[217.5,1.5,107.5],[219.5,0.6,105],[223,0.1,104]]},
+  {name:'Rapunzel Braid', colors:[0xffdd55], braid:true, noWalk:true, water:false,
+   pts:[[CX-29.3,18.1,CZ-14],[CX-30.4,16,CZ-14],[CX-31.2,12.5,CZ-14],[CX-31.7,8.5,CZ-14],[CX-32,4.5,CZ-14],[CX-32.4,1.5,CZ-14],[CX-33.4,0.35,CZ-14],[CX-35,0.2,CZ-14]]}
 ];
 const SLIDES = SLIDE_DEFS.map(d=>{
   const curve = new THREE.CatmullRomCurve3(d.pts.map(p=>new THREE.Vector3(p[0], p[1], p[2])), false, 'catmullrom', 0.5);
@@ -532,6 +581,7 @@ const gridKey = (x, z) => Math.floor(x/GRID) + ',' + Math.floor(z/GRID);
 SLIDES.forEach(sl=>{
   const n = Math.ceil(sl.len/0.5); sl.samples = [];
   for (let i=0;i<=n;i++){ const p = sl.curve.getPointAt(i/n), s = {x:p.x, y:p.y, z:p.z}; sl.samples.push(s);
+    if (sl.noWalk) continue;
     const k = gridKey(p.x, p.z); if (!SLIDE_GRID.has(k)) SLIDE_GRID.set(k, []); SLIDE_GRID.get(k).push(s); }
   const t = sl.curve.getTangentAt(0), l = Math.hypot(t.x, t.z) || 1; sl.dir = {x:t.x/l, z:t.z/l};   // which way is "down the slide"
 });
@@ -761,7 +811,7 @@ function buildBeach(){
   // resort slide tower, its ramp and the slides
   buildTower(TOWERS[1], 0xe3fafc, [-Math.PI/2, Math.PI/2, 0, Math.PI]);
   buildRamp(RAMPS[1], [0x1c7ed6, 0x4dabf7, 0x74c0fc, 0x4dabf7, 0x1c7ed6]);
-  SLIDES.slice(1).forEach(buildSlideMesh);
+  SLIDES.slice(1).filter(s=>!s.braid).forEach(buildSlideMesh);
   const ss = textSprite('🛝 Water Slides', 12, 3); ss.position.set(TOWERS[1].x, TOWERS[1].h + 7, TOWERS[1].z); scene.add(ss);
 
   // palm trees (instanced: one draw for all trunks, one for all leaves)
@@ -859,8 +909,151 @@ function buildBeach(){
   [1.2, 2.6].forEach(y=>{ const rope = add(new THREE.BoxGeometry(0.08, 0.08, 208), L(0xff5fa2), BEACH.x0, y, 0, beachGate); });
   const wall = new THREE.Mesh(new THREE.PlaneGeometry(208, 7), new THREE.MeshBasicMaterial({color:0xff9cf0, transparent:true, opacity:0.18, side:THREE.DoubleSide, depthWrite:false}));
   wall.rotation.y = Math.PI/2; wall.position.set(BEACH.x0, 3.5, 0); beachGate.add(wall);
-  const gs = textSprite('🔒 Beach opens at Wave ' + BEACH_WAVE, 22, 5.5); gs.position.set(BEACH.x0 - 2, 10, 0); beachGate.add(gs);
+  const gs = textSprite('🔒 Beat Wave 5 to open the beach', 22, 5.5); gs.position.set(BEACH.x0 - 2, 10, 0); beachGate.add(gs);
   const welcome = textSprite('🏖️ Unicorn Beach', 14, 3.5); welcome.position.set(186, 9, -10); scene.add(welcome);
+}
+
+// ---------- Castle ----------
+const castleParts = {chests:[]};
+function buildCastle(){
+  const WALL = 0xffc4e1, TRIM = 0xffe3f1, ROOF = 0xb46cff, H = 12;
+  // stone floor (a checker pattern drawn on a canvas)
+  const fc = document.createElement('canvas'); fc.width = fc.height = 64; const fx = fc.getContext('2d');
+  fx.fillStyle = '#f3e6f7'; fx.fillRect(0,0,64,64); fx.fillStyle = '#e2cfe9'; fx.fillRect(0,0,32,32); fx.fillRect(32,32,32,32);
+  const ft = new THREE.CanvasTexture(fc); ft.wrapS = ft.wrapT = THREE.RepeatWrapping; ft.repeat.set(10, 7);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 28), new THREE.MeshLambertMaterial({map:ft}));
+  floor.rotation.x = -Math.PI/2; floor.position.set(CX, 0.04, CZ); floor.receiveShadow = true; scene.add(floor);
+  // walls and battlements
+  CASTLE_RECTS.forEach(r=>{ const m = add(new THREE.BoxGeometry(r.x1-r.x0, H, r.z1-r.z0), L(WALL), (r.x0+r.x1)/2, H/2, (r.z0+r.z1)/2, scene); m.receiveShadow = true; });
+  add(new THREE.BoxGeometry(8, 5, 1.2), L(WALL), CX, 9.5, CZ+14, scene);
+  const merl = [];
+  for (let x = CX-19.5; x <= CX+19.5; x += 2.2){ merl.push([x, CZ-14]); merl.push([x, CZ+14]); }
+  for (let z = CZ-12.5; z <= CZ+12.5; z += 2.2){ merl.push([CX-20, z]); merl.push([CX+20, z]); }
+  const mm = new THREE.InstancedMesh(new THREE.BoxGeometry(1.1, 1.2, 1.3), L(WALL), merl.length), dm = new THREE.Object3D();
+  merl.forEach(([x,z],i)=>{ dm.position.set(x, H + 0.6, z); dm.updateMatrix(); mm.setMatrixAt(i, dm.matrix); });
+  mm.castShadow = true; scene.add(mm);
+  // gate: a portcullis that lifts when the castle opens
+  const pc = new THREE.Group(); pc.position.set(CX, 0, CZ+14); scene.add(pc);
+  for (let x=-3.6; x<=3.6; x+=0.9) add(new THREE.BoxGeometry(0.18, 7, 0.18), L(0x6b5b73), x, 3.5, 0, pc);
+  for (let y=0.8; y<7; y+=1.2) add(new THREE.BoxGeometry(8, 0.16, 0.16), L(0x6b5b73), 0, y, 0, pc);
+  castleParts.portcullis = pc;
+  castleParts.sign = textSprite('🔒 Castle opens after Wave 10', 20, 5); castleParts.sign.position.set(CX, 17, CZ+16); scene.add(castleParts.sign);
+  // three corner towers
+  [[CX+20,CZ+14],[CX+20,CZ-14],[CX-20,CZ+14]].forEach(([x,z])=>{
+    add(new THREE.CylinderGeometry(4, 4.3, 20, 20), L(TRIM), x, 10, z, scene);
+    add(new THREE.ConeGeometry(5, 7, 20), L(ROOF), x, 23.5, z, scene);
+    add(new THREE.CylinderGeometry(0.08,0.08,3,6), L(0xffffff), x, 28, z, scene);
+    add(new THREE.BoxGeometry(0.06, 1, 1.6), L(0xff5fa2), x, 29, z+0.8, scene);
+  });
+  // the princess tower, with an open-air room on top
+  add(new THREE.CylinderGeometry(PT.r, PT.r+0.4, PT.h, 28), L(TRIM), PT.x, PT.h/2, PT.z, scene);
+  add(new THREE.CylinderGeometry(PT.r+0.2, PT.r+0.2, 0.4, 28), L(0xf3d9fa), PT.x, PT.h-0.2, PT.z, scene).receiveShadow = true;
+  const nearOpening = a => ROOM_OPENINGS.some(o=>Math.abs(angDiff(a, o)) < 0.5);
+  for (let i=0;i<10;i++){ const a = i/10*TAU + 0.3; if (nearOpening(a)) continue;
+    add(new THREE.CylinderGeometry(0.25,0.25,6.5,8), L(0xffffff), PT.x + Math.sin(a)*5.6, PT.h + 3.25, PT.z + Math.cos(a)*5.6, scene); }
+  for (let i=0;i<24;i++){ const a = (i+0.5)/24*TAU; if (nearOpening(a)) continue;
+    const seg = add(new THREE.BoxGeometry(1.5, 1, 0.25), L(0xffffff), PT.x + Math.sin(a)*5.75, PT.h + 0.5, PT.z + Math.cos(a)*5.75, scene); seg.rotation.y = a; }
+  const roomRoof = new THREE.Group(); scene.add(roomRoof);
+  add(new THREE.ConeGeometry(7.6, 6, 28), L(0xff8fc8), PT.x, PT.h + 9.5, PT.z, roomRoof);
+  add(new THREE.CylinderGeometry(0.08,0.08,3,6), L(0xffffff), PT.x, PT.h + 13.5, PT.z, roomRoof);
+  add(new THREE.BoxGeometry(0.06, 1, 1.6), L(0xffd34d), PT.x, PT.h + 14.5, PT.z + 0.8, roomRoof);
+  castleParts.roomRoof = roomRoof;
+  // a canopy bed (nap here to heal) and a wardrobe (change outfits)
+  const ba = 2.36, bx = PT.x + Math.sin(ba)*2.8, bz = PT.z + Math.cos(ba)*2.8;
+  const bed = new THREE.Group(); bed.position.set(bx, PT.h, bz); bed.rotation.y = ba; scene.add(bed);
+  add(new THREE.BoxGeometry(2.2, 0.5, 3), L(0xffffff), 0, 0.25, 0, bed);
+  add(new THREE.BoxGeometry(2.1, 0.3, 2.9), L(0xffc9e6), 0, 0.65, 0, bed);
+  add(new THREE.BoxGeometry(1.6, 0.25, 0.6), L(0xffffff), 0, 0.9, 1.05, bed);
+  add(new THREE.BoxGeometry(2.12, 0.08, 1.7), L(0xb197fc), 0, 0.82, -0.55, bed);
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([sx,sz])=>add(new THREE.CylinderGeometry(0.07,0.07,2.6,6), L(0xffd34d), sx*1.05, 1.3, sz*1.45, bed));
+  add(new THREE.BoxGeometry(2.3, 0.08, 3.1), L(0xff8fc8), 0, 2.6, 0, bed);
+  castleParts.bed = {x:bx, z:bz};
+  const wd = new THREE.Group(); wd.position.set(PT.x, PT.h, PT.z - 4.4); scene.add(wd);
+  add(new THREE.BoxGeometry(2, 3.2, 0.9), L(0xc9a6ff), 0, 1.6, 0, wd);
+  add(new THREE.BoxGeometry(0.04, 2.8, 0.05), L(0x9b7be0), 0, 1.6, 0.46, wd);
+  [-0.25, 0.25].forEach(x=>add(new THREE.SphereGeometry(0.07,8,6), L(0xffd34d), x, 1.7, 0.5, wd));
+  add(new THREE.BoxGeometry(2.2, 0.25, 1), L(0xffd34d), 0, 3.3, 0, wd);
+  castleParts.wardrobe = {x:PT.x, z:PT.z - 3.6};
+  blockers.push({x:bx, z:bz, r:1.5, y0:PT.h}, {x:PT.x, z:PT.z - 4.4, r:1.0, y0:PT.h});
+  // the balcony, and Rapunzel's braid hanging from it
+  const bal = PLATFORMS[1];
+  add(new THREE.BoxGeometry(bal.x1-bal.x0, 0.4, bal.z1-bal.z0), L(0xf3d9fa), (bal.x0+bal.x1)/2, bal.h-0.2, (bal.z0+bal.z1)/2, scene).receiveShadow = true;
+  [[bal.z0, 'x'], [bal.z1, 'x']].forEach(([z])=>add(new THREE.BoxGeometry(bal.x1-bal.x0, 1, 0.15), L(0xffffff), (bal.x0+bal.x1)/2, bal.h+0.5, z, scene));
+  [[bal.z0+0.6],[bal.z1-0.6]].forEach(([z])=>add(new THREE.BoxGeometry(0.15, 1, 0.9), L(0xffffff), bal.x0, bal.h+0.5, z, scene));
+  const braid = SLIDES.find(s=>s.braid);
+  add(new THREE.TubeGeometry(braid.curve, 90, 0.3, 8, false), L(0xffdd55), 0,0,0, scene);
+  for (let i=1;i<40;i++){ const p = braid.curve.getPointAt(i/40); add(new THREE.SphereGeometry(0.38, 8, 6), L(i%2 ? 0xffe066 : 0xf5cc3a), p.x + (i%2 ? 0.12 : -0.12), p.y, p.z, scene); }
+  const bow = braid.curve.getPointAt(0.04); [-1,1].forEach(s=>add(new THREE.SphereGeometry(0.3,8,6), L(0xff6b9e), bow.x, bow.y, bow.z + s*0.35, scene));
+  // stairs up to the tower (a ramp underneath, drawn as steps)
+  const st = RAMPS.find(r=>r.stairs), N = 26;
+  for (let i=0;i<N;i++){
+    const h = (i+1)*st.h/N, x = st.x0 - (i+0.5)*st.len/N;
+    add(new THREE.BoxGeometry(st.len/N + 0.02, h, st.w), L(i%2 ? 0xf3e5f5 : 0xe9d8f0), x, h/2, st.z0, scene).receiveShadow = true;
+  }
+  // great hall: red carpet, throne, pillars, chandeliers, banners, stained glass, fireplace, knights and treasure
+  add(new THREE.BoxGeometry(3.2, 0.04, 20), L(0xc2255c), CX, 0.06, CZ+4, scene, false);
+  [-1,1].forEach(s=>add(new THREE.BoxGeometry(0.2, 0.05, 20), L(0xffd34d), CX + s*1.6, 0.07, CZ+4, scene, false));
+  add(new THREE.BoxGeometry(6, 0.5, 3.4), L(0xe9d8f0), CX, 0.25, CZ-7.5, scene);
+  add(new THREE.BoxGeometry(1.7, 0.9, 1.4), L(0xffd34d), CX, 0.95, CZ-7.6, scene);
+  add(new THREE.BoxGeometry(1.9, 3.4, 0.4), L(0xc2255c), CX, 2.2, CZ-8.4, scene);
+  add(new THREE.BoxGeometry(2.1, 0.3, 0.5), L(0xffd34d), CX, 4, CZ-8.4, scene);
+  [-0.7, 0, 0.7].forEach(x=>add(new THREE.ConeGeometry(0.15, 0.5, 6), L(0xffd34d), CX + x, 4.4, CZ-8.4, scene));
+  [-1,1].forEach(s=>add(new THREE.BoxGeometry(0.3, 0.6, 1.4), L(0xffd34d), CX + s*0.95, 1.5, CZ-7.6, scene));
+  castleParts.throne = {x:CX, z:CZ-6.4};
+  blockers.push({x:CX, z:CZ-7.8, r:1.3});
+  [[CX-9,CZ-4],[CX+9,CZ-4],[CX-9,CZ+5],[CX+9,CZ+5]].forEach(([x,z])=>{
+    add(new THREE.CylinderGeometry(0.7,0.7,H,14), L(0xfff0f6), x, H/2, z, scene);
+    add(new THREE.BoxGeometry(1.9,0.5,1.9), L(TRIM), x, 0.25, z, scene); add(new THREE.BoxGeometry(1.9,0.5,1.9), L(TRIM), x, H-0.25, z, scene);
+    blockers.push({x, z, r:1.0});
+  });
+  [CZ-2, CZ+7].forEach(z=>{
+    add(new THREE.CylinderGeometry(0.04,0.04,3,4), L(0x6b5b73), CX, 10.5, z, scene, false);
+    const ring = add(new THREE.TorusGeometry(1.6, 0.1, 6, 24), L(0xffd34d), CX, 9, z, scene, false); ring.rotation.x = Math.PI/2;
+    for (let i=0;i<8;i++){ const a = i/8*TAU; add(new THREE.CylinderGeometry(0.07,0.07,0.35,6), L(0xffffff), CX + Math.cos(a)*1.6, 9.25, z + Math.sin(a)*1.6, scene, false);
+      add(new THREE.ConeGeometry(0.07,0.2,6), B(0xffd43b), CX + Math.cos(a)*1.6, 9.55, z + Math.sin(a)*1.6, scene, false); }
+  });
+  [[CX-19.35, Math.PI/2], [CX+19.35, -Math.PI/2]].forEach(([x, ry], k)=>[CZ-6, CZ+7].forEach((z, j)=>{
+    const ban = add(new THREE.PlaneGeometry(2.4, 5), L((k+j)%2 ? 0xb46cff : 0xff5fa2), x, 7, z, scene, false); ban.rotation.y = ry;
+    const crest = add(new THREE.CircleGeometry(0.6, 20), L(0xffd34d), x + (k ? -0.02 : 0.02), 7.6, z, scene, false); crest.rotation.y = ry;
+  }));
+  [[CX-8, 0xff8fc8],[CX, 0x74c0fc],[CX+8, 0xffd43b]].forEach(([x,c])=>[[CZ-13.35, 0],[CZ-14.65, Math.PI]].forEach(([z, ry])=>{
+    const win = add(new THREE.PlaneGeometry(2, 3.6), B(c), x, 8, z, scene, false); win.rotation.y = ry;
+    const top = add(new THREE.CircleGeometry(1, 16, 0, Math.PI), B(c), x, 9.8, z, scene, false); top.rotation.y = ry;
+  }));
+  add(new THREE.BoxGeometry(1.6, 4.2, 4.6), L(0xcfc2d6), CX+18.6, 2.1, CZ+3, scene);
+  add(new THREE.BoxGeometry(0.2, 2.4, 2.6), B(0x2b1a1a), CX+17.8, 1.2, CZ+3, scene, false);
+  add(new THREE.BoxGeometry(2, 0.3, 5.2), L(0xb9aac4), CX+18.4, 4.3, CZ+3, scene);
+  castleParts.fire = {x:CX+17.6, z:CZ+3};
+  blockers.push({x:CX+18.6, z:CZ+3, r:2.0});
+  [CX-6, CX+6].forEach(x=>{
+    const k = new THREE.Group(); k.position.set(x, 0, CZ+11.5); scene.add(k);
+    [-0.2, 0.2].forEach(lx=>add(new THREE.BoxGeometry(0.3, 1, 0.35), L(0xa9b4c2), lx, 0.5, 0, k));
+    add(new THREE.BoxGeometry(0.9, 1.3, 0.55), L(0xc5cfdb), 0, 1.65, 0, k);
+    add(new THREE.BoxGeometry(0.6, 0.65, 0.6), L(0xc5cfdb), 0, 2.65, 0, k);
+    add(new THREE.BoxGeometry(0.5, 0.08, 0.05), B(0x222222), 0, 2.7, 0.31, k);
+    add(new THREE.ConeGeometry(0.15, 0.6, 8), L(0xff4d6d), 0, 3.2, -0.05, k);
+    add(new THREE.CylinderGeometry(0.05, 0.05, 3.6, 6), L(0x8b5a2b), 0.6, 1.8, 0.2, k);
+    add(new THREE.ConeGeometry(0.12, 0.4, 6), L(0xdfe6ee), 0.6, 3.75, 0.2, k);
+    blockers.push({x, z:CZ+11.5, r:0.8});
+  });
+  [[CX+15, CZ-9], [CX-15, CZ+9]].forEach(([x,z])=>{
+    const c = new THREE.Group(); c.position.set(x, 0, z); scene.add(c);
+    add(new THREE.BoxGeometry(1.6, 0.9, 1.0), L(0x8b5a2b), 0, 0.45, 0, c);
+    [-0.55, 0.55].forEach(bx=>add(new THREE.BoxGeometry(0.12, 0.92, 1.02), L(0xffd34d), bx, 0.45, 0, c));
+    const lid = new THREE.Group(); lid.position.set(0, 0.9, -0.5); c.add(lid);
+    add(new THREE.BoxGeometry(1.6, 0.35, 1.0), L(0x9c6b3a), 0, 0.175, 0.5, lid);
+    add(new THREE.BoxGeometry(0.25, 0.25, 0.08), L(0xffd34d), 0, 0.05, 1.02, lid);
+    castleParts.chests.push({x, z, lid, opened:false});
+    blockers.push({x, z, r:1.1});
+  });
+  // the hall's roof (hidden while she's inside so you can see her)
+  const roof = new THREE.Group(); scene.add(roof);
+  const slope = Math.atan2(7, 14), sl = Math.hypot(14, 7) + 0.8;
+  const r1 = add(new THREE.BoxGeometry(41.5, 0.4, sl), L(ROOF), CX, 15.5, CZ-7, roof); r1.rotation.x = -slope;
+  const r2 = add(new THREE.BoxGeometry(41.5, 0.4, sl), L(ROOF), CX, 15.5, CZ+7, roof); r2.rotation.x = slope;
+  const gs = new THREE.Shape(); gs.moveTo(-14, 0); gs.lineTo(14, 0); gs.lineTo(0, 7); gs.lineTo(-14, 0);
+  [CX-20.3, CX+20.3].forEach(x=>{ const g = new THREE.Mesh(new THREE.ShapeGeometry(gs), new THREE.MeshLambertMaterial({color:WALL, side:THREE.DoubleSide})); g.position.set(x, 12, CZ); g.rotation.y = Math.PI/2; roof.add(g); });
+  castleParts.roof = roof;
 }
 
 // ---------- World ----------
@@ -882,24 +1075,13 @@ const clouds = [];
   const inSlideZone = (x,z) => x > -22 && x < 22 && z > 15 && z < 147;
   const nearStart = (x,z) => Math.hypot(x - BASE.x, z - BASE.z) < BASE.r + 8;
 
-  // castle
-  const CX = -95, CZ = -70;
-  const castle = new THREE.Group(); castle.position.set(CX,0,CZ); castle.rotation.y = 0.8; scene.add(castle);
-  add(new THREE.BoxGeometry(24,14,10), L(0xffc4e1), 0,7,0, castle);
-  add(new THREE.BoxGeometry(5,7,1), L(0xc77dff), 0,3.5,5.1, castle);
-  [[-12,0],[12,0],[-6,-4],[6,-4],[0,-2]].forEach(([x,z],i)=>{
-    const h = i===4 ? 26 : 20;
-    add(new THREE.CylinderGeometry(3,3,h,14), L(0xffd6ec), x,h/2,z, castle);
-    add(new THREE.ConeGeometry(3.8,7,14), L(0xb46cff), x,h+3.5,z, castle);
-    add(new THREE.BoxGeometry(0.1,1.6,2), L(0xff5fa2), x+0.05,h+7.8,z+1, castle);
-  });
-  blockers.push({x:CX, z:CZ, r:15});
+  buildCastle();
 
   // trees (instanced so we can have lots)
   const NT = 300, trees = [];
   for (let i=0; trees.length<NT && i<6000; i++){
     const a = rand(0,TAU), r = Math.sqrt(Math.random())*(WORLD-6), x = Math.cos(a)*r, z = Math.sin(a)*r;
-    if (x > 135 || inSlideZone(x,z) || nearStart(x,z) || nearRace(x,z) || Math.hypot(x-CX, z-CZ) < 22) continue;
+    if (x > 135 || inSlideZone(x,z) || nearStart(x,z) || nearRace(x,z) || inRect(HALL, x, z, 16)) continue;
     trees.push({x, z, s:rand(0.8,1.5), c:pick([0x4caf50,0x5cc45f,0x3f9e48,0xff9ec9,0xffb3d9,0x5cc45f])});
   }
   for (let i=0;i<80;i++){ const a=rand(0,TAU), r=rand(WORLD+8, 300), x = Math.cos(a)*r, z = Math.sin(a)*r; if (x > 140) continue; trees.push({x, z, s:rand(1,1.6), c:pick([0x4caf50,0x3f9e48,0xff9ec9]), out:true}); }
@@ -924,7 +1106,7 @@ const clouds = [];
   let nf = 0;
   for (let i=0;i<NF*2 && nf<NF;i++){
     const a = rand(0,TAU), r = Math.sqrt(Math.random())*280, x = Math.cos(a)*r, z = Math.sin(a)*r;
-    if (x > sandEdge(z) - 3) continue;
+    if (x > sandEdge(z) - 3 || inRect(HALL, x, z, 1)) continue;
     dummy.position.set(x, 0.12, z); dummy.scale.setScalar(rand(0.7,1.3)); dummy.updateMatrix();
     flowers.setMatrixAt(nf, dummy.matrix); flowers.setColorAt(nf, col.setHex(pick(fc))); nf++;
   }
@@ -932,7 +1114,7 @@ const clouds = [];
   const NB = 90;
   const bushes = new THREE.InstancedMesh(new THREE.SphereGeometry(1,10,8), L(0x58b94a), NB);
   for (let i=0;i<NB;i++){
-    let x, z; do { const a = rand(0,TAU), r = rand(20, WORLD-4); x = Math.cos(a)*r; z = Math.sin(a)*r; } while (x > 135);
+    let x, z; do { const a = rand(0,TAU), r = rand(20, WORLD-4); x = Math.cos(a)*r; z = Math.sin(a)*r; } while (x > 135 || inRect(HALL, x, z, 8));
     dummy.position.set(x, 0.4, z); dummy.scale.set(rand(1,1.6),0.8,rand(0.9,1.4)); dummy.updateMatrix(); bushes.setMatrixAt(i, dummy.matrix);
   }
   bushes.castShadow = true; scene.add(bushes);
@@ -969,41 +1151,62 @@ const clouds = [];
 // Everything is built from simple shapes: spheres, boxes, cones and cylinders.
 function makePlayer(){
   const g = new THREE.Group(), rig = new THREE.Group(); g.add(rig);
-  const W=0xffffff, PINK=0xff8fc8, PURP=0xb48cff, BLUE=0x8fd8ff, GOLD=0xffd34d, SKIN=0xffd9b8, HAIR=0xffdd55, LAV=0xd7c6ff;
-  const body = add(new THREE.SphereGeometry(1,22,16), L(W), 0,1.7,0, rig); body.scale.set(0.75,0.72,1.25);
+  const PINK=0xff8fc8, PURP=0xb48cff, BLUE=0x8fd8ff, GOLD=0xffd34d, SKIN=0xffd9b8, HAIR=0xffdd55, LAV=0xd7c6ff;
+  // her own materials, so the wardrobe can recolor them without changing anything else in the world
+  const lm = c => new THREE.MeshLambertMaterial({color:c});
+  const M = {
+    body: lm(0xffffff), dress: lm(PINK), hair: lm(HAIR), crown: lm(GOLD),
+    mane: [PINK,PURP,BLUE,PINK,PURP,BLUE,PINK].map(lm), tail: [PINK,PURP,BLUE,PINK,PURP].map(lm),
+    wing: new THREE.MeshLambertMaterial({color:0xffffff, side:THREE.DoubleSide, transparent:true, opacity:0.95})
+  };
+  const body = add(new THREE.SphereGeometry(1,22,16), M.body, 0,1.7,0, rig); body.scale.set(0.75,0.72,1.25);
   const legs = [], legGeo = new THREE.CylinderGeometry(0.16,0.13,1.2,10), hoofGeo = new THREE.CylinderGeometry(0.17,0.19,0.2,10);
   [[-0.42,0.72,0],[0.42,0.72,Math.PI],[-0.42,-0.72,Math.PI],[0.42,-0.72,0]].forEach(([x,z,ph])=>{
     const p = new THREE.Group(); p.position.set(x,1.35,z); rig.add(p);
-    add(legGeo, L(W), 0,-0.6,0, p); add(hoofGeo, L(LAV), 0,-1.22,0, p);
+    add(legGeo, M.body, 0,-0.6,0, p); add(hoofGeo, L(LAV), 0,-1.22,0, p);
     p.userData.ph = ph; legs.push(p);
   });
-  const neck = add(new THREE.CylinderGeometry(0.3,0.42,1.2,12), L(W), 0,2.45,1.0, rig); neck.rotation.x = 0.55;
+  const neck = add(new THREE.CylinderGeometry(0.3,0.42,1.2,12), M.body, 0,2.45,1.0, rig); neck.rotation.x = 0.55;
   const head = new THREE.Group(); head.position.set(0,3.05,1.5); rig.add(head);
-  add(new THREE.BoxGeometry(0.62,0.6,0.95), L(W), 0,0,0, head);
+  add(new THREE.BoxGeometry(0.62,0.6,0.95), M.body, 0,0,0, head);
   add(new THREE.SphereGeometry(0.33,12,10), L(0xfff0f6), 0,-0.12,0.45, head);
   const eyeG = new THREE.SphereGeometry(0.09,8,8), earG = new THREE.ConeGeometry(0.09,0.28,8);
   [-1,1].forEach(s=>{
     add(eyeG, B(0x2b2250), s*0.315,0.1,0.15, head);
     add(new THREE.SphereGeometry(0.03,6,6), B(0xffffff), s*0.39,0.13,0.18, head);
-    add(earG, L(W), s*0.18,0.42,-0.25, head);
+    add(earG, M.body, s*0.18,0.42,-0.25, head);
   });
-  const hornMat = new THREE.MeshLambertMaterial({color:GOLD, emissive:0x332200});
+  const hornMat = new THREE.MeshLambertMaterial({color:GOLD, emissive:0x332200, transparent:true, opacity:1});
   const horn = add(new THREE.ConeGeometry(0.11,0.85,12), hornMat, 0,0.55,0.3, head); horn.rotation.x = 0.6;
   const tip = new THREE.Object3D(); tip.position.set(0,0.9,0.55); head.add(tip);
-  add(new THREE.SphereGeometry(0.17,10,8), L(PINK), 0,0.36,0.12, head);
-  const mg = new THREE.SphereGeometry(0.23,10,8), maneCols = [PINK,PURP,BLUE];
-  for (let i=0;i<7;i++){ const t=i/6; add(mg, L(maneCols[i%3]), 0, 3.4-t*1.25, 1.15-t*0.73, rig); }
+  add(new THREE.SphereGeometry(0.17,10,8), M.mane[0], 0,0.36,0.12, head);
+  const mg = new THREE.SphereGeometry(0.23,10,8);
+  for (let i=0;i<7;i++){ const t=i/6; add(mg, M.mane[i], 0, 3.4-t*1.25, 1.15-t*0.73, rig); }
   const tail = new THREE.Group(); tail.position.set(0,2.0,-1.2); rig.add(tail);
-  [[0,0,0],[0,-0.05,-0.3],[0,-0.35,-0.45],[0,-0.7,-0.5],[0,-1.0,-0.45]].forEach((p,i)=>add(mg, L(maneCols[i%3]), p[0],p[1],p[2], tail));
+  [[0,0,0],[0,-0.05,-0.3],[0,-0.35,-0.45],[0,-0.7,-0.5],[0,-1.0,-0.45]].forEach((p,i)=>add(mg, M.tail[i], p[0],p[1],p[2], tail));
   add(new THREE.CylinderGeometry(0.55,0.55,0.12,20), L(PURP), 0,2.4,-0.1, rig);
+  // wings (only shown if she owns and picks them in the wardrobe)
+  const wings = new THREE.Group(); wings.visible = false; rig.add(wings);
+  const ws = new THREE.Shape(); ws.moveTo(0,0); ws.bezierCurveTo(0.6,0.9,1.8,1.5,2.6,1.2); ws.bezierCurveTo(2.2,0.7,2.3,0.35,1.9,0.15);
+  ws.bezierCurveTo(1.7,-0.1,1.3,-0.05,1.0,-0.25); ws.bezierCurveTo(0.7,-0.35,0.35,-0.2,0,0);
+  const wingGeo = new THREE.ShapeGeometry(ws);
+  const wingL = new THREE.Group(), wingR = new THREE.Group(); wingL.position.set(0.45,2.35,0.3); wingR.position.set(-0.45,2.35,0.3);
+  const wl1 = new THREE.Mesh(wingGeo, M.wing); wl1.rotation.y = -0.15; wingL.add(wl1);
+  const wr1 = new THREE.Mesh(wingGeo, M.wing); wr1.scale.x = -1; wr1.rotation.y = 0.15; wingR.add(wr1);
+  wings.add(wingL); wings.add(wingR);
 
   // princess
   const pr = new THREE.Group(); pr.position.set(0,2.45,-0.1); rig.add(pr);
-  add(new THREE.ConeGeometry(0.62,0.95,18), L(PINK), 0,0.45,0, pr);
+  const skirt = add(new THREE.ConeGeometry(0.62,0.95,18), M.dress, 0,0.45,0, pr);
+  // a rainbow skirt for the Rainbow Dress (colored bands from top to bottom)
+  const rsg = new THREE.ConeGeometry(0.62,0.95,18,6), rsp = rsg.attributes.position, rcol = [], rc = new THREE.Color();
+  for (let i=0;i<rsp.count;i++){ const k = Math.min(5, Math.floor((0.475 - rsp.getY(i))/0.95*6)); rc.setHex(RB6[Math.max(0,k)]); rcol.push(rc.r, rc.g, rc.b); }
+  rsg.setAttribute('color', new THREE.Float32BufferAttribute(rcol, 3));
+  const rainbowSkirt = add(rsg, new THREE.MeshLambertMaterial({vertexColors:true}), 0,0.45,0, pr); rainbowSkirt.visible = false;
   // legs for riding (sticking out to the sides) ...
   const rideLegs = new THREE.Group(); pr.add(rideLegs);
   [-1,1].forEach(s=>{
-    const l = add(new THREE.CylinderGeometry(0.1,0.1,0.6,8), L(PINK), s*0.6,-0.12,0.1, rideLegs); l.rotation.z = s*0.3;
+    const l = add(new THREE.CylinderGeometry(0.1,0.1,0.6,8), M.dress, s*0.6,-0.12,0.1, rideLegs); l.rotation.z = s*0.3;
     add(new THREE.SphereGeometry(0.13,8,6), L(PURP), s*0.74,-0.42,0.15, rideLegs);
   });
   // ... and legs for walking (hidden until she hops off)
@@ -1015,9 +1218,9 @@ function makePlayer(){
     add(new THREE.BoxGeometry(0.16,0.12,0.28), L(PURP), 0,-0.64,0.05, hip);
     wl.push(hip);
   });
-  add(new THREE.CylinderGeometry(0.2,0.28,0.55,12), L(PINK), 0,1.05,0, pr);
+  add(new THREE.CylinderGeometry(0.2,0.28,0.55,12), M.dress, 0,1.05,0, pr);
   add(new THREE.CylinderGeometry(0.29,0.29,0.08,12), L(GOLD), 0,0.8,0, pr);
-  [-1,1].forEach(s=>add(new THREE.SphereGeometry(0.12,8,6), L(PINK), s*0.26,1.26,0, pr));
+  [-1,1].forEach(s=>add(new THREE.SphereGeometry(0.12,8,6), M.dress, s*0.26,1.26,0, pr));
   const armG = new THREE.CylinderGeometry(0.07,0.07,0.5,8);
   const ra = new THREE.Group(); ra.position.set(0.27,1.22,0); pr.add(ra); add(armG, L(SKIN), 0,0.25,0, ra);
   ra.rotation.x = 1.25; ra.rotation.z = -0.15;
@@ -1026,23 +1229,44 @@ function makePlayer(){
   const la = new THREE.Group(); la.position.set(-0.27,1.22,0); pr.add(la); add(armG, L(SKIN), 0,0.25,0, la);
   la.rotation.x = 1.0; la.rotation.z = 0.2;
   add(new THREE.SphereGeometry(0.3,16,12), L(SKIN), 0,1.62,0, pr);
-  add(new THREE.SphereGeometry(0.33,16,12), L(HAIR), 0,1.72,-0.06, pr);
-  add(new THREE.BoxGeometry(0.62,0.8,0.24), L(HAIR), 0,1.33,-0.2, pr);
-  [-1,1].forEach(s=>add(new THREE.BoxGeometry(0.12,0.55,0.22), L(HAIR), s*0.29,1.45,-0.02, pr));
-  [-0.2,0,0.2].forEach(x=>add(new THREE.SphereGeometry(0.14,8,6), L(HAIR), x,0.95,-0.22, pr));
+  add(new THREE.SphereGeometry(0.33,16,12), M.hair, 0,1.72,-0.06, pr);
+  add(new THREE.BoxGeometry(0.62,0.8,0.24), M.hair, 0,1.33,-0.2, pr);
+  [-1,1].forEach(s=>add(new THREE.BoxGeometry(0.12,0.55,0.22), M.hair, s*0.29,1.45,-0.02, pr));
+  [-0.2,0,0.2].forEach(x=>add(new THREE.SphereGeometry(0.14,8,6), M.hair, x,0.95,-0.22, pr));
   [-1,1].forEach(s=>{
     add(new THREE.SphereGeometry(0.045,8,6), B(0x3b5bdb), s*0.11,1.65,0.27, pr);
     add(new THREE.SphereGeometry(0.05,8,6), L(0xff9eb5), s*0.17,1.55,0.24, pr);
   });
   const smile = add(new THREE.TorusGeometry(0.06,0.016,6,12,Math.PI), B(0xc2255c), 0,1.53,0.29, pr); smile.rotation.z = Math.PI;
-  add(new THREE.CylinderGeometry(0.17,0.19,0.12,10), L(GOLD), 0,2.03,-0.02, pr);
-  for (let i=0;i<5;i++){ const a=i/5*TAU; add(new THREE.ConeGeometry(0.045,0.14,6), L(GOLD), Math.sin(a)*0.17,2.15,Math.cos(a)*0.17-0.02, pr); }
-  add(new THREE.SphereGeometry(0.045,8,6), B(0xff3d8b), 0,2.03,0.16, pr);
+  // things she can wear on her head
+  const hats = {};
+  const hg = id => { const h = new THREE.Group(); h.visible = false; pr.add(h); hats[id] = h; return h; };
+  { const h = hg('crown'); h.visible = true;
+    add(new THREE.CylinderGeometry(0.17,0.19,0.12,10), M.crown, 0,2.03,-0.02, h);
+    for (let i=0;i<5;i++){ const a=i/5*TAU; add(new THREE.ConeGeometry(0.045,0.14,6), M.crown, Math.sin(a)*0.17,2.15,Math.cos(a)*0.17-0.02, h); }
+    add(new THREE.SphereGeometry(0.045,8,6), B(0xff3d8b), 0,2.03,0.16, h); }
+  { const h = hg('tiara');
+    const t = add(new THREE.TorusGeometry(0.27,0.025,6,24,Math.PI), L(0xdfe6ee), 0,1.9,0.02, h); t.rotation.x = Math.PI/2;
+    add(new THREE.OctahedronGeometry(0.07), B(0x9be7ff), 0,2.08,0.18, h);
+    [-1,1].forEach(s=>add(new THREE.OctahedronGeometry(0.04), B(0xd0bfff), s*0.12,2.03,0.16, h)); }
+  { const h = hg('flowers');
+    const ring = add(new THREE.TorusGeometry(0.27,0.04,6,24), L(0x51cf66), 0,1.98,-0.04, h); ring.rotation.x = Math.PI/2;
+    for (let i=0;i<8;i++){ const a = i/8*TAU; add(new THREE.SphereGeometry(0.07,8,6), L([0xff6b9e,0xffe066,0xffffff,0xb197fc][i%4]), Math.sin(a)*0.27, 2.0, Math.cos(a)*0.27-0.04, h); } }
+  { const h = hg('sunhat');
+    add(new THREE.CylinderGeometry(0.62,0.62,0.04,24), L(0xfff3bf), 0,1.98,-0.04, h);
+    add(new THREE.CylinderGeometry(0.28,0.32,0.26,18), L(0xfff3bf), 0,2.12,-0.04, h);
+    const rib = add(new THREE.TorusGeometry(0.31,0.04,6,20), L(0xff8fc8), 0,2.03,-0.04, h); rib.rotation.x = Math.PI/2;
+    add(new THREE.SphereGeometry(0.08,8,6), L(0xff6b9e), 0.26,2.06,0.12, h); }
+  { const h = hg('royal');
+    add(new THREE.CylinderGeometry(0.19,0.2,0.2,12), M.crown, 0,2.07,-0.02, h);
+    for (let i=0;i<8;i++){ const a=i/8*TAU; add(new THREE.ConeGeometry(0.04,0.2,6), M.crown, Math.sin(a)*0.19,2.25,Math.cos(a)*0.19-0.02, h);
+      add(new THREE.SphereGeometry(0.035,6,6), B([0xff3d8b,0x4dabf7,0x51cf66,0xb197fc][i%4]), Math.sin(a)*0.2,2.06,Math.cos(a)*0.2-0.02, h); }
+    add(new THREE.SphereGeometry(0.06,8,6), B(0xff3d8b), 0,2.38,-0.02, h); }
 
   const shield = add(new THREE.SphereGeometry(2.7,24,16),
     new THREE.MeshBasicMaterial({color:0xff9cf0, transparent:true, opacity:0.22, depthWrite:false}), 0,2.2,0, g, false);
   shield.visible = false;
-  return {g, rig, legs, tail, tip, hornMat, shield, head, star, pr, rideLegs, walkLegs, wl, ra, la};
+  return {g, rig, legs, tail, tip, hornMat, shield, head, star, pr, rideLegs, walkLegs, wl, ra, la, M, skirt, rainbowSkirt, hats, wings, wingL, wingR};
 }
 const U = makePlayer(); scene.add(U.g);   // U = the unicorn (with the princess riding)
 
@@ -1058,19 +1282,29 @@ const ZG = {
 const barBgGeo = new THREE.PlaneGeometry(1.3,0.2), barFgGeo = new THREE.PlaneGeometry(1.2,0.13);
 function makeZombie(type){
   const g = new THREE.Group(), inner = new THREE.Group(); g.add(inner);
-  const skin = pick([0x9cbf7a,0x8fb09a,0xa9c68a,0x86b48a]);
-  const shirt = type==='boss' ? 0x6741d9 : pick([0x8e6bd6,0xd66b8e,0x4fa3d6,0xe0a03a,0x45b5a5]);
-  const pants = pick([0x4a4e8c,0x5a4030,0x37506b]);
+  const fire = type === 'fireboss';
+  const skin = fire ? 0x8c1c13 : pick([0x9cbf7a,0x8fb09a,0xa9c68a,0x86b48a]);
+  const shirt = fire ? 0x1b1414 : type==='boss' ? 0x6741d9 : pick([0x8e6bd6,0xd66b8e,0x4fa3d6,0xe0a03a,0x45b5a5]);
+  const pants = fire ? 0x2b2222 : pick([0x4a4e8c,0x5a4030,0x37506b]);
   const legs = [], arms = [];
-  [-0.24,0.24].forEach(x=>{ const p=new THREE.Group(); p.position.set(x,1.0,0); inner.add(p); add(ZG.leg,L(pants),0,-0.5,0,p); add(ZG.shoe,L(0x3b2f2f),0,-0.93,0.08,p); legs.push(p); });
+  [-0.24,0.24].forEach(x=>{ const p=new THREE.Group(); p.position.set(x,1.0,0); inner.add(p); add(ZG.leg,L(pants),0,-0.5,0,p); add(ZG.shoe,L(fire ? 0x111111 : 0x3b2f2f),0,-0.93,0.08,p); legs.push(p); });
   add(ZG.torso, L(shirt), 0,1.5,0, inner);
-  const head = new THREE.Group(); head.position.set(0,2.4,0); head.rotation.z = rand(-0.2,0.2); inner.add(head);
+  const head = new THREE.Group(); head.position.set(0,2.4,0); head.rotation.z = fire ? 0 : rand(-0.2,0.2); inner.add(head);
   add(ZG.head, L(skin), 0,0,0, head);
-  add(ZG.eye, L(0xffffff), -0.18,0.08,0.38, head).scale.setScalar(0.15);
-  add(ZG.eye, L(0xffffff), 0.19,0.06,0.38, head).scale.setScalar(0.11);
-  add(ZG.pupil, B(0x111111), -0.16,0.06,0.52, head); add(ZG.pupil, B(0x111111), 0.2,0.05,0.48, head);
-  add(ZG.mouth, B(0x3a1a2a), 0,-0.2,0.39, head); add(ZG.tooth, L(0xffffff), 0.06,-0.155,0.41, head);
-  for (let i=0;i<3;i++) add(ZG.hair, L(0x3d2b1f), rand(-0.25,0.25),0.47,rand(-0.2,0.2), head).rotation.z = rand(-0.5,0.5);
+  if (fire){
+    // the Fire Zombie King: glowing eyes, horns, lava cracks and shoulder spikes
+    [-0.18, 0.18].forEach(x=>{ add(ZG.eye, B(0xffd43b), x,0.08,0.38, head).scale.set(0.15,0.09,0.12); add(ZG.pupil, B(0xff2a00), x,0.08,0.5, head); });
+    add(ZG.mouth, B(0xff6a00), 0,-0.2,0.39, head).scale.set(1.3,1.6,1);
+    [-1,1].forEach(s=>{ const h = add(new THREE.ConeGeometry(0.11,0.55,8), L(0x241010), s*0.3,0.55,0, head); h.rotation.z = -s*0.5; });
+    [[-0.25,1.7],[0.2,1.45],[0.05,1.25],[-0.1,1.55]].forEach(([x,y])=>{ const c = add(new THREE.BoxGeometry(0.4,0.05,0.02), B(0xff7a1a), x,y,0.29, inner, false); c.rotation.z = rand(-0.7,0.7); });
+    [-1,1].forEach(s=>{ for (let k=0;k<3;k++){ const sp = add(new THREE.ConeGeometry(0.08,0.35,6), L(0x241010), s*(0.5+k*0.08),2.05,-0.1+k*0.12, inner); sp.rotation.z = -s*0.4; } });
+  } else {
+    add(ZG.eye, L(0xffffff), -0.18,0.08,0.38, head).scale.setScalar(0.15);
+    add(ZG.eye, L(0xffffff), 0.19,0.06,0.38, head).scale.setScalar(0.11);
+    add(ZG.pupil, B(0x111111), -0.16,0.06,0.52, head); add(ZG.pupil, B(0x111111), 0.2,0.05,0.48, head);
+    add(ZG.mouth, B(0x3a1a2a), 0,-0.2,0.39, head); add(ZG.tooth, L(0xffffff), 0.06,-0.155,0.41, head);
+    for (let i=0;i<3;i++) add(ZG.hair, L(0x3d2b1f), rand(-0.25,0.25),0.47,rand(-0.2,0.2), head).rotation.z = rand(-0.5,0.5);
+  }
   if (type==='boss'){ add(ZG.hat, L(0xff4d6d), 0,0.72,0, head); add(ZG.pom, L(0xffe066), 0,1.08,0, head); }
   [-0.6,0.6].forEach(x=>{ const p=new THREE.Group(); p.position.set(x,1.85,0); inner.add(p); add(ZG.sleeve,L(shirt),0,0,0.1,p); add(ZG.arm,L(skin),0,0,0.5,p); arms.push(p); });
   return {g, inner, legs, arms, head};
@@ -1198,12 +1432,12 @@ const bubbleMat = new THREE.MeshLambertMaterial({color:0x9be7ff, transparent:tru
 const SHOP = [
   {id:'coin',  emoji:'🪙', name:'Coin Power',    max:25, cost:l=>Math.round(30*Math.pow(1.45,l)),
    desc:l=>'Every coin worth ×' + fmtNum(Math.pow(1.6,l+1)) + ' (now ×' + fmtNum(Math.pow(1.6,l)) + ')'},
-  {id:'speed', emoji:'👟', name:'Speedy Hooves', max:10, cost:l=>Math.round(40*Math.pow(1.7,l)),
-   desc:l=>'Ride and walk 10% faster'},
+  {id:'speed', emoji:'👟', name:'Super Speed', max:40, cost:l=>Math.round(40*Math.pow(1.5,l)),
+   desc:l=>'Ride AND walk faster: ×' + speedAt(l).toFixed(2) + ' → ×' + speedAt(l+1).toFixed(2)},
   {id:'slots', emoji:'🎒', name:'Weapon Bag',    max:3,  cost:l=>[750, 4000, 20000][l],
    desc:l=>'Carry ' + (l+2) + ' weapons at once'}
 ];
-const save = {coins:0, coin:0, speed:0, slots:0, best:0, beach:false};
+const save = {coins:0, coin:0, speed:0, slots:0, best:0, beach:false, castle:false};
 try { Object.assign(save, JSON.parse(localStorage.getItem('puz-save3') || '{}')); } catch(e){}
 function saveGame(){ try { localStorage.setItem('puz-save3', JSON.stringify(save)); } catch(e){} }
 unlocked.beach = !!save.beach; beachGate.visible = !unlocked.beach;
@@ -1216,13 +1450,14 @@ function saveRun(){
 }
 function wipeEverything(){
   try { localStorage.removeItem('puz-save3'); } catch(e){}
-  Object.assign(save, {coins:0, coin:0, speed:0, slots:0, best:0, beach:false}); delete save.run;
-  unlocked.beach = false; beachGate.visible = true;
+  Object.assign(save, {coins:0, coin:0, speed:0, slots:0, best:0, beach:false, castle:false, look:Object.assign({}, LOOK_DEFAULT), owned:{}}); delete save.run;
+  unlocked.beach = false; beachGate.visible = true; unlocked.castle = false; setCastleOpen(false); applyLook();
   saveGame(); refreshMenu();
 }
 const coinValue = () => Math.pow(1.6, save.coin);
 const maxSlots = () => 1 + save.slots;
-const speedMult = () => 1 + 0.1*save.speed;
+const speedAt = l => 1 + 0.1*Math.min(l, 10) + 0.06*Math.max(0, l - 10);   // +10% per level, then +6% after level 10
+const speedMult = () => speedAt(save.speed);
 function fmtNum(n){
   if (n < 10 && n % 1) return n.toFixed(1);
   if (n < 1000) return String(Math.floor(n));
@@ -1262,11 +1497,22 @@ function openShop(){
   renderShop(); $('shop').classList.remove('hidden');
 }
 function closeShop(){
-  $('shop').classList.add('hidden'); $('barMenu').classList.add('hidden');
+  $('shop').classList.add('hidden'); $('barMenu').classList.add('hidden'); $('wardrobe').classList.add('hidden'); wardrobeOpen = false;
   if (state === 'shop'){ state = 'play'; last = performance.now(); }
 }
+let shopTab = 'up';
 function renderShop(){
   $('shopCoins').textContent = '🪙 ' + fmtNum(save.coins);
+  document.querySelectorAll('#shopTabs .tab').forEach(b=>b.classList.toggle('on', b.dataset.tab === shopTab));
+  if (shopTab === 'ward'){
+    $('shopRows').innerHTML = WARDROBE.map(c=>'<div class="wcat">' + (c.who === 'unicorn' ? 'Unicorn · ' : 'Princess · ') + c.label + '</div>' +
+      c.items.filter(it=>it.cost > 0).map(it=>{
+        const own = owns(c.cat, it.id);
+        return '<div class="shopRow slim"><div class="t"><b>' + swatch(it) + it.name + '</b></div>' + (own ? '<span class="owned">✓ Yours</span>' :
+          '<button class="buy" data-wc="' + c.cat + '" data-wi="' + it.id + '"' + (save.coins < it.cost ? ' disabled' : '') + '>🪙 ' + fmtNum(it.cost) + '</button>') + '</div>';
+      }).join('')).join('') + '<p class="small">New things are put on right away. Change outfits any time in your house 🏠 (and the castle tower).</p>';
+    return;
+  }
   $('shopRows').innerHTML = SHOP.map(it=>{
     const l = save[it.id], maxed = l >= it.max, c = maxed ? 0 : it.cost(l);
     return '<div class="shopRow"><div class="e">' + it.emoji + '</div><div class="t"><b>' + it.name + '</b> <span class="lv">Level ' + l + (maxed ? ' (max)' : '') + '</span>' +
@@ -1276,6 +1522,11 @@ function renderShop(){
 }
 $('shopRows').addEventListener('click', e=>{
   const b = e.target.closest('.buy'); if (!b || b.disabled) return;
+  if (b.dataset.wc){                                         // a wardrobe item: buy it and put it on
+    const it = lookItem(b.dataset.wc, b.dataset.wi); if (save.coins < it.cost) return;
+    save.coins -= it.cost; (save.owned[b.dataset.wc] = save.owned[b.dataset.wc] || []).push(it.id);
+    save.look[b.dataset.wc] = it.id; applyLook(); saveGame(); sfx.power(); renderShop(); updateHUD(true); return;
+  }
   const it = SHOP.find(i=>i.id === b.dataset.id), l = save[it.id], c = it.cost(l);
   if (save.coins < c || l >= it.max) return;
   save.coins -= c; save[it.id]++; saveGame(); sfx.power(); renderShop(); updateHUD(true);
@@ -1324,11 +1575,13 @@ function clearAll(){
   projectiles.forEach(p=>scene.remove(p.m)); projectiles = [];
   pickups.forEach(p=>scene.remove(p.g)); pickups.length = 0;
   particles.forEach(p=>scene.remove(p.m)); particles.length = 0;
+  fireballs.forEach(f=>scene.remove(f.m)); fireballs.length = 0;
 }
 function resetGame(run){
   clearAll();
   U.g.position.set(0,0,4); U.g.rotation.y = 0; attachRider(true); mounted = true; uni.called = false;
   endRace(); ball.reset();
+  castleParts.chests.forEach(c=>{ c.opened = false; c.lid.rotation.x = 0; });
   Object.assign(P, {swim:false, inWater:false, y:0, vy:0, ang:0, grounded:true, slide:null, health:100, max:100, fireCd:0, stompCd:0, invuln:0, gallop:0, rear:0, weapons:['wand'], wi:0});
   P.pos.set(0,0,4);
   power.speed = power.strength = power.shield = 0;
@@ -1353,7 +1606,9 @@ function nextWave(){
   wave++; inBreak = false;
   if (!unlocked.beach && wave >= BEACH_WAVE) openBeach();
   toSpawn = 3 + wave*2; spawnT = 3;
-  if (wave % 5 === 0){ spawnZombie('boss'); banner('👑 Big Zombie Boss! 👑'); }
+  if (!unlocked.castle && wave >= CASTLE_WAVE) openCastle();
+  if (wave % 10 === 0){ spawnZombie('fireboss'); banner('🔥 The Fire Zombie King! 🔥'); }
+  else if (wave % 5 === 0){ spawnZombie('boss'); banner('👑 Big Zombie Boss! 👑'); }
   else banner('Wave ' + wave + '!');
   sfx.wave();
   const nw = WEAPONS.find(w=>w.wave === wave && w.wave > 1);
@@ -1364,8 +1619,10 @@ function nextWave(){
   }
 }
 function placeZombie(z){
-  const s = aheadSpot(32, 50, 1.3) || aheadSpot(25, 50, Math.PI) || [P.pos.x + 30, P.pos.z];
-  z.g.position.set(s[0], 0, s[1]); z.rise = 0;
+  const s = aheadSpot(32, 50, 1.3) || aheadSpot(25, 60, Math.PI);
+  // no good spot ahead (for example while she's swimming far out)? pick dry land nearby instead, never the water
+  const r = s ? {x:s[0], z:s[1]} : (randomLandSpot(P.pos.x, P.pos.z, 90, 25) || randomLandSpot(0, 0, 170, 0) || {x:0, z:30});
+  z.g.position.set(r.x, 0, r.z); z.rise = 0;
 }
 function spawnZombie(type, mode){
   const z = makeZombie(type);
@@ -1373,11 +1630,13 @@ function spawnZombie(type, mode){
   const stats = {
     normal:{hp:3 + Math.floor(wave/3), speed:sp,      scale:1,   r:0.8,  dmg:10, score:10,  coins:2},
     fast:  {hp:2 + Math.floor(wave/4), speed:sp*1.55, scale:0.8, r:0.65, dmg:8,  score:15,  coins:3},
-    boss:  {hp:14 + wave*3,  speed:2.2 + wave*0.1,    scale:1.9, r:1.5,  dmg:20, score:100, coins:15}
+    boss:  {hp:14 + wave*3,  speed:2.2 + wave*0.1,    scale:1.9, r:1.5,  dmg:20, score:100, coins:15, big:true},
+    // the Fire Zombie King: 50% bigger than the Big Zombie Boss, three times as tough, and he throws fireballs
+    fireboss: {hp:(14 + wave*3)*3, speed:2.4 + wave*0.06, scale:2.85, r:2.2, dmg:30, score:300, coins:40, big:true}
   }[type];
   Object.assign(z, stats, {type, maxHp:stats.hp, phase:rand(0,TAU), squash:0, bar:makeBar(), dead:false});
   z.inner.scale.setScalar(z.scale);
-  z.bar.b.scale.setScalar(type === 'boss' ? 2 : 1);
+  z.bar.b.scale.setScalar(type === 'fireboss' ? 3 : type === 'boss' ? 2 : 1);
   placeZombie(z);
   if (mode === 'wander'){                                 // wanderers roam the world until they spot her
     const s = randomLandSpot(unlocked.beach ? 60 : 0, 0, unlocked.beach ? 230 : 175, 45);
@@ -1415,7 +1674,9 @@ function dismount(){
 function interact(){
   if (state !== 'play' || P.slide) return;
   if (distXZ(P.pos, SHOP_POS) < 5.5 && P.y < 2){ openShop(); return; }
+  if (distXZ(P.pos, HOUSE) < 7 && P.y < 2){ openWardrobe(); return; }
   if (unlocked.beach && distXZ(P.pos, BAR) < 6.8 && P.y < 2){ openBar(); return; }
+  if (castleInteract()) return;
   if (!raceState.active && raceState.near >= 0){ startRace(raceState.near); return; }
   if (mounted){ if (P.grounded) dismount(); }
   else if (distXZ(P.pos, U.g.position) < 3.8) mount();
@@ -1450,7 +1711,9 @@ const KEY_E = () => isTouch ? 'Tap 🦄' : 'Press E';
 function promptText(){
   if (P.slide || state !== 'play') return '';
   if (distXZ(P.pos, SHOP_POS) < 5.5 && P.y < 2) return KEY_E() + ' to open the shop 🛒';
+  if (distXZ(P.pos, HOUSE) < 7 && P.y < 2) return KEY_E() + ' to go inside and change clothes 👗';
   if (unlocked.beach && distXZ(P.pos, BAR) < 6.8 && P.y < 2) return KEY_E() + ' for the beach bar 🍹';
+  { const cs = castleSpot(); if (cs) return KEY_E() + ' ' + cs.text; }
   if (!raceState.active && raceState.near >= 0) return KEY_E() + ' to start the ' + RACES[raceState.near].name + ' 🏁';
   if (!mounted && distXZ(P.pos, U.g.position) < 3.8) return KEY_E() + ' to hop on 🦄';
   if (mounted && distXZ(P.pos, PARK_POS) < 3) return KEY_E() + ' to park and hop off 🅿️';
@@ -1490,7 +1753,7 @@ function splash(center, radius, dmg){
   zombies.forEach(z=>{
     if (z.dead || z.rise < 1) return;
     const dx = z.g.position.x - center.x, dz = z.g.position.z - center.z, d = Math.hypot(dx,dz) || 1;
-    if (d < radius + z.r) hurtZombie(z, dmg, dx/d, dz/d, z.type === 'boss' ? 0.4 : 1.6);
+    if (d < radius + z.r) hurtZombie(z, dmg, dx/d, dz/d, z.big ? 0.4 : 1.6);
   });
 }
 function stomp(){
@@ -1504,13 +1767,14 @@ function stomp(){
   zombies.forEach(z=>{
     if (z.rise < 1 || z.dead) return;
     const dx = z.g.position.x - px, dz = z.g.position.z - pz, d = Math.hypot(dx,dz) || 1;
-    if (d < 8) hurtZombie(z, 2 + Math.floor(wave/4), dx/d, dz/d, z.type === 'boss' ? 1.5 : 5);
+    if (d < 8) hurtZombie(z, 2 + Math.floor(wave/4), dx/d, dz/d, z.big ? 1.5 : 5);
   });
 }
 function hurtZombie(z, dmg, kx, kz, kb){
   if (z.dead) return;
   z.hp -= dmg; z.squash = 1;
-  z.g.position.x += kx*kb; z.g.position.z += kz*kb;
+  const nx = z.g.position.x + kx*kb, nz = z.g.position.z + kz*kb;
+  if (zombieCanStand(nx, nz)){ z.g.position.x = nx; z.g.position.z = nz; }   // never knock a zombie into the water
   tmpV.copy(z.g.position); tmpV.y = 2*z.scale;
   burst(tmpV, [0xffffff,0xffe066,0xff8fc8], 6, 4, 0.8, 0.4, 6, 3);
   sfx.hit();
@@ -1519,10 +1783,11 @@ function hurtZombie(z, dmg, kx, kz, kb){
 function killZombie(z){
   z.dead = true; scene.remove(z.g); scene.remove(z.bar.b);
   tmpV.copy(z.g.position); tmpV.y = 1.5*z.scale;
-  burst(tmpV, [0xa9e38a,0xd8ffb5,0xffffff,0xc8a2ff], z.type === 'boss' ? 60 : 22, z.type === 'boss' ? 11 : 7, 1.5, 0.9, 9, 7);
+  burst(tmpV, [0xa9e38a,0xd8ffb5,0xffffff,0xc8a2ff], z.big ? 60 : 22, z.big ? 11 : 7, 1.5, 0.9, 9, 7);
   score += z.score;
   floatText('+' + z.score, z.g.position, '#ffe066');
   sfx.poof();
+  if (z.type === 'fireboss'){ burst(tmpV, [0xff3b00,0xff8c00,0xffd43b], 80, 14, 1.8, 1.2, 6, 10); setTimeout(()=>banner('🔥 You beat the Fire Zombie King! 🔥'), 300); }
   if (safeNow){
     // no camping! a zombie beaten from a safe place gets replaced, and drops nothing
     toSpawn++;
@@ -1533,7 +1798,7 @@ function killZombie(z){
   for (let i=0;i<z.coins;i++) spawnCoin(zx + rand(-1.8,1.8), zz + rand(-1.8,1.8));
   const nCh = pickups.filter(p=>p.kind === 'chicken').length;
   const unlocked = WEAPONS.filter(w=>w.wave <= wave && w.wave > 1);
-  if (z.type === 'boss'){ spawnPickup('chicken', zx+2, zz); spawnPickup(pick(Object.keys(RANCH)), zx-2, zz); }
+  if (z.big){ spawnPickup('chicken', zx+2, zz); spawnPickup(pick(Object.keys(RANCH)), zx-2, zz); }
   else if (Math.random() < 0.13 && nCh < 4) spawnPickup('chicken', zx, zz);
   else if (Math.random() < 0.07) spawnPickup(pick(Object.keys(RANCH)), zx, zz);
   else if (Math.random() < 0.03 && unlocked.length) spawnWeaponPickup(pick(unlocked).id, zx, zz);
@@ -1582,12 +1847,12 @@ function updatePlayer(dt){
   if (P.slide){
     // whee! ride along the rainbow slide
     const S = P.slide;
-    S.v = Math.min(30, S.v + 16*dt);
+    S.v = Math.min(S.s.braid ? 12 : 30, S.v + 16*dt);
     S.u += dt * S.v / S.s.len;
     const u = Math.min(1, S.u), c = S.s.curve.getPointAt(u), t = S.s.curve.getTangentAt(u);
     pos.x = c.x; pos.z = c.z; P.y = c.y + 0.05;
     P.ang = Math.atan2(t.x, t.z);
-    rider.rotation.x = -Math.asin(Math.max(-1, Math.min(1, t.y)));
+    rider.rotation.x = S.s.braid ? 0 : -Math.asin(Math.max(-1, Math.min(1, t.y)));   // stay upright while climbing down the braid
     spawnParticle(new THREE.Vector3(c.x+rand(-1,1), c.y+0.6, c.z+rand(-1,1)), pick(RAINBOW), new THREE.Vector3(rand(-2,2), rand(1,3), rand(-2,2)), 1.2, 0.6, 2);
     if (S.u >= 1){
       P.slide = null; P.vy = S.s.water ? 1 : 7; P.grounded = false; P.invuln = 1; rider.rotation.x = 0;
@@ -1622,10 +1887,19 @@ function updatePlayer(dt){
   else if (canGo(nx, pos.z)) pos.x = nx;
   else if (canGo(pos.x, nz)) pos.z = nz;
   const bodyR = mounted ? 0.9 : 0.5;
-  if (P.y < 5){
-    for (const b of blockers){
-      const dx = pos.x - b.x, dz = pos.z - b.z, d = Math.hypot(dx, dz), min = b.r + bodyR;
-      if (d < min && d > 0.001){ pos.x = b.x + dx/d*min; pos.z = b.z + dz/d*min; }
+  for (const b of blockers){
+    if (b.y0 !== undefined ? Math.abs(P.y - b.y0) > 2.5 : P.y > 5) continue;
+    const dx = pos.x - b.x, dz = pos.z - b.z, d = Math.hypot(dx, dz), min = b.r + bodyR;
+    if (d < min && d > 0.001){ pos.x = b.x + dx/d*min; pos.z = b.z + dz/d*min; }
+  }
+  // the tower room has a low wall all around, except where the stairs come in and at the balcony
+  if (P.y > PT.h - 1.5){
+    const dx = pos.x - PT.x, dz = pos.z - PT.z, d = Math.hypot(dx, dz);
+    if (d > 5.3 && d < 6.6 && !ROOM_OPENINGS.some(o=>Math.abs(angDiff(Math.atan2(dx, dz), o)) < 0.42)){ pos.x = PT.x + dx/d*5.3; pos.z = PT.z + dz/d*5.3; }
+    const bal = PLATFORMS[1];
+    if (inRect(bal, pos.x, pos.z, 0.5)){
+      pos.z = Math.max(bal.z0 + 0.35, Math.min(bal.z1 - 0.35, pos.z));
+      if (Math.abs(pos.z - (CZ-14)) > 1.1) pos.x = Math.max(bal.x0 + 0.35, pos.x);   // railings, with a gap for the braid
     }
   }
   if (P.y < 60) pushOutRects(pos, bodyR);
@@ -1696,7 +1970,9 @@ function syncModels(dt){
   }
   const big = mounted ? U.rig : walker, targetScale = power.strength > 0 ? 1.15 : 1;
   big.scale.setScalar(big.scale.x + (targetScale - big.scale.x)*Math.min(1, dt*6));
-  U.hornMat.emissive.setHex(power.strength > 0 && mounted ? (Math.sin(time*12) > 0 ? 0xff3300 : 0x992200) : 0x332200);
+  U.hornMat.emissive.setHex(power.strength > 0 && mounted ? (Math.sin(time*12) > 0 ? 0xff3300 : 0x992200) : hornGlow);
+  if (hornRainbow) U.hornMat.color.setHSL((time*0.3) % 1, 0.9, 0.65);
+  if (U.wings.visible){ const f = Math.sin(time*(P.moving ? 9 : 2.5))*(P.moving ? 0.55 : 0.2); U.wingL.rotation.z = 0.3 + f; U.wingR.rotation.z = -0.3 - f; }
   U.shield.position.set(pos.x, P.y + (mounted ? 2.2 : 1.4), pos.z);
   U.shield.scale.setScalar(mounted ? 1 : 0.65);
   U.shield.visible = power.shield > 0 && (power.shield > 2 || Math.sin(time*20) > 0);
@@ -1750,6 +2026,13 @@ function updateZombies(dt){
     z.inner.rotation.z = Math.sin(z.phase)*0.08;
     z.squash = Math.max(0, z.squash - dt*5);
     z.inner.scale.set(z.scale*(1+z.squash*0.25), z.scale*(1-z.squash*0.25), z.scale*(1+z.squash*0.25));
+    if (z.type === 'fireboss'){
+      for (let k=0;k<6;k++){ const sh = k < 2 ? 0 : (k%2 ? 1 : -1);   // flames on his head and both shoulders
+        spawnParticle(new THREE.Vector3(zp.x + (sh*0.6 + rand(-0.3,0.3))*z.scale, (sh ? 2.15 : 2.95 + rand(0,0.4))*z.scale, zp.z + rand(-0.3,0.3)*z.scale),
+          pick([0xff3b00,0xff8c00,0xffd43b]), new THREE.Vector3(rand(-0.6,0.6), rand(2.5,5.5), rand(-0.6,0.6)), rand(1.4,2.6), rand(0.35,0.75), -2); }
+      z.fireT = (z.fireT === undefined ? 2.5 : z.fireT) - dt;
+      if (z.fireT <= 0 && d < 48 && !safeNow){ z.fireT = 3.2; shootFireball(z); }
+    }
     for (let j=i+1;j<zombies.length;j++){              // don't stand inside each other
       const o = zombies[j]; if (o.dead || o.rise < 1) continue;
       const ox = o.g.position.x - zp.x, oz = o.g.position.z - zp.z, od = Math.hypot(ox, oz), min = z.r + o.r;
@@ -1761,15 +2044,19 @@ function updateZombies(dt){
       if (bd < bmin && bd > 0.001){ zp.x = cx + bx/bd*bmin; zp.z = cz + bz/bd*bmin; }
     });
     if (d < 25) for (const b of blockers){
+      if (b.y0 !== undefined) continue;
       const bx = zp.x - b.x, bz = zp.z - b.z, bd = Math.hypot(bx, bz), bmin = b.r + z.r*0.8;
       if (bd < bmin && bd > 0.001){ zp.x = b.x + bx/bd*bmin; zp.z = b.z + bz/bd*bmin; }
     }
     pushOutRects(zp, z.r);
-    if (!zombieCanStand(zp.x, zp.z)){ zp.x = ox; zp.z = oz; }   // zombies can't swim!
+    if (!zombieCanStand(zp.x, zp.z)){
+      if (zombieCanStand(ox, oz)){ zp.x = ox; zp.z = oz; }                                    // zombies can't swim!
+      else { const s = randomLandSpot(zp.x, zp.z, 40, 10); if (s){ zp.x = s.x; zp.z = s.z; } }  // stuck in water? climb out onto land
+    }
     // touching the princess?
     if (d < z.r + (mounted ? 1.1 : 0.6) && P.y < 1.8*z.scale && !P.slide && !safeNow){
       if (power.shield > 0){
-        hurtZombie(z, 1, -dx/d, -dz/d, z.type === 'boss' ? 1.5 : 3);
+        hurtZombie(z, 1, -dx/d, -dz/d, z.big ? 1.5 : 3);
       } else if (P.invuln <= 0){
         P.health -= z.dmg; P.invuln = 0.8; shake = 0.5; sfx.hurt();
         $('hurt').style.opacity = 1; setTimeout(()=>$('hurt').style.opacity = 0, 180);
@@ -1799,7 +2086,7 @@ function updateProjectiles(dt){
         const s = Math.hypot(p.vx, p.vz);
         if (p.w.splash){ splash(p.m.position, p.w.splash, p.dmg); p.life = 0; break; }
         if (p.w.pierce){ if (!p.hits.has(z)){ p.hits.add(z); hurtZombie(z, p.dmg, p.vx/s, p.vz/s, 0.4); } continue; }
-        hurtZombie(z, p.dmg, p.vx/s, p.vz/s, z.type === 'boss' ? 0.2 : 0.7);
+        hurtZombie(z, p.dmg, p.vx/s, p.vz/s, z.big ? 0.2 : 0.7);
         p.life = 0; break;
       }
     }
@@ -1854,7 +2141,7 @@ function update(dt){
     P.fireCd = currentWeapon().rate * (power.speed > 0 ? 0.65 : 1);
   }
   const inBase = distXZ(P.pos, BASE) < BASE.r && P.y < 3;
-  if (inBase){ P.health = Math.min(P.max, P.health + 8*dt); if (!wasInBase) floatText('Home sweet home! 🏠', P.pos, '#ff5fa2'); }
+  if (inBase){ P.health = Math.min(P.max, P.health + 1.2*dt); if (!wasInBase) floatText('Home sweet home! 🏠', P.pos, '#ff5fa2'); }
   wasInBase = inBase;
   updateProjectiles(dt);
   updateZombies(dt);
@@ -1862,6 +2149,9 @@ function update(dt){
   updatePickups(dt);
   updateRaces(dt);
   updateShells(dt);
+  updateFireballs(dt);
+  if (unlocked.castle && distXZ(P.pos, castleParts.fire) < 45 && Math.random() < 0.8)
+    spawnParticle(new THREE.Vector3(castleParts.fire.x + rand(-0.3,0.3), 0.5, castleParts.fire.z + rand(-0.8,0.8)), pick([0xff3b00,0xff8c00,0xffd43b]), new THREE.Vector3(rand(-0.2,0.2), rand(1,2.2), rand(-0.2,0.2)), 1.1, 0.6, -1);
   ball.update(dt);
   saveT -= dt; if (saveT <= 0){ saveT = 5; saveRun(); }
   updateHUD();
@@ -1885,12 +2175,13 @@ function updateParticles(dt){
 // But zombies beaten from a safe place don't count, so every wave has to be finished out in the open!
 const GUARD_WAVE = 6;     // from this wave on (once the beach is open), zombies guard the other safe places while you hide
 const WANDER_WAVE = 15;   // from this wave on, some zombies roam the world instead of charging at you
-const SAFE_NAMES = {home:'Home Base 🏠', bar:'Beach Bar 🍹', water:'In the water 🌊', slide:'Slides 🛝'};
+const SAFE_NAMES = {home:'Home Base 🏠', bar:'Beach Bar 🍹', water:'In the water 🌊', slide:'Slides 🛝', tower:'Princess Tower 🏰'};
 function safeZone(){
   if (P.slide) return 'slide';
   if (distXZ(P.pos, BASE) < BASE.r && P.y < 3) return 'home';
   if (unlocked.beach && distXZ(P.pos, BAR) < BAR.r) return 'bar';
-  if (P.inWater || PLATFORMS.some(p=>inRect(p, P.pos.x, P.pos.z))) return 'water';
+  if (P.inWater || PLATFORMS.some(p=>p.water && inRect(p, P.pos.x, P.pos.z))) return 'water';
+  if (unlocked.castle && P.y > 1.5 && (inRect(HALL, P.pos.x, P.pos.z, 1) || distXZ(P.pos, PT) < 12) && structureH(P.pos.x, P.pos.z, P.y) > 1) return 'tower';
   if (P.y > 1.5 && structureH(P.pos.x, P.pos.z, P.y) > 1) return 'slide';
   return null;
 }
@@ -1898,7 +2189,7 @@ function landSpot(x, z){
   if (!inWorld(x, z) || waterSurface(x, z) !== null || terrainH(x, z) < -0.05) return false;
   if (Math.hypot(x-BASE.x, z-BASE.z) < BASE.r + 5 || Math.hypot(x-BAR.x, z-BAR.z) < BAR.r + 4) return false;
   if (structureH(x, z) > -50 || TOWERS.some(T=>Math.hypot(x-T.x, z-T.z) < T.r + 3)) return false;
-  if (RECTS.some(R=>inRect(R, x, z, 2))) return false;
+  if (RECTS.some(R=>inRect(R, x, z, 2)) || inRect(HALL, x, z, 6)) return false;
   return !blockers.some(b=>Math.hypot(x-b.x, z-b.z) < b.r + 1.5);
 }
 function zombieCanStand(x, z){
@@ -2064,6 +2355,157 @@ const ball = (function(){
   b.reset(); return b;
 })();
 
+// ---------- Wardrobe ----------
+// Every outfit is a name, a color and a price. Free ones (cost 0) are always hers; the rest are bought at the shop.
+const WARDROBE = [
+  {cat:'dress', who:'princess', label:'👗 Dress', items:[
+    {id:'pink', name:'Pink Princess', color:0xff8fc8, cost:0}, {id:'lavender', name:'Lavender Gown', color:0xc9a6ff, cost:0},
+    {id:'blue', name:'Ice Blue Gown', color:0x8fd8ff, cost:0}, {id:'mint', name:'Mermaid Mint', color:0x8ce9c8, cost:80},
+    {id:'red', name:'Ruby Red', color:0xff4d6d, cost:150}, {id:'gold', name:'Golden Ball Gown', color:0xffd34d, glow:0x4a3500, cost:300},
+    {id:'midnight', name:'Midnight Stars', color:0x3b3f9e, glow:0x1a1046, cost:400}, {id:'rainbow', name:'Rainbow Dress', color:0xffffff, rainbow:true, cost:600}]},
+  {cat:'hat', who:'princess', label:'👑 On her head', items:[
+    {id:'crown', name:'Gold Crown', cost:0}, {id:'none', name:'Nothing', cost:0}, {id:'tiara', name:'Sparkle Tiara', cost:0},
+    {id:'sunhat', name:'Beach Sun Hat', cost:0}, {id:'flowers', name:'Flower Crown', cost:90}, {id:'royal', name:'Royal Jewel Crown', cost:250}]},
+  {cat:'hair', who:'princess', label:'💇 Hair', items:[
+    {id:'blonde', name:'Golden Blonde', color:0xffdd55, cost:0}, {id:'brown', name:'Chocolate', color:0x8a5a3c, cost:0},
+    {id:'pink', name:'Cotton Candy', color:0xff9ed2, cost:0}, {id:'lilac', name:'Lilac', color:0xc9a6ff, cost:120}, {id:'silver', name:'Snow Queen', color:0xeef2ff, cost:200}]},
+  {cat:'body', who:'unicorn', label:'🦄 Coat', items:[
+    {id:'white', name:'Snow White', color:0xffffff, cost:0}, {id:'pink', name:'Bubblegum', color:0xffc2e2, cost:0},
+    {id:'lavender', name:'Lavender', color:0xddd0ff, cost:0}, {id:'mint', name:'Mint', color:0xc8f7e1, cost:80},
+    {id:'midnight', name:'Midnight', color:0x3a3358, cost:250}, {id:'golden', name:'Golden', color:0xffe08a, glow:0x3a2a00, cost:400}]},
+  {cat:'mane', who:'unicorn', label:'🌈 Mane & tail', items:[
+    {id:'pastel', name:'Pastel', colors:[0xff8fc8,0xb48cff,0x8fd8ff], cost:0}, {id:'candy', name:'Candy', colors:[0xff8fc8,0xffffff,0xffc2e2], cost:0},
+    {id:'fire', name:'Fire', colors:[0xff4d2e,0xff9f1c,0xffe066], cost:0}, {id:'ocean', name:'Ocean', colors:[0x1c7ed6,0x22b8cf,0x96f2d7], cost:150},
+    {id:'galaxy', name:'Galaxy', colors:[0x5f3dc4,0x339af0,0xf8f0fc], cost:300},
+    {id:'rainbow', name:'Rainbow', colors:[0xff6b6b,0xffa94d,0xffe066,0x8ce99a,0x74c0fc,0xb197fc,0xff8fc8], cost:450}]},
+  {cat:'horn', who:'unicorn', label:'✨ Horn', items:[
+    {id:'gold', name:'Gold', color:0xffd34d, glow:0x332200, cost:0}, {id:'silver', name:'Silver', color:0xe9eef5, glow:0x222630, cost:0},
+    {id:'crystal', name:'Crystal', color:0xffb3e6, glow:0x551144, opacity:0.75, cost:0}, {id:'rainbow', name:'Rainbow Glow', color:0xffffff, glow:0x333333, rainbow:true, cost:350}]},
+  {cat:'wings', who:'unicorn', label:'🕊️ Wings', items:[
+    {id:'none', name:'No wings', cost:0}, {id:'angel', name:'Angel Wings', color:0xffffff, opacity:0.95, cost:0},
+    {id:'fairy', name:'Fairy Wings', color:0xffa8e0, opacity:0.6, cost:1200}, {id:'gold', name:'Golden Wings', color:0xffd34d, opacity:0.95, cost:1600}]}
+];
+const LOOK_DEFAULT = {dress:'pink', hat:'crown', hair:'blonde', body:'white', mane:'pastel', horn:'gold', wings:'none'};
+save.look = Object.assign({}, LOOK_DEFAULT, save.look || {}); save.owned = save.owned || {};
+const lookItem = (cat, id) => { const c = WARDROBE.find(c=>c.cat === cat); return c.items.find(i=>i.id === id) || c.items[0]; };
+const owns = (cat, id) => lookItem(cat, id).cost === 0 || (save.owned[cat] || []).includes(id);
+const hexCss = c => '#' + c.toString(16).padStart(6, '0');
+const swatch = it => it.colors ? '<span class="swatch" style="background:linear-gradient(90deg,' + it.colors.map(hexCss).join(',') + ')"></span>'
+  : it.color !== undefined ? '<span class="swatch" style="background:' + hexCss(it.color) + '"></span>' : '';
+let hornRainbow = false, hornGlow = 0x332200, wardTab = 'princess', wardrobeOpen = false, wardAng = 0, wardBase = 0;
+function applyLook(){
+  const k = save.look;
+  const d = lookItem('dress', k.dress); U.M.dress.color.setHex(d.color); U.M.dress.emissive.setHex(d.glow || 0);
+  U.skirt.visible = !d.rainbow; U.rainbowSkirt.visible = !!d.rainbow;
+  Object.keys(U.hats).forEach(id=>U.hats[id].visible = id === k.hat);
+  U.M.hair.color.setHex(lookItem('hair', k.hair).color);
+  const b = lookItem('body', k.body); U.M.body.color.setHex(b.color); U.M.body.emissive.setHex(b.glow || 0);
+  const m = lookItem('mane', k.mane).colors;
+  U.M.mane.forEach((mat,i)=>mat.color.setHex(m[i % m.length])); U.M.tail.forEach((mat,i)=>mat.color.setHex(m[(i+2) % m.length]));
+  const h = lookItem('horn', k.horn); U.hornMat.color.setHex(h.color); U.hornMat.opacity = h.opacity || 1; hornGlow = h.glow || 0; hornRainbow = !!h.rainbow;
+  const w = lookItem('wings', k.wings); U.wings.visible = w.id !== 'none';
+  if (w.color !== undefined){ U.M.wing.color.setHex(w.color); U.M.wing.opacity = w.opacity; }
+}
+applyLook();
+function openWardrobe(){
+  firing = false;
+  if (state === 'play') state = 'shop';
+  // keep the close-up camera on the open side, facing away from the house walls (or out from the tower's middle)
+  const from = P.y > PT.h - 1.5 ? PT : HOUSE;
+  wardBase = Math.atan2(P.pos.x - from.x, P.pos.z - from.z); wardAng = 0;
+  wardrobeOpen = true; renderWardrobe(); $('wardrobe').classList.remove('hidden');
+}
+function renderWardrobe(){
+  document.querySelectorAll('#wardTabs .tab').forEach(b=>b.classList.toggle('on', b.dataset.w === wardTab));
+  $('wardRows').innerHTML = WARDROBE.filter(c=>c.who === wardTab).map(c=>
+    '<div class="wcat">' + c.label + '</div><div class="witems">' + c.items.map(it=>{
+      const own = owns(c.cat, it.id), on = save.look[c.cat] === it.id;
+      return '<button class="witem' + (on ? ' on' : '') + (own ? '' : ' locked') + '" data-c="' + c.cat + '" data-i="' + it.id + '"' + (own ? '' : ' disabled') + '>' +
+        swatch(it) + it.name + (own ? '' : ' · 🔒 🪙 ' + fmtNum(it.cost)) + '</button>';
+    }).join('') + '</div>').join('');
+}
+$('wardRows').addEventListener('click', e=>{
+  const b = e.target.closest('.witem'); if (!b || b.disabled) return;
+  save.look[b.dataset.c] = b.dataset.i; applyLook(); saveGame(); renderWardrobe(); tone(880, 0.1, 'triangle', 0.08);
+});
+$('wardTabs').addEventListener('click', e=>{ const b = e.target.closest('.tab'); if (b){ wardTab = b.dataset.w; renderWardrobe(); } });
+$('wardClose').addEventListener('click', closeShop);
+
+// ---------- Castle doors, treasure and naps ----------
+const HOUSE = {x:BASE.x - 9, z:BASE.z - 6};
+let napT = -99, throneT = -99;
+function setCastleOpen(open){
+  const i = RECTS.indexOf(GATE_RECT);
+  if (open && i >= 0) RECTS.splice(i, 1);
+  if (!open && i < 0) RECTS.push(GATE_RECT);
+  castleParts.sign.visible = !open;
+  castleParts.portcullis.position.y = open ? 6.6 : 0;          // lift the gate
+}
+unlocked.castle = !!save.castle; setCastleOpen(unlocked.castle);
+function openCastle(){
+  unlocked.castle = true; save.castle = true; saveGame(); setCastleOpen(true);
+  setTimeout(()=>banner('🏰 The castle is open!'), 4800);
+}
+function castleSpot(){
+  if (!unlocked.castle) return null;
+  const hi = P.y > PT.h - 1.5, lo = P.y < 2.5;
+  if (hi && distXZ(P.pos, castleParts.wardrobe) < 2.4) return {kind:'wardrobe', text:'to change clothes 👗'};
+  if (hi && distXZ(P.pos, castleParts.bed) < 3.2) return {kind:'bed', text:'to take a royal nap 💤'};
+  if (lo){
+    const c = castleParts.chests.find(c=>!c.opened && distXZ(P.pos, c) < 2.6); if (c) return {kind:'chest', c, text:'to open the treasure chest 💰'};
+    if (distXZ(P.pos, castleParts.throne) < 2.4) return {kind:'throne', text:'to sit on the throne 👑'};
+  }
+  return null;
+}
+function castleInteract(){
+  const s = castleSpot(); if (!s) return false;
+  if (s.kind === 'wardrobe') openWardrobe();
+  else if (s.kind === 'bed'){
+    if (time - napT < 15){ floatText('Not sleepy yet! 😊', P.pos, '#b44bd6'); return true; }
+    napT = time; P.health = P.max; sfx.eat();
+    floatText('💤 Royal nap! Full health', P.pos, '#ff4d88'); burst(new THREE.Vector3(P.pos.x, P.y + 1.5, P.pos.z), [0xffffff,0xff8fc8,0xb197fc], 20, 4, 1, 0.8, 2, 3);
+  } else if (s.kind === 'chest'){
+    s.c.opened = true; s.c.lid.rotation.x = -1.2;
+    const v = addCoins(40); floatText('💰 +' + fmtNum(v) + ' 🪙', P.pos, '#e0a800'); sfx.power();
+    burst(new THREE.Vector3(s.c.x, 1.2, s.c.z), [0xffd43b,0xffe066,0xffffff], 30, 5, 1.2, 0.9, 8, 7);
+  } else if (s.kind === 'throne'){
+    if (time - throneT < 8) return true;
+    throneT = time; banner('👑 All hail ' + princessName + '!'); seq([523,659,784,1047,784,1047], 120, 'triangle', 0.12);
+    burst(new THREE.Vector3(CX, 4, CZ-7), RAINBOW, 60, 9, 1.4, 1.2, 6, 9);
+  }
+  return true;
+}
+
+// ---------- Fireballs ----------
+// The Fire Zombie King throws fireballs. Dodge them, or hide somewhere safe!
+const fireballs = [], fireballGeo = new THREE.SphereGeometry(0.75, 12, 10);
+function hurtPlayer(dmg){
+  P.health -= dmg; P.invuln = 0.8; shake = 0.6; sfx.hurt();
+  $('hurt').style.opacity = 1; setTimeout(()=>$('hurt').style.opacity = 0, 180);
+  if (P.health <= 0){ P.health = 0; gameOver(); }
+}
+function shootFireball(z){
+  const from = new THREE.Vector3(z.g.position.x, 2.6*z.scale, z.g.position.z);
+  const v = new THREE.Vector3(P.pos.x, P.y + (mounted ? 2.2 : 1.2), P.pos.z).sub(from).normalize().multiplyScalar(22);
+  const m = new THREE.Mesh(fireballGeo, B(0xff6a00)); m.position.copy(from); scene.add(m);
+  fireballs.push({m, v, life:3.5}); tone(150, 0.4, 'sawtooth', 0.07, 60);
+}
+function updateFireballs(dt){
+  const fire = [0xff3b00,0xff8c00,0xffd43b];
+  for (const f of fireballs){
+    f.life -= dt; f.m.position.addScaledVector(f.v, dt); f.m.scale.setScalar(1 + Math.sin(time*20)*0.12);
+    spawnParticle(f.m.position, pick(fire), new THREE.Vector3(rand(-1,1), rand(0,1.5), rand(-1,1)), 1.6, 0.35, -1);
+    const dx = f.m.position.x - P.pos.x, dy = f.m.position.y - (P.y + (mounted ? 2.2 : 1.2)), dz = f.m.position.z - P.pos.z;
+    if (dx*dx + dy*dy + dz*dz < 2.6 && !P.slide){
+      f.life = 0; burst(f.m.position, fire, 18, 6, 1.4, 0.5, 4, 4);
+      if (!safeNow && power.shield <= 0 && P.invuln <= 0) hurtPlayer(15);
+    }
+    if (f.m.position.y < groundH(f.m.position.x, f.m.position.z, f.m.position.y)){ f.life = 0; burst(f.m.position, fire, 10, 4, 1.2, 0.4, 4, 3); }
+    if (f.life <= 0) scene.remove(f.m);
+  }
+  for (let i=fireballs.length-1;i>=0;i--) if (fireballs[i].life <= 0) fireballs.splice(i,1);
+}
+
 // ---------- HUD & minimap ----------
 let lastHud = '', weaponBarKey = '';
 const mapCtx = $('map').getContext('2d');
@@ -2088,6 +2530,7 @@ function drawMap(){
   poly(zs.map(z=>[shoreX(z), z]).concat(zs.slice().reverse().map(z=>[1500, z])), '#3cc3d6');
   rect(DECK, '#fbf6ee'); POOLS.forEach(p=>rect(p, '#8af0f5')); RECTS.forEach(r=>rect(r, '#e2b9a0')); PLATFORMS.forEach(p=>rect(p, '#b08657'));
   { const m = raw(BAR.x, BAR.z); c.fillStyle = 'rgba(255,214,236,.9)'; c.beginPath(); c.arc(m[0], m[1], BAR.r*sc, 0, TAU); c.fill(); }
+  rect(HALL, unlocked.castle ? '#f7cde4' : '#c9a7c0');
   if (!unlocked.beach) rect(BEACH, 'rgba(90,60,120,.35)');
   c.fillStyle = 'rgba(60,140,60,.3)';
   for (const b of blockers){ const m = toMap(b.x, b.z, false); if (m){ c.beginPath(); c.arc(m[0], m[1], Math.max(2, b.r*sc), 0, TAU); c.fill(); } }
@@ -2105,7 +2548,7 @@ function drawMap(){
       c.fillStyle = '#ff1f1f'; c.strokeStyle = '#fff'; c.lineWidth = 2.5; c.beginPath(); c.arc(m[0], m[1], 8.5, 0, TAU); c.fill(); c.stroke();
       continue;
     }
-    c.fillStyle = z.guard ? '#c2410c' : '#2f7a2f'; c.beginPath(); c.arc(m[0], m[1], z.type === 'boss' ? 10 : 5.5, 0, TAU); c.fill();
+    c.fillStyle = z.guard ? '#c2410c' : '#2f7a2f'; c.beginPath(); c.arc(m[0], m[1], z.big ? 10 : 5.5, 0, TAU); c.fill();
   }
   c.restore();
   c.textAlign = 'center'; c.textBaseline = 'middle';
@@ -2178,11 +2621,26 @@ function updateCamera(dt){
     camera.lookAt(up.x, 2.6, up.z);
     return;
   }
+  if (wardrobeOpen){                         // close-up while choosing outfits, aimed so she shows up beside the menu
+    const uni = wardTab === 'unicorn', tgt = uni || mounted ? U.g.position : walker.position;
+    const r = uni ? 7.5 : mounted ? 6.5 : 4.2, hY = uni ? 2.2 : mounted ? 3.7 : 1.8;
+    wardAng += dt; const a = wardBase + Math.sin(wardAng*0.4)*0.5;      // sway gently instead of circling into walls
+    const narrow = gameEl.clientWidth < 700, rr = narrow ? r*2.1 : r;   // narrow phone: menu is at the bottom, so step back and show her up top
+    camera.position.set(tgt.x + Math.sin(a)*rr, tgt.y + hY + (narrow ? 1.6 : 0.6), tgt.z + Math.cos(a)*rr);
+    const k = 1.3*r/5;
+    if (narrow) camera.lookAt(tgt.x, tgt.y + hY - 0.45*rr, tgt.z);
+    else camera.lookAt(tgt.x - Math.cos(a)*k, tgt.y + hY, tgt.z + Math.sin(a)*k);
+    return;
+  }
+  // inside the castle: hide the roof and keep the camera close so the walls don't get in the way
+  const inHall = unlocked.castle && inRect(HALL, pos.x, pos.z, 0.5), inRoom = P.y > PT.h - 1.5 && distXZ(pos, PT) < PT.r + 5;
+  castleParts.roof.visible = !inHall; castleParts.roomRoof.visible = !inRoom;
+  const cd = inHall ? Math.min(camDist, 7) : inRoom ? Math.min(camDist, 8) : camDist, chh = inHall ? Math.min(camH, 4) : camH;
   if (P.slide) camYaw += angDiff(camYaw, P.ang) * Math.min(1, dt*6);
-  camY += (P.y + camH*(camDist/12) - camY) * Math.min(1, dt*6);
+  camY += (P.y + chh*(cd/12) - camY) * Math.min(1, dt*6);
   shake = Math.max(0, shake - dt*2);
   const s = shake*0.6;
-  camera.position.set(pos.x - Math.sin(camYaw)*camDist + rand(-s,s), Math.max(0.6, camY + rand(-s,s)), pos.z - Math.cos(camYaw)*camDist);
+  camera.position.set(pos.x - Math.sin(camYaw)*cd + rand(-s,s), Math.max(0.6, camY + rand(-s,s)), pos.z - Math.cos(camYaw)*cd);
   camLook.set(pos.x + Math.sin(camYaw)*4, P.y + (mounted ? 2.6 : 1.7), pos.z + Math.cos(camYaw)*4);
   camera.lookAt(camLook);
 }
@@ -2216,7 +2674,7 @@ function setPaused(p){
 }
 function selectWeapon(i){ if (i < P.weapons.length && i < maxSlots()){ P.wi = i; tone(700 + i*120, 0.08, 'triangle', 0.08); } }
 addEventListener('keydown', e=>{
-  const shopWasOpen = !$('shop').classList.contains('hidden') || !$('barMenu').classList.contains('hidden');
+  const shopWasOpen = !$('shop').classList.contains('hidden') || !$('barMenu').classList.contains('hidden') || !$('wardrobe').classList.contains('hidden');
   if (e.target.tagName === 'INPUT'){ if (e.code === 'Enter' && e.target.id === 'nameIn') startGame(!!save.run); if (e.target.type !== 'range') return; e.target.blur(); }
   if (e.code === 'Space'){ e.preventDefault(); if (state === 'play' && !e.repeat) jumpQueued = 0.15; return; }
   if (e.code === 'Tab'){ e.preventDefault(); if (state === 'play') selectWeapon((P.wi + 1) % P.weapons.length); return; }
@@ -2307,6 +2765,7 @@ $('pauseBtn').addEventListener('click', ()=>setPaused(true));
 $('resumeBtn').addEventListener('click', ()=>setPaused(false));
 document.querySelectorAll('.shopOpen').forEach(b=>b.addEventListener('click', openShop));
 $('shopClose').addEventListener('click', closeShop);
+$('shopTabs').addEventListener('click', e=>{ const b = e.target.closest('.tab'); if (b){ shopTab = b.dataset.tab; renderShop(); } });
 $('barClose').addEventListener('click', closeShop);
 
 function startGame(cont){
@@ -2341,7 +2800,8 @@ function toMenu(){
   U.g.position.set(0,0,4); U.g.rotation.y = 0; P.pos.set(0,0,4); P.y = 0;
   state = 'start'; firing = false;
   endRace();
-  ['pause','over','shop','barMenu','hud','touch'].forEach(id=>$(id).classList.add('hidden'));
+  wardrobeOpen = false;
+  ['pause','over','shop','barMenu','wardrobe','hud','touch'].forEach(id=>$(id).classList.add('hidden'));
   $('start').classList.remove('hidden');
   refreshMenu();
 }
@@ -2365,7 +2825,7 @@ const EXPLAIN = {
   'Getting started': 'A few helper tools the rest of the game uses, like <b>rand</b> (pick a random number) and <b>pick</b> (pick a random thing from a list).',
   'Tuning (try changing these!)': 'These numbers decide how the game <b>feels</b>. Move the sliders at the top of this panel and the game changes right away. Programmers call these "settings" or "variables".',
   'The ocean': 'The ocean is drawn by a <b>shader</b>: a tiny program the graphics card runs for every single pixel, 60 times a second. It adds up a few wave patterns, mixes turquoise near the shore into deep blue far out, reflects the sky, adds sparkles where the sun hits, and paints white foam at the water\'s edge.',
-  'Map layout: ground, ramps, towers and water': '<b>groundH</b> answers "how high is the ground here?" (sand, sea floor, ramps, towers, the pier, and the slides, which you can walk up!). <b>waterSurface</b> answers "is there water here?", which is how the game knows when to swim. <b>inWorld</b> keeps you inside the map and keeps the beach locked until Wave 4.',
+  'Map layout: ground, ramps, towers and water': '<b>groundH</b> answers "how high is the ground here?" (sand, sea floor, ramps, towers, the pier, and the slides, which you can walk up!). <b>waterSurface</b> answers "is there water here?", which is how the game knows when to swim. <b>inWorld</b> keeps you inside the map and keeps the beach locked until you beat Wave 5.',
   'Beach and resort': 'Builds the beach: sand that slopes into the sea, hotels, pools, three water slides, palm trees, umbrellas, the palapa beach bar, the pier, buoys and sailboats. Palm trees are "instanced" so 60 of them draw as fast as one.',
   'Safe places': 'Zombies can\'t enter safe places, but a zombie beaten from a safe place gets replaced. That\'s how the game stops you from winning while hiding! From Wave 6, while you hide, some zombies sneak off to guard the other safe places.',
   'Beach bar': 'The menu is a list. Each item has a price and a <b>use</b> function that runs when you buy it, like adding health or turning on a power.',
@@ -2393,6 +2853,10 @@ const EXPLAIN = {
   'Loop': 'The heartbeat of the game! About 60 times every second: update everything a little, then draw a new picture. Lots of tiny pictures in a row look like smooth movement, just like a flip book.',
   'Input': 'Listens for keys, mouse drags, scrolling and touch, and turns them into actions like jump, shoot and get on or off.',
   'Saving, quitting and starting over': 'The game writes a little note in the browser\'s memory (called <b>localStorage</b>) every few seconds: which wave you\'re on, your score, weapons and coins. <b>Continue</b> reads that note back. <b>Start from scratch</b> throws the note away.',
+  'Wardrobe': 'Each outfit is a name, a color and a price. <b>applyLook</b> paints the princess and the unicorn with the colors you picked. The materials belong only to them, so changing her dress doesn\'t change anything else in the world.',
+  'Castle doors, treasure and naps': 'When you beat Wave 10, the castle gate lifts (its invisible wall is removed). Inside: treasure chests, a throne, and up the stairs, a tower room with a bed that heals you and a wardrobe.',
+  'Castle': 'The castle is built from boxes and cylinders: walls, towers, stairs (really a ramp drawn as steps!), a throne, chandeliers and a canopy bed. Rapunzel\'s braid is a slide made of golden spheres.',
+  'Fireballs': 'Each fireball flies straight toward where the princess was when it was thrown. If it gets close enough to her, it bursts. Moving or jumping out of the way works!',
   'Code viewer': 'The code for this very panel! It reads the game\'s own code and splits it into the sections you see.'
 };
 const TUNE_UI = [['ride','🦄 Unicorn speed',4,30,1], ['walk','🚶 Walking speed',2,16,1], ['jump','⬆️ Jump power',5,30,1], ['gravity','🌍 Gravity',8,60,1], ['zombie','🧟 Zombie speed',0.2,3,0.1]];
