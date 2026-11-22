@@ -2360,29 +2360,29 @@ const ball = (function(){
 const WARDROBE = [
   {cat:'dress', who:'princess', label:'👗 Dress', items:[
     {id:'pink', name:'Pink Princess', color:0xff8fc8, cost:0}, {id:'lavender', name:'Lavender Gown', color:0xc9a6ff, cost:0},
-    {id:'blue', name:'Ice Blue Gown', color:0x8fd8ff, cost:60}, {id:'mint', name:'Mermaid Mint', color:0x8ce9c8, cost:80},
+    {id:'blue', name:'Ice Blue Gown', color:0x8fd8ff, cost:0}, {id:'mint', name:'Mermaid Mint', color:0x8ce9c8, cost:80},
     {id:'red', name:'Ruby Red', color:0xff4d6d, cost:150}, {id:'gold', name:'Golden Ball Gown', color:0xffd34d, glow:0x4a3500, cost:300},
     {id:'midnight', name:'Midnight Stars', color:0x3b3f9e, glow:0x1a1046, cost:400}, {id:'rainbow', name:'Rainbow Dress', color:0xffffff, rainbow:true, cost:600}]},
   {cat:'hat', who:'princess', label:'👑 On her head', items:[
-    {id:'crown', name:'Gold Crown', cost:0}, {id:'none', name:'Nothing', cost:0}, {id:'tiara', name:'Sparkle Tiara', cost:40},
-    {id:'sunhat', name:'Beach Sun Hat', cost:70}, {id:'flowers', name:'Flower Crown', cost:90}, {id:'royal', name:'Royal Jewel Crown', cost:250}]},
+    {id:'crown', name:'Gold Crown', cost:0}, {id:'none', name:'Nothing', cost:0}, {id:'tiara', name:'Sparkle Tiara', cost:0},
+    {id:'sunhat', name:'Beach Sun Hat', cost:0}, {id:'flowers', name:'Flower Crown', cost:90}, {id:'royal', name:'Royal Jewel Crown', cost:250}]},
   {cat:'hair', who:'princess', label:'💇 Hair', items:[
-    {id:'blonde', name:'Golden Blonde', color:0xffdd55, cost:0}, {id:'brown', name:'Chocolate', color:0x8a5a3c, cost:60},
-    {id:'pink', name:'Cotton Candy', color:0xff9ed2, cost:120}, {id:'lilac', name:'Lilac', color:0xc9a6ff, cost:120}, {id:'silver', name:'Snow Queen', color:0xeef2ff, cost:200}]},
+    {id:'blonde', name:'Golden Blonde', color:0xffdd55, cost:0}, {id:'brown', name:'Chocolate', color:0x8a5a3c, cost:0},
+    {id:'pink', name:'Cotton Candy', color:0xff9ed2, cost:0}, {id:'lilac', name:'Lilac', color:0xc9a6ff, cost:120}, {id:'silver', name:'Snow Queen', color:0xeef2ff, cost:200}]},
   {cat:'body', who:'unicorn', label:'🦄 Coat', items:[
-    {id:'white', name:'Snow White', color:0xffffff, cost:0}, {id:'pink', name:'Bubblegum', color:0xffc2e2, cost:80},
-    {id:'lavender', name:'Lavender', color:0xddd0ff, cost:80}, {id:'mint', name:'Mint', color:0xc8f7e1, cost:80},
+    {id:'white', name:'Snow White', color:0xffffff, cost:0}, {id:'pink', name:'Bubblegum', color:0xffc2e2, cost:0},
+    {id:'lavender', name:'Lavender', color:0xddd0ff, cost:0}, {id:'mint', name:'Mint', color:0xc8f7e1, cost:80},
     {id:'midnight', name:'Midnight', color:0x3a3358, cost:250}, {id:'golden', name:'Golden', color:0xffe08a, glow:0x3a2a00, cost:400}]},
   {cat:'mane', who:'unicorn', label:'🌈 Mane & tail', items:[
-    {id:'pastel', name:'Pastel', colors:[0xff8fc8,0xb48cff,0x8fd8ff], cost:0}, {id:'candy', name:'Candy', colors:[0xff8fc8,0xffffff,0xffc2e2], cost:100},
-    {id:'fire', name:'Fire', colors:[0xff4d2e,0xff9f1c,0xffe066], cost:150}, {id:'ocean', name:'Ocean', colors:[0x1c7ed6,0x22b8cf,0x96f2d7], cost:150},
+    {id:'pastel', name:'Pastel', colors:[0xff8fc8,0xb48cff,0x8fd8ff], cost:0}, {id:'candy', name:'Candy', colors:[0xff8fc8,0xffffff,0xffc2e2], cost:0},
+    {id:'fire', name:'Fire', colors:[0xff4d2e,0xff9f1c,0xffe066], cost:0}, {id:'ocean', name:'Ocean', colors:[0x1c7ed6,0x22b8cf,0x96f2d7], cost:150},
     {id:'galaxy', name:'Galaxy', colors:[0x5f3dc4,0x339af0,0xf8f0fc], cost:300},
     {id:'rainbow', name:'Rainbow', colors:[0xff6b6b,0xffa94d,0xffe066,0x8ce99a,0x74c0fc,0xb197fc,0xff8fc8], cost:450}]},
   {cat:'horn', who:'unicorn', label:'✨ Horn', items:[
-    {id:'gold', name:'Gold', color:0xffd34d, glow:0x332200, cost:0}, {id:'silver', name:'Silver', color:0xe9eef5, glow:0x222630, cost:60},
-    {id:'crystal', name:'Crystal', color:0xffb3e6, glow:0x551144, opacity:0.75, cost:200}, {id:'rainbow', name:'Rainbow Glow', color:0xffffff, glow:0x333333, rainbow:true, cost:350}]},
+    {id:'gold', name:'Gold', color:0xffd34d, glow:0x332200, cost:0}, {id:'silver', name:'Silver', color:0xe9eef5, glow:0x222630, cost:0},
+    {id:'crystal', name:'Crystal', color:0xffb3e6, glow:0x551144, opacity:0.75, cost:0}, {id:'rainbow', name:'Rainbow Glow', color:0xffffff, glow:0x333333, rainbow:true, cost:350}]},
   {cat:'wings', who:'unicorn', label:'🕊️ Wings', items:[
-    {id:'none', name:'No wings', cost:0}, {id:'angel', name:'Angel Wings', color:0xffffff, opacity:0.95, cost:800},
+    {id:'none', name:'No wings', cost:0}, {id:'angel', name:'Angel Wings', color:0xffffff, opacity:0.95, cost:0},
     {id:'fairy', name:'Fairy Wings', color:0xffa8e0, opacity:0.6, cost:1200}, {id:'gold', name:'Golden Wings', color:0xffd34d, opacity:0.95, cost:1600}]}
 ];
 const LOOK_DEFAULT = {dress:'pink', hat:'crown', hair:'blonde', body:'white', mane:'pastel', horn:'gold', wings:'none'};
