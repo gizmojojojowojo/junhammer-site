@@ -541,17 +541,18 @@ PLATFORMS[0].water = true;                                                      
 PLATFORMS.push({x0:CX-30, x1:CX-25.5, z0:CZ-16, z1:CZ-12, h:18},                   // the tower balcony
                {x0:CX-3, x1:CX+3, z0:CZ-9.2, z1:CZ-5.8, h:0.5});                   // the throne's step
 const CASTLE_RECTS = [
-  {x0:CX-20.6, x1:CX+20.6, z0:CZ-14.6, z1:CZ-13.4},                                // back wall
-  {x0:CX-20.6, x1:CX-19.4, z0:CZ-14.6, z1:CZ+14.6},                                // west wall
-  {x0:CX+19.4, x1:CX+20.6, z0:CZ-14.6, z1:CZ+14.6},                                // east wall
-  {x0:CX-20.6, x1:CX-4, z0:CZ+13.4, z1:CZ+14.6}, {x0:CX+4, x1:CX+20.6, z0:CZ+13.4, z1:CZ+14.6}   // front wall, with a gap for the gate
+  {x0:CX-20.6, x1:CX+20.6, z0:CZ-14.6, z1:CZ-13.4, h:12},                         // back wall (12 tall: up in the tower room you're above it)
+  {x0:CX-20.6, x1:CX-19.4, z0:CZ-14.6, z1:CZ+14.6, h:12},                         // west wall
+  {x0:CX+19.4, x1:CX+20.6, z0:CZ-14.6, z1:CZ+14.6, h:12},                         // east wall
+  {x0:CX-20.6, x1:CX-4, z0:CZ+13.4, z1:CZ+14.6, h:12}, {x0:CX+4, x1:CX+20.6, z0:CZ+13.4, z1:CZ+14.6, h:12}   // front wall, with a gap for the gate
 ];
-const GATE_RECT = {x0:CX-4, x1:CX+4, z0:CZ+13.4, z1:CZ+14.6};
+const GATE_RECT = {x0:CX-4, x1:CX+4, z0:CZ+13.4, z1:CZ+14.6, h:12};
 RECTS.push(...CASTLE_RECTS, GATE_RECT);
 const ROOM_OPENINGS = [Math.atan2((CX-15.5) - PT.x, (CZ-10.5) - PT.z), -Math.PI/2];   // the stairs and the balcony
 
-function pushOutRects(pos, r){
+function pushOutRects(pos, r, y){
   for (const R of RECTS){
+    if (R.h !== undefined && y !== undefined && y > R.h - 0.5) continue;   // she's up above this wall (like in the tower room)
     if (!inRect(R, pos.x, pos.z, r)) continue;
     const dl = pos.x - (R.x0-r), dr = (R.x1+r) - pos.x, dn = pos.z - (R.z0-r), df = (R.z1+r) - pos.z, m = Math.min(dl, dr, dn, df);
     if (m === dl) pos.x = R.x0-r; else if (m === dr) pos.x = R.x1+r; else if (m === dn) pos.z = R.z0-r; else pos.z = R.z1+r;
@@ -1902,7 +1903,7 @@ function updatePlayer(dt){
       if (Math.abs(pos.z - (CZ-14)) > 1.1) pos.x = Math.max(bal.x0 + 0.35, pos.x);   // railings, with a gap for the braid
     }
   }
-  if (P.y < 60) pushOutRects(pos, bodyR);
+  if (P.y < 60) pushOutRects(pos, bodyR, P.y);
   // slides are shaped like a U, so walking on one gently keeps her near the middle (she can still jump off the side)
   if (P.grounded){
     const sp = slideNearest(pos.x, pos.z, P.y);
@@ -2635,9 +2636,15 @@ function updateCamera(dt){
   // inside the castle: hide the roof and keep the camera close so the walls don't get in the way
   const inHall = unlocked.castle && inRect(HALL, pos.x, pos.z, 0.5), inRoom = P.y > PT.h - 1.5 && distXZ(pos, PT) < PT.r + 5;
   castleParts.roof.visible = !inHall; castleParts.roomRoof.visible = !inRoom;
-  const cd = inHall ? Math.min(camDist, 7) : inRoom ? Math.min(camDist, 8) : camDist, chh = inHall ? Math.min(camH, 4) : camH;
+  // in the hall, pull the camera closer if it would end up outside the walls. Its height stays yours to drag.
+  let cd = camDist;
+  if (inHall){
+    const fx = Math.sin(camYaw), fz = Math.cos(camYaw);
+    for (let d = 2; d <= camDist; d += 0.5) if (!inRect(HALL, pos.x - fx*d, pos.z - fz*d, -1.2)){ cd = Math.max(2.5, d - 0.5); break; }
+  }
+  if (inRoom) cd = Math.min(cd, 9);
   if (P.slide) camYaw += angDiff(camYaw, P.ang) * Math.min(1, dt*6);
-  camY += (P.y + chh*(cd/12) - camY) * Math.min(1, dt*6);
+  camY += (Math.max(P.y + camH*(camDist/12), P.y + (mounted ? 3.6 : 2.4)) - camY) * Math.min(1, dt*6);   // never below her head
   shake = Math.max(0, shake - dt*2);
   const s = shake*0.6;
   camera.position.set(pos.x - Math.sin(camYaw)*cd + rand(-s,s), Math.max(0.6, camY + rand(-s,s)), pos.z - Math.cos(camYaw)*cd);
