@@ -6,6 +6,7 @@ date: "2026-11-24"
 topic: "AI"
 pillar: false
 draft: false
+image: "/images/posts/ai-consultant-cost.webp"
 faqs:
   - q: "How much does an AI consultant charge per hour?"
     a: "Published 2026 rate cards put independent AI consultants at $150 to $350 an hour, boutique firms at $250 to $500, and large strategy firms at $350 to $500 or more. Marketplace freelancers charge less."

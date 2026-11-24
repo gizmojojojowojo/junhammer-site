@@ -42,7 +42,7 @@ If you want to know where your company stands today, the self-check in [AI-nativ
 3. **Pilot.** One workflow set up end to end, with prompts, review steps and a simple way to measure results.
 4. **Roll-out plan.** Guardrails, training and a backlog, including anything worth building as a custom tool.
 
-The full sequence, from usage rules to expanding in waves, is laid out in [How to become an AI-native company](/blog/how-to-become-ai-native/).
+The full sequence, from usage rules to expanding in waves, is laid out in [How to become an AI-native company](/blog/how-to-become-ai-native/). For typical rates and project sizes, see [how much an AI consultant costs](/blog/ai-consultant-cost/).
 
 ## Why work with me
 

@@ -92,4 +92,6 @@ Getting cited by AI engines isn't a replacement for ranking in traditional searc
 
 That window is shorter than it looks.
 
+To see whether your changes are working, [check your AI citations](/blog/how-to-check-ai-citations/) on a fixed set of buyer questions.
+
 ---

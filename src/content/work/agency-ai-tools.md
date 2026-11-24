@@ -40,4 +40,4 @@ As AI Search Strategist at a digital agency for nonprofit and social-impact orga
 
 I also lead AEO strategy for the agency's nonprofit clients, structuring content and schema so AI answer engines cite those organizations. Building the tools and running the strategy in the same role means the automation reflects how the work is actually done.
 
-See [AI automation](/services/ai-automation/) and [AI consulting](/services/ai-consulting/) for how this applies to your team.
+See [AI automation](/services/ai-automation/) and [AI consulting](/services/ai-consulting/) for how this applies to your team. For a walkthrough of one such connection, see [MCP for SEO](/blog/mcp-for-seo/).

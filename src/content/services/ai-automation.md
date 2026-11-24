@@ -56,7 +56,7 @@ Two tools let an AI model work with your business data safely.
 
 **Claude skills** package a process. A skill holds the instructions, examples and scripts for one task, so anyone on the team can run it and get consistent output.
 
-**MCP servers** connect AI to your systems. The [Model Context Protocol](https://modelcontextprotocol.io/) is an open standard for connecting AI applications to outside tools and data. With an MCP server, Claude can read your CRM or reporting data inside limits you set, usually read-only to start.
+**MCP servers** connect AI to your systems. The [Model Context Protocol](https://modelcontextprotocol.io/) is an open standard for connecting AI applications to outside tools and data. With an MCP server, Claude can read your CRM or reporting data inside limits you set, usually read-only to start. [MCP for SEO](/blog/mcp-for-seo/) walks through one example: connecting Claude to Google Search Console.
 
 ## Workflow first, agent when needed
 
