@@ -1,9 +1,9 @@
 {
-  "ranAt": "2026-11-24T12:49:47.915Z",
-  "commit": "14233a7",
+  "ranAt": "2026-11-24T13:11:37.264Z",
+  "commit": "6dd95fb",
   "retrieval": {
     "questions": 60,
-    "passages": 894,
+    "passages": 893,
     "first": 49,
     "top3": 55,
     "reachedModel": 59,
@@ -15,12 +15,12 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 50,
+    "passedAll": 51,
     "checks": [
       {
         "id": "cites",
         "label": "Cites a source",
-        "passed": 58
+        "passed": 59
       },
       {
         "id": "citesInRange",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 52
+        "passed": 55
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 58
+        "passed": 56
       },
       {
         "id": "short",
@@ -45,10 +45,10 @@
     ],
     "offTopicReachedModel": 4,
     "offTopicDeclined": 3,
-    "avgTokensIn": 2325,
-    "avgTokensOut": 343,
-    "ranAt": "2026-11-24T12:49:47.915Z",
-    "commit": "14233a7"
+    "avgTokensIn": 2330,
+    "avgTokensOut": 333,
+    "ranAt": "2026-11-24T13:11:37.263Z",
+    "commit": "6dd95fb"
   },
   "questions": [
     {
@@ -72,11 +72,8 @@
     {
       "q": "How long until SEO shows results?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "This site's timeline guide says established businesses with existing domain authority and content libraries typically see significant improvements in 3-6 months, and that technical fixes can show quick results [1]. The guide does not give a single timeline for all businesses. For more detail, see the full guide, [How Long Does SEO Take to Work in 2025?](/blog/how-long-does-it-take-for-seo-to-work/). For questions about your own site, use the [contact page](/contact/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Why isn't my content appearing in ChatGPT?",
@@ -135,11 +132,8 @@
     {
       "q": "How can a small regional hospital compete in AI search?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ]
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How do pharma companies optimize content for Perplexity?",
@@ -162,8 +156,11 @@
     {
       "q": "What is the difference between an AI agent and an AI workflow?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "An AI workflow runs a model and tools through a fixed path that a developer defines, while an AI agent lets the model decide its own next steps and which tools to use until the task is done [1][2]. Workflows are more predictable and easier to test, which suits well-defined, repeatable tasks, whereas agents suit open-ended tasks where the steps can't be known in advance [1][2]. Agents usually make more model calls and take longer, so they tend to cost more [1][2]. Joe starts projects by scoping which one the job needs, and many end up as a workflow [6][8]. For a project, see [AI agent development](/services/ai-agent-development/) or reach out via the [contact page](/contact/)."
     },
     {
       "q": "When should I use a workflow instead of an agent?",
@@ -180,12 +177,8 @@
     {
       "q": "Is SEO dead?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ],
-      "answer": "No, this site argues that the \"SEO is dead\" narrative falls apart, because the core principles that have always made content successful remain unchanged ([SEO is dead, long live SEO]("
+      "pass": true,
+      "failed": []
     },
     {
       "q": "How does AEO reporting differ from SEO reporting?",
@@ -206,7 +199,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe's AEO service covers five areas: a visibility baseline that checks which brands each AI assistant cites today for the questions your buyers ask [3]; content rebuilt around direct, self-contained answers and question-based headings [3]; entity and schema work [3]; technical access, including AI crawler rules, server-rendered content, llms.txt and page speed [3"
+      "answer": "AEO services are about making your content citable by AI assistants like ChatGPT, Perplexity, Gemini, and Google's AI Overviews. Joe's service covers five areas [3]:\n\n- **Visibility baseline:** Picking the questions your buyers or patients ask, and checking which brands each AI assistant cites today [3].\n- **Content structure:** Rebuilding pages around direct, self-contained answers and question-based headings [3].\n- **"
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -263,7 +256,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado, and his Denver location is listed on the contact page, which also notes he works with teams anywhere in the US [8]. His Parker page says he works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, as well as teams across the US [6]. To discuss a project, visit the [contact page](/contact/)."
+      "answer": "Joe Unhammer is based in Colorado. His contact page says he is based in Denver and works with teams anywhere in the US [8]. His service pages also name the south metro area, including Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and the Denver metro area [6][7]."
     },
     {
       "q": "What AI tools has Joe built?",
@@ -298,17 +291,17 @@
     {
       "q": "Does Joe have ecommerce SEO experience?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes. Joe has worked on e-commerce SEO, including a B2B e-commerce client where he increased organic traffic more than 200% [3]. He also grew one client's e-commerce sales 115% across B2B and B2C channels [3][5]. His e-commerce work includes an industrial manufacturer, where the case study covers SEO and conversion work on a site with both direct purchase and \"request more information\" paths [1][2]. For details on working with Joe, see [the contact page](/contact/)."
     },
     {
       "q": "Can Joe build an MCP server for Claude?",
       "rank": 2,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Yes, this site indicates Joe builds with MCP for Claude. He builds mostly with Claude and the Model Context Protocol (MCP) [5], and his consulting work includes Claude and MCP setup [7]. His resume lists MCP connectors among his AI and automation skills [8]. For working with Joe on a project, see /contact/."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What does an AI agent project involve?",
@@ -323,7 +316,7 @@
       "failed": [
         "Uses only links found in the sources"
       ],
-      "answer": "Yes, this site says Joe automates reporting that pulls from GA4 and Search Console, and from your CRM. The data is summarized and formatted into the report your team or clients expect [1]. He has built this for an agency and describes it as producing ready-to-send client deliverables [1][2]. For marketing, a person typically still handles final edits and fact checks [4]. To discuss your setup, see the [contact page](/contact/)."
+      "answer": "Yes, Joe automates reporting. He pulls CRM, GA4 and Search Console data, then summarizes and formats it into the report your team or clients expect [1][2]. Joe already builds these for an agency [1]. For marketing specifically, reporting from GA4 and Search Console is a standard workflow, with a person handling final edits and fact checks [5]. To discuss your setup, see the [contact page](/contact/)."
     },
     {
       "q": "Do you offer AI strategy consulting?",
@@ -364,11 +357,8 @@
     {
       "q": "how does it take for seo to work?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a page that holds the answer"
-      ],
-      "answer": "SEO usually shows early movement in three to six months and compounding results in six to twelve, depending on competition, site health, and how much content needs to be built. New sites in competitive fields take longer [8]. Joe sets milestones for each quarter so progress is visible before rankings fully arrive [8]. For more on timelines, see the [SEO timeline guide](/blog/how-long-does-it-take-for-seo-to-work/)."
+      "pass": true,
+      "failed": []
     },
     {
       "q": "seo how long",
@@ -377,7 +367,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, and meaningful organic traffic growth typically appears between three and six months. Substantial, compounding results often show up at the six-to-twelve month mark [1]. Joe sets realistic expectations based on your situation and reports progress along the way [1]. For AI search visibility (AEO and GEO), results can shift faster [1]."
+      "answer": "Joe's FAQ says SEO is a long-term investment, and timing depends on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, meaningful organic traffic growth typically appears between three and six months, and substantial compounding results are often visible at six to twelve months [1]. For AEO and GEO, visibility in AI systems can shift faster [1]. For a project-specific estimate, see the contact page at /contact/."
     },
     {
       "q": "aeo vs geo",
@@ -424,8 +414,12 @@
     {
       "q": "ai overviews for hospitals",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "This site covers AI Overviews for healthcare in a few places. Joe notes that healthcare marketers face the urgent question of how to get their organization's content featured in A"
     },
     {
       "q": "what do you charge",
@@ -434,13 +428,16 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "This site doesn't list Joe's own rates. For market context, published 2026 rate cards put independent AI consultants at $150 to $350 an hour [1], and MarketerHire lists fractional AEO consultant retainers at $3,000 to $15,000 per month [6]. These are industry figures, not quotes from Joe. For pricing on a specific project, use the contact page at /contact/."
+      "answer": "This site doesn't list Joe's own rates. For pricing on working with him, see the contact page at /contact/.\n\nFor context, published 2026 rate cards put independent AI consultants at $150 to $350 an hour, and boutique firms at $250 to $500 [1]. Typical AEO engagement costs vary by scope, such as $3,000 to $15,000 per month for a fractional consultant retainer [7]. These are market figures, not Joe's prices."
     },
     {
       "q": "keyword research",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Joe's site covers keyword research as a shift away from exact-match targeting toward user intent and conversational queries. Instead of targeting generic keywords, focus on the specific problems your audience wants to solve, and consider how they search on different platforms, not only Google [4]. Joe recommends identifying intent with tools that offer intent classification, looking at search volume patterns, SERP features, related keyword clusters and seasonal intent shifts [3]. He also suggests measuring results with frameworks that go beyond traditional ranking tracking [2]. For a deeper look, see [Keyword Research in 2025: Beyond Traditional SEO](/blog/keyword-research-in-2025-beyond-tra"
     }
   ],
   "semantic": {
