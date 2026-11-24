@@ -1,13 +1,13 @@
 {
-  "ranAt": "2026-11-21T21:45:07.597Z",
-  "commit": "d472d0d",
+  "ranAt": "2026-11-24T12:49:47.915Z",
+  "commit": "14233a7",
   "retrieval": {
     "questions": 60,
-    "passages": 828,
-    "first": 52,
-    "top3": 56,
-    "reachedModel": 60,
-    "mrr": 0.904,
+    "passages": 894,
+    "first": 49,
+    "top3": 55,
+    "reachedModel": 59,
+    "mrr": 0.869,
     "wronglyTurnedAway": 0,
     "offTopic": 8,
     "offTopicStopped": 4
@@ -15,7 +15,7 @@
   "answers": {
     "model": "claude-haiku-5-5",
     "answered": 60,
-    "passedAll": 51,
+    "passedAll": 50,
     "checks": [
       {
         "id": "cites",
@@ -30,12 +30,12 @@
       {
         "id": "citesExpected",
         "label": "Cites a page that holds the answer",
-        "passed": 55
+        "passed": 52
       },
       {
         "id": "linksAllowed",
         "label": "Uses only links found in the sources",
-        "passed": 56
+        "passed": 58
       },
       {
         "id": "short",
@@ -44,11 +44,11 @@
       }
     ],
     "offTopicReachedModel": 4,
-    "offTopicDeclined": 2,
-    "avgTokensIn": 2357,
-    "avgTokensOut": 323,
-    "ranAt": "2026-11-21T21:45:07.597Z",
-    "commit": "d472d0d"
+    "offTopicDeclined": 3,
+    "avgTokensIn": 2325,
+    "avgTokensOut": 343,
+    "ranAt": "2026-11-24T12:49:47.915Z",
+    "commit": "14233a7"
   },
   "questions": [
     {
@@ -72,8 +72,11 @@
     {
       "q": "How long until SEO shows results?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "This site's timeline guide says established businesses with existing domain authority and content libraries typically see significant improvements in 3-6 months, and that technical fixes can show quick results [1]. The guide does not give a single timeline for all businesses. For more detail, see the full guide, [How Long Does SEO Take to Work in 2025?](/blog/how-long-does-it-take-for-seo-to-work/). For questions about your own site, use the [contact page](/contact/)."
     },
     {
       "q": "Why isn't my content appearing in ChatGPT?",
@@ -102,12 +105,8 @@
     {
       "q": "How do I get featured in Google AI Overviews?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ],
-      "answer": "Google says AI Overviews aim to highlight high-quality content that best answers the query, so your"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "What is semantic search?",
@@ -124,11 +123,8 @@
     {
       "q": "What is E-E-A-T and how do I show it to AI systems?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "E-E-A-T stands for Experience, Expertise, Authoritativeness and Trustworthiness. Google's guidelines emphasize these factors for judging content quality, and they can affect whether a site appears in AI Overviews [3]. AI search engines evaluate them through computational methods, so they read machine-readable signals rather than only reputation [1].\n\nTo show these signals to AI systems, the site suggests:\n\n- **Structured data:** Use schema markup for author information, professional qualifications and organizational affiliations, since credentials in flowing prose may not register as clearly [1].\n- **Author credentials:** Include detailed author bios highlighting relevant qualifications and "
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Which schema markup matters for medical pages?",
@@ -139,8 +135,11 @@
     {
       "q": "How can a small regional hospital compete in AI search?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ]
     },
     {
       "q": "How do pharma companies optimize content for Perplexity?",
@@ -175,17 +174,18 @@
     {
       "q": "What are AI integration services?",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "AI integration services cover more than automation alone. Automation handles a specific sequence of steps, while integration services also cover the assessment, policy, tool selection, training, and measurement that make automation work across a business [1]. Joe's post on the topic describes a path from having no AI to AI in every workflow, and it is the best place to start [1]. For a sense of scope, see [AI integration services: how to go from zero AI to AI in every workflow](/blog/ai-integration-services/). If you want a price or a proposal, this site does not give figures, but the most reliable route is a scoped proposal after an initial conversation about your workflows [2]. You can rea"
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Is SEO dead?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a source",
+        "Cites a page that holds the answer"
+      ],
+      "answer": "No, this site argues that the \"SEO is dead\" narrative falls apart, because the core principles that have always made content successful remain unchanged ([SEO is dead, long live SEO]("
     },
     {
       "q": "How does AEO reporting differ from SEO reporting?",
@@ -206,7 +206,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe's AEO program covers five areas: a visibility baseline that checks which brands AI assistants cite for the questions your buyers ask, content rebuilt around direct answers, entity and schema work, technical access such as crawler rules and page speed, and monthly reporting on citation share next to your SEO numbers [3]. AEO itself means structuring content so"
+      "answer": "Joe's AEO service covers five areas: a visibility baseline that checks which brands each AI assistant cites today for the questions your buyers ask [3]; content rebuilt around direct, self-contained answers and question-based headings [3]; entity and schema work [3]; technical access, including AI crawler rules, server-rendered content, llms.txt and page speed [3"
     },
     {
       "q": "What tools are used for answer engine optimization?",
@@ -263,7 +263,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "Joe Unhammer is based in Colorado. He works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, and with teams across the US [6]. He is based in the Denver metro area and works with teams anywhere in the US [7][8]."
+      "answer": "Joe Unhammer is based in Colorado, and his Denver location is listed on the contact page, which also notes he works with teams anywhere in the US [8]. His Parker page says he works with businesses in Parker, Castle Rock, Lone Tree, Highlands Ranch and Centennial, as well as teams across the US [6]. To discuss a project, visit the [contact page](/contact/)."
     },
     {
       "q": "What AI tools has Joe built?",
@@ -303,9 +303,12 @@
     },
     {
       "q": "Can Joe build an MCP server for Claude?",
-      "rank": 0,
-      "pass": true,
-      "failed": []
+      "rank": 2,
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "Yes, this site indicates Joe builds with MCP for Claude. He builds mostly with Claude and the Model Context Protocol (MCP) [5], and his consulting work includes Claude and MCP setup [7]. His resume lists MCP connectors among his AI and automation skills [8]. For working with Joe on a project, see /contact/."
     },
     {
       "q": "What does an AI agent project involve?",
@@ -316,12 +319,15 @@
     {
       "q": "Can you automate our marketing reports?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Uses only links found in the sources"
+      ],
+      "answer": "Yes, this site says Joe automates reporting that pulls from GA4 and Search Console, and from your CRM. The data is summarized and formatted into the report your team or clients expect [1]. He has built this for an agency and describes it as producing ready-to-send client deliverables [1][2]. For marketing, a person typically still handles final edits and fact checks [4]. To discuss your setup, see the [contact page](/contact/)."
     },
     {
       "q": "Do you offer AI strategy consulting?",
-      "rank": 0,
+      "rank": 1,
       "pass": true,
       "failed": []
     },
@@ -333,12 +339,9 @@
     },
     {
       "q": "How do I get in touch about a project?",
-      "rank": 2,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "To start a project, send Joe what you need, your timeline, and your site or product URL. Email brubeckunhammer@gmail.com, or use the [contact page](/contact/). He is based in Denver, Colorado, works with teams anywhere in the US, and replies within two business days [3]. You can also find him on [LinkedIn](https://www.linkedin.com/in/junhammer/) [3]."
+      "rank": 4,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "Does Joe work with companies in Denver?",
@@ -361,8 +364,11 @@
     {
       "q": "how does it take for seo to work?",
       "rank": 0,
-      "pass": true,
-      "failed": []
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "SEO usually shows early movement in three to six months and compounding results in six to twelve, depending on competition, site health, and how much content needs to be built. New sites in competitive fields take longer [8]. Joe sets milestones for each quarter so progress is visible before rankings fully arrive [8]. For more on timelines, see the [SEO timeline guide](/blog/how-long-does-it-take-for-seo-to-work/)."
     },
     {
       "q": "seo how long",
@@ -371,7 +377,7 @@
       "failed": [
         "Cites a page that holds the answer"
       ],
-      "answer": "SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins from foundational issues can show impact within weeks. Meaningful organic traffic growth typically appears between three and six months, with substantial, compounding results often visible at six to twelve months [1]. Visibility in AI systems for AEO and GEO can shift faster, and Joe sets expectations based on each situation [1]."
+      "answer": "SEO is a long-term investment, and timelines depend on your starting point, competition, and goals. Technical fixes and quick wins can show impact within weeks, and meaningful organic traffic growth typically appears between three and six months. Substantial, compounding results often show up at the six-to-twelve month mark [1]. Joe sets realistic expectations based on your situation and reports progress along the way [1]. For AI search visibility (AEO and GEO), results can shift faster [1]."
     },
     {
       "q": "aeo vs geo",
@@ -393,12 +399,9 @@
     },
     {
       "q": "mcp server",
-      "rank": 0,
-      "pass": false,
-      "failed": [
-        "Uses only links found in the sources"
-      ],
-      "answer": "An MCP server is the piece that lets an AI application such as Claude connect to outside tools and data. It can let Claude read from a database, query an analytics account or take an action in another system [1]. Joe uses MCP servers to connect AI to systems like a CRM or reporting data, usually read-only to start, within limits the business sets [2]. You can learn more on the [AI automation](/services/ai-automation/) page, and for questions about working with Joe, use the [contact page](/contact/)."
+      "rank": 2,
+      "pass": true,
+      "failed": []
     },
     {
       "q": "agents vs workflows",
@@ -421,18 +424,17 @@
     {
       "q": "ai overviews for hospitals",
       "rank": 0,
-      "pass": false,
-      "failed": [
-        "Cites a source",
-        "Cites a page that holds the answer"
-      ],
-      "answer": "This site has a healthcare article on getting featured in AI Overviews. It suggests tracking appearances by regularly testing relevant healthcare queries, and treating featured snippet capture as a proxy metric, since content that earns snippets often performs well in AI Overviews ["
+      "pass": true,
+      "failed": []
     },
     {
       "q": "what do you charge",
-      "rank": 6,
-      "pass": true,
-      "failed": []
+      "rank": -1,
+      "pass": false,
+      "failed": [
+        "Cites a page that holds the answer"
+      ],
+      "answer": "This site doesn't list Joe's own rates. For market context, published 2026 rate cards put independent AI consultants at $150 to $350 an hour [1], and MarketerHire lists fractional AEO consultant retainers at $3,000 to $15,000 per month [6]. These are industry figures, not quotes from Joe. For pricing on a specific project, use the contact page at /contact/."
     },
     {
       "q": "keyword research",
