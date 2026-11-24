@@ -7,6 +7,7 @@ date: "2026-11-24"
 topic: "AEO"
 pillar: false
 draft: false
+image: "/images/posts/how-to-check-ai-citations.webp"
 faqs:
   - q: "How do I check if ChatGPT cites my website?"
     a: "Turn on web search in ChatGPT, ask the questions your buyers ask, and open the sources for each answer. Log whether your URL appears. Repeat the same questions on a schedule."

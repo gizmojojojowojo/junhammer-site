@@ -6,6 +6,7 @@ date: "2026-11-24"
 topic: "SEO"
 pillar: false
 draft: false
+image: "/images/posts/mcp-for-seo.webp"
 faqs:
   - q: "What is MCP in SEO?"
     a: "MCP in SEO means connecting an AI assistant such as Claude to SEO data sources, like Google Search Console, through an MCP server. You can then ask questions about your search data in plain English."

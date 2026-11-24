@@ -49,7 +49,7 @@ I have worked on AEO since before most agencies had a name for it, and I [write 
 
 **Technical access.** AI crawler rules, server-rendered content, llms.txt and page speed, the [technical foundation every GEO strategy needs](/blog/the-technical-seo-foundation-every-geo-strategy-needs-to-succeed/).
 
-**Reporting.** Citation share across assistants, tracked monthly next to your SEO numbers.
+**Reporting.** Citation share across assistants, tracked monthly next to your SEO numbers. The method is the one in [how to check AI citations](/blog/how-to-check-ai-citations/).
 
 ## AEO consultant, GEO consultant or AI SEO consultant?
 

@@ -50,4 +50,4 @@ The [map agent](/work/map-agent/) shows how I build. It answers questions about 
 
 ## Related services
 
-For custom AI software that does not need an agent, such as chat over your documents or a data product, see [AI engineering](/services/ai-engineering/). For connecting AI to your CRM and everyday tools, see [AI automation](/services/ai-automation/).
+For custom AI software that does not need an agent, such as chat over your documents or a data product, see [AI engineering](/services/ai-engineering/). For connecting AI to your CRM and everyday tools, see [AI automation](/services/ai-automation/). For what consulting and builds typically cost, see [AI consultant cost](/blog/ai-consultant-cost/).

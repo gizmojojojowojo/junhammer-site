@@ -29,6 +29,8 @@ I work on both sides. I build [AI agents](/services/ai-agent-development/), [aut
 | To show up in AI answers | Audit and fix how ChatGPT, Perplexity and AI Overviews see you | [AEO](/services/answer-engine-optimization/) |
 | Rankings and traffic | SEO strategy, content and technical fixes | [SEO](/services/seo/) |
 
+For typical rates, see [how much an AI consultant costs in 2026](/blog/ai-consultant-cost/). For an example of Claude and MCP setup, see [MCP for SEO](/blog/mcp-for-seo/).
+
 ## Colorado work
 
 [LandmAIn](/work/landmain/) is an AI land intelligence platform I built for data center and energy site selection. It screens Colorado sites against power, fiber, land and policy evidence, and it publishes research on Front Range data center permitting and Xcel Energy's large-load tariff proceeding.
