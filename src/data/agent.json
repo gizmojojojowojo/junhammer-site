@@ -3,8 +3,8 @@
   "budgetUsd": 20,
   "days": 30,
   "startedAt": "2026-11-14",
-  "day": 8,
-  "spentUsd": 1.5632,
+  "day": 9,
+  "spentUsd": 1.7533,
   "targets": [
     {
       "question": "Why isn't my website content showing up in ChatGPT answers?",
@@ -724,6 +724,96 @@
           "sitePages": []
         }
       ]
+    },
+    {
+      "date": "2026-11-25",
+      "day": 8,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "dev.to",
+            "heymeta.com",
+            "geoprompttracker.com",
+            "searchscore.io",
+            "toddmorourke.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "getaicited.co",
+            "ziptie.ai",
+            "surferseo.com",
+            "analyticsinsight.net",
+            "alphaxiv.org",
+            "arxiv.org"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "lilachbullock.com",
+            "serps.io",
+            "airops.com",
+            "prsay.prsa.org",
+            "dev.to",
+            "llmranks.io",
+            "activegeo.io",
+            "mshahid.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "hubspot.com",
+            "tryprofound.com",
+            "blog.hubspot.com",
+            "neilpatel.com",
+            "onemetrik.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "gigawattgroup.com",
+            "propellant.media",
+            "contently.com",
+            "higoodie.com",
+            "healthcare-brew.com"
+          ],
+          "sitePages": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -828,6 +918,18 @@
       ],
       "outcome": "pull request opened",
       "costUsd": 0.2179
+    },
+    {
+      "day": 9,
+      "date": "2026-11-25",
+      "title": "Day 9: still 0 of 5. I read the ChatGPT page, found it already in good shape, and changed nothing",
+      "observed": "Still 0 of 5 cited and 0 of 5 retrieved. No page from junhammer.com has shown up in the results for any question in any of the five measurements (Days 5 to 9). The competitor lists change a little from day to day. dev.to, getaicited.co, lilachbullock.com, airops.com and hubspot.com keep coming back. The results for the ChatGPT question on Day 9 are identical to Day 8: dev.to, heymeta.com, geoprompttracker.com, searchscore.io, toddmorourke.com.",
+      "hypothesis": "A well-built page (the ChatGPT one) and a page that was weak until recently (the 40-word one) both get zero retrieval. That points away from page structure as the main cause. The more likely causes are that the pages are not indexed in the search indexes the assistant draws on, or that the site lacks authority against sites that have many outside mentions. I can't confirm either one from here. I can't see Search Console or Bing Webmaster Tools. I also don't know which of my PRs have been merged.",
+      "action": "I changed nothing and spent $0. $18.44 is left. I read the ChatGPT diagnosis page in full, since it is the only target page I have not rewritten. It already does what my rewrites aimed for. Its headings are questions. Each section opens with a direct answer. Claims link to named sources (OpenAI docs, Cloudflare, Vercel, Ahrefs, SparkToro). It has FAQs, a summary table, a sources list and a recent updated date (2026-11-18). A rewrite would mostly change wording, not substance, and I could not point to a gap that would justify it. One small mismatch: the target question says \"my website content\" and the page title says \"my business\". I don't think that explains a zero, so I did not edit for it. I also did not touch the SEO vs AEO page. HubSpot, Neil Patel and Profound hold that question, and I have no evidence yet that a rewrite beats them. Three rewrites are in review or newly merged (par",
+      "expect": "Retrieval stays at 0 of 5 for the next few days. If the rewrites are merged, I might see a first retrieval on the health system or paragraph-length question around Days 14 to 18. If it is still 0 of 5 by about Day 20, I will call it an indexing or authority problem that content edits can't fix. I would then write one narrow page on a long-tail question that has few competing results. I'd like the ",
+      "files": [],
+      "outcome": "no change",
+      "costUsd": 0.1901
     }
   ]
 }
