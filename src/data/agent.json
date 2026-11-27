@@ -3,8 +3,8 @@
   "budgetUsd": 20,
   "days": 30,
   "startedAt": "2026-11-14",
-  "day": 10,
-  "spentUsd": 1.9001,
+  "day": 11,
+  "spentUsd": 2.2041,
   "targets": [
     {
       "question": "Why isn't my website content showing up in ChatGPT answers?",
@@ -906,6 +906,90 @@
           "sitePages": []
         }
       ]
+    },
+    {
+      "date": "2026-11-27",
+      "day": 10,
+      "results": [
+        {
+          "question": "Why isn't my website content showing up in ChatGPT answers?",
+          "page": "/blog/why-your-content-isnt-showing-up-in-chatgpt-answers/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "help.openai.com",
+            "thebilliongame.com",
+            "heymeta.com",
+            "subscribepr.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How do AI search engines like Perplexity and ChatGPT decide which sources to cite?",
+          "page": "/blog/how-ai-search-engines-decide-what-to-cite-and-how-to-get-on-the-list/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 20,
+          "citedDomains": [
+            "goremy.ai",
+            "arxiv.org",
+            "gracker.ai"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How long should a paragraph be to get cited by AI search engines?",
+          "page": "/blog/the-40-word-rule-how-to-structure-paragraphs-for-ai-citations-in-2026/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 18,
+          "citedDomains": [
+            "lilachbullock.com",
+            "geoclarity.io",
+            "airops.com",
+            "dev.to",
+            "visibilitystack.ai",
+            "fortitudemedia.ai",
+            "pushleads.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "What is the difference between SEO and AEO, and how does the reporting change?",
+          "page": "/blog/seo-vs-aeo-what-changes-in-the-work-and-the-reporting/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "rankable.ai",
+            "pipelinevelocity.com",
+            "blog.hubspot.com",
+            "pctechmag.com",
+            "timothe.ai",
+            "cairrot.com",
+            "acquia.com"
+          ],
+          "sitePages": []
+        },
+        {
+          "question": "How can a regional health system compete in AI search without an enterprise budget?",
+          "page": "/blog/how-regional-health-systems-can-compete-in-ai-search-without-enterprise-budgets/",
+          "cited": false,
+          "retrieved": false,
+          "position": null,
+          "results": 19,
+          "citedDomains": [
+            "mgma.com",
+            "gigawattgroup.com"
+          ],
+          "sitePages": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -1034,6 +1118,20 @@
       "files": [],
       "outcome": "no change",
       "costUsd": 0.1468
+    },
+    {
+      "day": 11,
+      "date": "2026-11-27",
+      "title": "Day 11: still 0 of 5, so I wrote one narrow page on a topic only this site has facts for",
+      "observed": "0 of 5 cited, 0 of 5 retrieved, no junhammer.com pages seen on any question. Same as Days 7 to 10. The cited domains keep rotating (help.openai.com, arxiv.org, mgma.com, hubspot, airops, dev.to). The site has not appeared once in 25 question-checks across five days. Spend so far is unchanged at $1.90, so $18.10 is left.",
+      "hypothesis": "The zero is probably about the whole domain, not wording. The site is not retrieved even for its most closely matched pages, and the pages are already formatted well. Likely causes are low authority, thin indexing, or both. A narrow page tests this. If this page gets retrieved for anything, indexing works and the problem is competition on broad questions. If it never appears either, indexing or crawling is the likely blocker, and the content can't fix that.",
+      "action": "I wrote one new file, src/content/blog/how-to-add-ai-search-with-cited-answers-to-your-website.md. It is not aimed at the five target questions. It covers a long-tail topic where the competition is thin and this site has first-hand facts: how I built the cited-answer search box, the 60-question test set, the keyword vs keyword-plus-meaning numbers, and what failed. Every number comes from the existing /work/site-ai-search/ case study. I invented nothing. Headings are questions, each opens with a direct answer, and it links to the pages for the target questions. I copied the front matter shape from how-to-check-ai-citations. Caveats: the image path follows the sibling pattern but I cannot create the image file, and I guessed topic \"AEO\" as a safe value. The human reviewer should check both. I also tried to read the 40-word page without the /blog/ prefix and got an error. That was my typo,",
+      "expect": "Still 0 of 5 on the target questions through at least Day 14, because the PR needs review and merge and then a crawl. This page will not show in the five-question measurement, since it targets none of them. I can only see it if it lands in sitePagesSeen. If the reviewer can check whether the pages are indexed in Google Search Console and Bing Webmaster Tools, that would tell me more than the next ",
+      "files": [
+        "src/content/blog/how-to-add-ai-search-with-cited-answers-to-your-website.md"
+      ],
+      "outcome": "pull request opened",
+      "costUsd": 0.304
     }
   ]
 }
